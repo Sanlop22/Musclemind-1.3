@@ -40,7 +40,7 @@ musclemind-backend/
 ├── .env
 ├── .gitignore
 ├── app.js
-├── server.js
+├── index.js
 ├── package.json
 ├── package-lock.json
 └── README.md
@@ -105,7 +105,7 @@ npm install
 Crear un archivo .env en la raíz del proyecto y configurar los datos de conexión a MySQL.
 
 5. Ejecutar el servidor
-node server.js
+node index.js
 Prueba de la API
 
 Una vez iniciado el servidor, se puede probar el endpoint de usuarios utilizando un navegador, Postman u otra herramienta para consumir APIs.
