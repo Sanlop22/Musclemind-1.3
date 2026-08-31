@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MuscleMind – Motivación Personal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+
+  <!-- NAV  -->
+  <nav>
+    <div class="nav-logo">💪 MUSCLE<span>MIND</span></div>
+    <ul class="nav-links">
+      <li><a href="#pilares">Pilares</a></li>
+      <li><a href="#rutinas">Rutinas</a></li>
+      <li><a href="#progreso">Progreso</a></li>
+    </ul>
+    <button class="nav-cta">EMPEZAR AHORA</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">Tu mejor versión te espera</p>
+    <h1>ENTRENA TU CUERPO<br/>Y <em>FORTALECE</em><br/>TU MENTE.</h1>
+    <p class="hero-sub">Rutinas personalizadas, seguimiento de progreso y comunicación directa con tu entrenador — todo en un solo lugar.</p>
+    
+    <div class="hero-actions">
+      <button class="btn-primary">Iniciar Sesión</button>
+      <button class="btn-outline">Crear Cuenta</button>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-num">+12K</div>
+      <div class="stat-label">Usuarios activos</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">340+</div>
+      <div class="stat-label">Rutinas disponibles</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">98%</div>
+      <div class="stat-label">Satisfacción</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Acceso sin límites</div>
+    </div>
+  </div>
+
+  <main class="container">
+        <section class="form-crearcuenta">
+            <h2 id="form-crearcuenta">Crear Cuenta</h2>
+            <form id="crud-form">
+                <input type="hidden" id="item-id">
+
+                <div class="form-group">
+                    <label for="item-name"> Nombre: </label>
+                    <input type="text" id=item-name required placeholder=" Maria">
+
+                </div>
+
+                <div class="form-group">
+                    <label for="item-nane"> Apellido: </label>
+                    <input type="text" id=item-name required placeholder="Lopez">
+
+                </div>
+
+                <div class="form-group">
+                    <label for="item-categoria"> Genero: </label>
+                    <select id="itemcategoria" required>
+                        <option value="">Selecione una opcion</option>
+                        <option value="Femenimo">Femenino </option>
+                        <option value="Masculino">Masculino</option>
+
+
+                    </select>
+
+                </div>
+                <div class="form-group">
+                    <label for="item-descripcion"> Detalle sus objetivos</label>
+                    <textarea id="item-drescripcion" rows="3"required placeholder="Breve descripcion de objetivos..."></textarea>
+
+                </div>
+
+                <div class="form-button">
+                    <button type="submit" id="Guardar" class= "btn btn-success"> Guardar</button>
+                    <button type="submit" id="Borrar" class= "btn btn-success"> Borrar </button>
+                </div>
+
+            </form>
+
+
+        </section>
+        <section>
+
+        </section class= Vinculados>
+        <h2>Clientes preferenciales</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Genero</th>
+                </tr>
+            </thead>
+            <tbody id="data-table-body"></tbody>
+
+        </table>
+
+        
+    </main>
+
+  <!-- PILARES -->
+  <section class="pillars" id="pilares">
+    <div class="section-inner">
+      <p class="section-tag">Fundamentos</p>
+      <h2 class="section-title">Los pilares de tu <em>transformación</em></h2>
+      <p class="section-desc">Cada objetivo requiere un enfoque distinto. MuscleMind combina ciencia del deporte, nutrición y mentalidad para llevarte al siguiente nivel.</p>
+
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-icon">🔥</div>
+          <h3>Disciplina diaria</h3>
+          <p>Los grandes resultados no vienen de un solo esfuerzo, sino de hábitos consistentes. Construye tu rutina día a día con metas alcanzables.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon">💡</div>
+          <h3>Mentalidad de crecimiento</h3>
+          <p>Tu cerebro es el músculo más importante. Aprende a gestionar el esfuerzo, la recuperación y la resiliencia para superar tus propios límites.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon">📈</div>
+          <h3>Progreso medible</h3>
+          <p>Lo que no se mide no mejora. Registra cada sesión, visualiza tus avances y ajusta tu plan con base en datos reales.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon">🤝</div>
+          <h3>Comunidad y guía</h3>
+          <p>No entrenas solo. Tu instructor te acompaña en tiempo real, responde tus dudas y ajusta tu plan según tu evolución.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+  <div class="quote-section">
+    <blockquote>
+      "El dolor que sientes hoy es la fortaleza que tendrás mañana. No pares cuando estés cansado — para cuando hayas terminado."
+    </blockquote>
+    <cite>— MuscleMind Philosophy</cite>
+  </div>
+
+  <!-- RUTINAS -->
+  <section id="rutinas">
+    <div class="section-inner">
+      <p class="section-tag">Entrenamiento</p>
+      <h2 class="section-title">Rutinas para <em>cada objetivo</em></h2>
+      <p class="section-desc">Selecciona la rutina que se adapta a tu nivel y metas. Cada plan fue diseñado por entrenadores certificados.</p>
+
+      <div class="routines-grid">
+        <div class="routine-card">
+          <div class="routine-badge">Intermedio</div>
+          <h3>Pecho & Tríceps</h3>
+          <p>Enfocado en fuerza funcional y masa muscular en tren superior. Incluye press banca, fondos y cables.</p>
+          <div class="routine-meta">
+            <span>⏱️ 55 min</span>
+            <span>💪 8 ejercicios</span>
+          </div>
+        </div>
+        <div class="routine-card">
+          <div class="routine-badge">Avanzado</div>
+          <h3>Espalda & Bíceps</h3>
+          <p>Volumen alto para máximo crecimiento. Dominadas, remos y curls en superset para mayor densidad.</p>
+          <div class="routine-meta">
+            <span>⏱️ 60 min</span>
+            <span>💪 10 ejercicios</span>
+          </div>
+        </div>
+        <div class="routine-card">
+          <div class="routine-badge">Avanzado</div>
+          <h3>Piernas & Glúteos</h3>
+          <p>Sentadillas, peso muerto y prensa para desarrollar potencia y definición en tren inferior.</p>
+          <div class="routine-meta">
+            <span>⏱️ 65 min</span>
+            <span>💪 8 ejercicios</span>
+          </div>
+        </div>
+        <div class="routine-card">
+          <div class="routine-badge">Intermedio</div>
+          <h3>Hombros & Core</h3>
+          <p>Estabilidad y fuerza en deltoides y núcleo. Clave para prevenir lesiones y mejorar postura.</p>
+          <div class="routine-meta">
+            <span>⏱️ 45 min</span>
+            <span>💪 7 ejercicios</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRESO -->
+  <section class="progress-section" id="progreso">
+    <div class="section-inner">
+      <div class="progress-layout">
+        <div>
+          <p class="section-tag">Tu evolución</p>
+          <h2 class="section-title">Cada sesión <em>cuenta</em></h2>
+          <p class="section-desc">Visualiza en tiempo real cómo cambia tu cuerpo semana a semana. El progreso real es invisible en el día a día, pero imparable en el tiempo.</p>
+
+          <ul class="progress-list">
+            <li class="progress-item">
+              <div class="progress-label"><span>Constancia semanal</span><span>87%</span></div>
+              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:87%"></div></div>
+            </li>
+            <li class="progress-item">
+              <div class="progress-label"><span>Ganancia de masa</span><span>+2.3 kg</span></div>
+              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:72%"></div></div>
+            </li>
+            <li class="progress-item">
+              <div class="progress-label"><span>Reducción de grasa</span><span>-4.1%</span></div>
+              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:65%"></div></div>
+            </li>
+            <li class="progress-item">
+              <div class="progress-label"><span>Racha activa</span><span>12 días</span></div>
+              <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:55%"></div></div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="progress-visual">
+          <p class="pv-title">OBJETIVO ACTUAL</p>
+          <p style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:1rem; letter-spacing:.1em; color:#E63946; margin-bottom:24px;">GANAR MASA MUSCULAR</p>
+          <div class="pv-metric">
+            <span class="pv-num">78.4</span>
+            <span class="pv-unit">kg · Peso</span>
+          </div>
+          <p class="pv-sub">↑ +2.3 kg desde el inicio</p>
+          <div style="margin-top:28px; padding-top:28px; border-top:1px solid #2a2a2a;">
+            <div class="pv-metric">
+              <span class="pv-num" style="font-size:2.2rem">71.5</span>
+              <span class="pv-unit">% · Masa muscular</span>
+            </div>
+            <p class="pv-sub">Semana 6 · En progreso</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-final">
+    <h2>¿Listo para tu<br/><em style="color:#E63946; font-style:normal;">mejor versión?</em></h2>
+    <p>Crea tu cuenta hoy, conecta con un instructor y empieza la transformación que siempre postergaste.</p>
+    <button class="btn-primary">CREAR CUENTA GRATIS</button>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">💪 MUSCLE<span>MIND</span></div>
+    <p>© 2026 MuscleMind · SENA – Análisis y Desarrollo de Software</p>
+    <p style="color:#555; font-size:.72rem;">Barbara Jaramillo · Ronald Muñoz · Sandra López</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
