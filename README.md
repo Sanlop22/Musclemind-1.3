@@ -1,15 +1,12 @@
 ## Repositorio 
 https://github.com/Sanlop22/Musclemind-1.3/blob/main/src/app.js
 
-## MuscleMind Backend
-
-Backend del proyecto MuscleMind, una aplicación orientada a la promoción de hábitos saludables mediante la planificación y seguimiento de rutinas de entrenamiento personalizadas.
-
+MuscleMind Backend
 Descripción
 
-MuscleMind permite gestionar información relacionada con usuarios y, posteriormente, otros módulos necesarios para el funcionamiento de la aplicación.
+MuscleMind es una aplicación web orientada al entrenamiento físico y al seguimiento del progreso de los usuarios.
 
-El backend proporciona una API REST desarrollada con Node.js y Express, conectada a una base de datos MySQL.
+Este repositorio contiene el componente backend del proyecto, desarrollado con Node.js y Express.js. El backend proporciona una API REST encargada de gestionar la información de los usuarios y establecer la comunicación con la base de datos MySQL.
 
 Tecnologías utilizadas
 Node.js
@@ -17,68 +14,97 @@ Express.js
 MySQL
 MySQL2
 Dotenv
+CORS
 Git
 GitHub
 Visual Studio Code
 Arquitectura del proyecto
 
-El proyecto utiliza una arquitectura modular para separar las responsabilidades del sistema.
+El backend utiliza una arquitectura organizada por responsabilidades para facilitar el mantenimiento y la escalabilidad del código.
 
-musclemind-backend/
+backend/
 │
 ├── database/
 │   └── connection.js
 │
-├── modules/
-│   └── users/
-│       ├── user.controller.js
-│       ├── user.repository.js
-│       ├── user.service.js
-│       ├── user.routes.js
-│       └── user.validator.js
+├── src/
+│   ├── modules/
+│   │   └── users/
+│   │       ├── user.controller.js
+│   │       ├── user.repository.js
+│   │       ├── user.routes.js
+│   │       ├── user.service.js
+│   │       └── user.validator.js
+│   │
+│   └── app.js
 │
 ├── .env
 ├── .gitignore
-├── app.js
 ├── index.js
 ├── package.json
 ├── package-lock.json
 └── README.md
-Módulo de usuarios
+Funciones principales
 
-Actualmente se encuentra implementado el módulo de usuarios.
+El módulo de usuarios permite:
 
-El módulo permite realizar operaciones relacionadas con los usuarios almacenados en la base de datos.
+Consultar los usuarios registrados.
+Consultar usuarios mediante la API.
+Registrar nuevos usuarios.
+Actualizar información de usuarios.
+Eliminar usuarios.
+Validar los datos recibidos desde las solicitudes.
+Conectar el backend con la base de datos MySQL.
+Organización de las capas
+Routes
 
-Funcionalidades actuales
-Consultar usuarios.
-Crear usuarios.
-Conectar el módulo con la base de datos MySQL.
-Organizar la lógica mediante controlador, servicio y repositorio.
-Validar la información recibida mediante el módulo correspondiente.
-API
+Las rutas reciben las solicitudes HTTP y las dirigen al controlador correspondiente.
 
-La API utiliza rutas REST.
+Ejemplo:
 
-Usuarios
+/api/usuarios
+Controller
 
-Consultar usuarios
+El controlador recibe las solicitudes y las respuestas HTTP. Se encarga de comunicarse con la capa de servicios.
 
-GET /api/usuarios
+Service
 
-Crear usuario
+La capa de servicios contiene la lógica de negocio de las operaciones realizadas sobre los usuarios.
 
-POST /api/usuarios
+Repository
 
-Las rutas pueden ampliarse posteriormente para implementar las operaciones de actualización y eliminación de usuarios.
+El repositorio se encarga de realizar las operaciones directamente sobre la base de datos MySQL.
+
+Validator
+
+El validador comprueba que los datos enviados cumplan con las condiciones requeridas antes de realizar las operaciones correspondientes.
 
 Base de datos
 
-El proyecto utiliza MySQL como sistema de gestión de base de datos.
+El proyecto utiliza MySQL como sistema gestor de base de datos.
 
-La conexión se realiza mediante un pool de conexiones utilizando el paquete mysql2.
+La base de datos utilizada es:
 
-Las variables de configuración de la base de datos se almacenan en un archivo .env para evitar colocar información sensible directamente en el código fuente.
+musclemind
+
+Una de las tablas principales es:
+
+usuario
+
+La información gestionada por el registro de usuarios incluye datos como:
+
+Nombre
+Apellido
+Tipo de documento
+Número de documento
+Contraseña
+Edad
+Peso
+Altura
+País
+Variables de entorno
+
+La conexión a MySQL se configura mediante variables de entorno almacenadas en el archivo .env.
 
 Ejemplo:
 
@@ -87,44 +113,93 @@ DB_PORT=3306
 DB_USER=tu_usuario
 DB_PASSWORD=tu_contraseña
 DB_NAME=musclemind
+DB_CONNECTION_LIMIT=10
 
-El archivo .env no debe subirse al repositorio de GitHub.
+El archivo .env no debe publicarse en GitHub cuando contiene información real de acceso a la base de datos.
 
+API REST
+
+El backend funciona mediante una API REST.
+
+Obtener usuarios
+GET http://localhost:3000/api/usuarios
+
+Permite consultar los usuarios almacenados en la base de datos.
+
+Registrar usuario
+POST http://localhost:3000/api/usuarios
+
+Permite registrar un nuevo usuario mediante el envío de los datos correspondientes.
+
+Actualizar usuario
+PUT http://localhost:3000/api/usuarios/:id
+
+Permite modificar la información de un usuario existente.
+
+Eliminar usuario
+DELETE http://localhost:3000/api/usuarios/:id
+
+Permite eliminar un usuario mediante su identificador.
+
+Ejemplo de registro
+
+El endpoint POST recibe información como:
+
+{
+  "nombre": "Sandra",
+  "apellido": "Prueba",
+  "numero_documento": "99999999",
+  "tipo_documento": "CC",
+  "contrasena": "123456",
+  "edad": 30,
+  "peso": 70,
+  "altura": 165,
+  "pais": "Colombia"
+}
 Instalación
 
-Para ejecutar el proyecto localmente:
+Clonar el repositorio:
 
-1. Clonar el repositorio
-git clone https://github.com/Sanlop22/Musclemind-1.3/blob/main/src/app.js
-2. Entrar a la carpeta
-cd musclemind-backend
-3. Instalar las dependencias
+git clone https://github.com/Sanlop22/Musclemind-1.3.git
+
+Ingresar a la carpeta del backend:
+
+cd Musclemind-1.3/backend
+
+Instalar las dependencias:
+
 npm install
-4. Configurar las variables de entorno
 
-Crear un archivo .env en la raíz del proyecto y configurar los datos de conexión a MySQL.
+Configurar las variables de entorno en el archivo .env.
 
-5. Ejecutar el servidor
+Ejecución
+
+Para iniciar el servidor:
+
 node index.js
-Prueba de la API
 
-Una vez iniciado el servidor, se puede probar el endpoint de usuarios utilizando un navegador, Postman u otra herramienta para consumir APIs.
+El servidor se ejecuta en:
 
-http://localhost:3000/api/usuarios
+http://localhost:3000
+Pruebas
+
+Las rutas de la API fueron probadas mediante solicitudes HTTP utilizando herramientas de prueba de API y verificando posteriormente la información almacenada en MySQL.
+
 Control de versiones
 
-El proyecto utiliza Git para el control de versiones y GitHub como repositorio remoto.
+El proyecto utiliza Git y GitHub para el control de versiones.
 
-Los cambios se registran mediante commits para mantener un historial del desarrollo.
+Repositorio:
 
-Estado del proyecto
+https://github.com/Sanlop22/Musclemind-1.3
 
-Actualmente se encuentra implementada la estructura inicial del backend y el módulo de usuarios con conexión a MySQL.
-
-Se continuará con el desarrollo de los demás módulos requeridos para el proyecto MuscleMind.
+Se han realizado commits para registrar los avances y modificaciones realizadas durante el desarrollo del proyecto.
 
 Autores
 Sandra Lopez
 Barbara Jaramillo
 Ronald Muñoz
 David Lizcano
+Estado del proyecto
+
+El backend cuenta con el módulo de usuarios desarrollado y conectado con una base de datos MySQL, permitiendo realizar operaciones CRUD y validar la información recibida mediante la API REST.
