@@ -1,10 +1,13 @@
 const express = require('express');
+const cors = require('cors');
 const userRoutes = require('./modules/users/user.routes');
 // Registra el middleware encargado de manejar los errores de la aplicación
 const errorMiddleware = require('./middlewares/error.middleware');
 
 const app = express();
+app.use(cors());
 //// Permite recibir y procesar datos en formato JSON
+
 
 app.use(express.json());
 

@@ -1,5 +1,7 @@
+
 const UserRepository = require('./user.repository');
 const userValidator = require('./user.validator');
+const bcrypt = require('bcrypt');
 
 const userRepository = new UserRepository();
 
@@ -20,7 +22,14 @@ const getUserById = async (id) => {
 const createUser = async (userData) => {
     userValidator.validateUser(userData);
 
-    return await userRepository.createUser(userData);
+    const hashedPassword = await bcrypt.hash(userData.contrasena, 10);
+
+    const userWithPassword = {
+        ...userData,
+        contrasena: hashedPassword
+    };
+
+    return await userRepository.createUser(userWithPassword);
 };
 
 const updateUser = async (id, userData) => {

@@ -1,15 +1,24 @@
+import Navbar from '../components/Navbar'
+import Hero from '../components/Hero'
+import StatsBar from '../components/StatsBar'
+import Pilares from '../components/Pilares'
+import Rutinas from '../components/Rutinas'
+import Progreso from '../components/Progreso'
+import CtaFinal from '../components/CtaFinal'
+import Footer from '../components/Footer'
+
 function Home() {
   return (
-    <div>
-      <h1>Bienvenido a MuscleMind</h1>
-
-      <p>
-        Tu aplicación para organizar y hacer seguimiento
-        a tus entrenamientos.
-      </p>
-
-      <button>Comenzar</button>
-    </div>
+    <>
+      <Navbar />
+      <Hero />
+      <StatsBar />
+      <Pilares />
+      <Rutinas />
+      <Progreso />
+      <CtaFinal />
+      <Footer />
+    </>
   )
 }
 
