@@ -18,6 +18,14 @@ class UserRepository {
 
         return rows[0];
     }
+     async getUserByDocument(numero_documento) {
+        const [rows] = await pool.query(
+            'SELECT * FROM usuario WHERE numero_documento = ?',
+            [numero_documento]
+        );
+
+        return rows[0];
+    }
 
     async createUser(userData) {
         const {
@@ -28,13 +36,15 @@ class UserRepository {
             numero_documento,
             peso,
             altura,
-            pais
+            pais,
+            correo,
+            contrasena
         } = userData;
 
         const [result] = await pool.query(
             `INSERT INTO usuario
-            (nombre, apellido, edad, tipo_documento, numero_documento, peso, altura, pais)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            (nombre, apellido, edad, tipo_documento, numero_documento, peso, altura, pais, correo, contrasena)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 nombre,
                 apellido,
@@ -43,7 +53,9 @@ class UserRepository {
                 numero_documento,
                 peso,
                 altura,
-                pais
+                pais,
+                correo,
+                contrasena
             ]
         );
 

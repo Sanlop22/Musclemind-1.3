@@ -56,20 +56,45 @@ req.body
 };
 
 const deleteUser = async (req, res) => {
-try {
-await userService.deleteUser(req.params.id);
+    try {
+        await userService.deleteUser(req.params.id);
 
-    res.status(204).send();
-} catch (error) {
-    res.status(404).json({ error: error.message });
-}
-
+        res.status(204).send();
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
 };
 
+const loginUser = async (req, res) => {
+    try {
+        const { numero_documento, contrasena } = req.body;
+
+        if (!numero_documento || !contrasena) {
+            return res.status(400).json({
+                error: 'El número de documento y la contraseña son obligatorios'
+            });
+        }
+
+        const result = await userService.loginUser(
+            numero_documento,
+            contrasena
+        );
+
+        res.json(result);
+
+    } catch (error) {
+        res.status(401).json({
+            error: error.message
+        });
+    }
+};
+
+
 module.exports = {
-getUsers,
-getUserById,
-createUser,
-updateUser,
-deleteUser
+    getUsers,
+    getUserById,
+    createUser,
+    updateUser,
+    deleteUser,
+    loginUser
 };

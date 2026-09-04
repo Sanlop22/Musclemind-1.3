@@ -56,11 +56,38 @@ const deleteUser = async (id) => {
 
     return true;
 };
+const loginUser = async (numero_documento, contrasena) => {
+    const user = await userRepository.getUserByDocument(numero_documento);
+
+    if (!user) {
+        throw new Error('Credenciales incorrectas');
+    }
+
+    const passwordCorrect = await bcrypt.compare(
+        contrasena,
+        user.contrasena
+    );
+
+    if (!passwordCorrect) {
+        throw new Error('Credenciales incorrectas');
+    }
+
+    return {
+        mensaje: 'Inicio de sesión exitoso',
+        usuario: {
+            id_usuario: user.id_usuario,
+            nombre: user.nombre,
+            apellido: user.apellido,
+            correo: user.correo
+        }
+    };
+};
 
 module.exports = {
     getUsers,
     getUserById,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    loginUser
 };
