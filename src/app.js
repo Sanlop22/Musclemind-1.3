@@ -1,5 +1,6 @@
 const express = require('express');
 const userRoutes = require('./modules/users/user.routes');
+const instructorRoutes = require('./modules/instructor/instructor.routes');
 // Registra el middleware encargado de manejar los errores de la aplicación
 const errorMiddleware = require('./middlewares/error.middleware');
 
@@ -11,6 +12,7 @@ app.use(express.json());
 // Registra las rutas del módulo de usuarios
 
 app.use('/api/usuarios', userRoutes);
+app.use('/api/instructor', instructorRoutes);
 // Ruta principal de la API
 
 app.get('/', (req, res) => {
