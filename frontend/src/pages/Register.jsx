@@ -5,15 +5,16 @@ function Register() {
 const navigate = useNavigate();
 
 const [formData, setFormData] = useState({
-nombre: "",
-apellido: "",
-numero_documento: "",
-tipo_documento: "",
-contrasena: "",
-edad: "",
-peso: "",
-altura: "",
-pais: "",
+  nombre: "",
+  apellido: "",
+  numero_documento: "",
+  tipo_documento: "",
+  correo: "",
+  contrasena: "",
+  edad: "",
+  peso: "",
+  altura: "",
+  pais: "",
 });
 
 const handleChange = (e) => {
@@ -51,17 +52,20 @@ try {
 
   alert("Usuario registrado correctamente");
 
-  setFormData({
-    nombre: "",
-    apellido: "",
-    numero_documento: "",
-    tipo_documento: "",
-    contrasena: "",
-    edad: "",
-    peso: "",
-    altura: "",
-    pais: "",
-  });
+setFormData({
+  nombre: "",
+  apellido: "",
+  numero_documento: "",
+  tipo_documento: "",
+  correo: "",
+  contrasena: "",
+  edad: "",
+  peso: "",
+  altura: "",
+  pais: "",
+});
+
+document.activeElement?.blur();
 } catch (error) {
   console.error("Error:", error);
   alert(error.message);
@@ -142,6 +146,19 @@ return (
         required
       />
     </div>
+
+    <div>
+  <label>Correo electrónico</label>
+  <input
+    type="email"
+    name="correo"
+    value={formData.correo}
+    onChange={handleChange}
+    required
+  />
+</div>
+    
+   
 
     <div>
       <label>Contraseña</label>
