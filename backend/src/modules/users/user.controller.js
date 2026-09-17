@@ -1,58 +1,56 @@
 const userService = require('./user.service');
 
 const getUsers = async (req, res) => {
-try {
-const users = await userService.getUsers();
+    try {
+        const users = await userService.getUsers();
 
-    res.json(users);
-} catch (error) {
-    res.status(500).json({ error: error.message });
-}
-
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };
 
 const getUserById = async (req, res) => {
-try {
-const user = await userService.getUserById(req.params.id);
+    try {
+        const user = await userService.getUserById(req.params.id);
 
-    res.json(user);
-} catch (error) {
-    const status = error.message === 'Usuario no encontrado' ? 404 : 400;
+        res.json(user);
+    } catch (error) {
+        const status =
+            error.message === 'Usuario no encontrado' ? 404 : 400;
 
-    res.status(status).json({ error: error.message });
-}
-
+        res.status(status).json({ error: error.message });
+    }
 };
 
 const createUser = async (req, res) => {
-try {
-      console.log("BODY DEL POST:", req.body);
+    try {
+        console.log("BODY DEL POST:", req.body);
 
-const user = await userService.createUser(req.body);
+        const user = await userService.createUser(req.body);
 
-    res.status(201).json(user);
-} catch (error) {
-    console.log("ERROR DEL POST:", error.message);
-    res.status(400).json({ error: error.message });
-}
+        res.status(201).json(user);
+    } catch (error) {
+        console.log("ERROR DEL POST:", error.message);
 
+        res.status(400).json({ error: error.message });
+    }
 };
 
 const updateUser = async (req, res) => {
-try {
-const user = await userService.updateUser(
-req.params.id,
-req.body
-);
+    try {
+        const user = await userService.updateUser(
+            req.params.id,
+            req.body
+        );
 
-    res.json(user);
-} catch (error) {
-    const status =
-        error.message === 'Usuario no encontrado' ? 404 : 400;
+        res.json(user);
+    } catch (error) {
+        const status =
+            error.message === 'Usuario no encontrado' ? 404 : 400;
 
-    res.status(status).json({ error: error.message });
-}
-
+        res.status(status).json({ error: error.message });
+    }
 };
 
 const deleteUser = async (req, res) => {
@@ -67,16 +65,16 @@ const deleteUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
     try {
-        const { numero_documento, contrasena } = req.body;
+        const { correo, contrasena } = req.body;
 
-        if (!numero_documento || !contrasena) {
+        if (!correo || !contrasena) {
             return res.status(400).json({
-                error: 'El número de documento y la contraseña son obligatorios'
+                error: 'El correo electrónico y la contraseña son obligatorios'
             });
         }
 
         const result = await userService.loginUser(
-            numero_documento,
+            correo,
             contrasena
         );
 
@@ -88,7 +86,6 @@ const loginUser = async (req, res) => {
         });
     }
 };
-
 
 module.exports = {
     getUsers,

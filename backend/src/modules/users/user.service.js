@@ -56,8 +56,8 @@ const deleteUser = async (id) => {
 
     return true;
 };
-const loginUser = async (numero_documento, contrasena) => {
-    const user = await userRepository.getUserByDocument(numero_documento);
+const loginUser = async (correo, contrasena) => {
+    const user = await userRepository.getUserByEmail(correo);
 
     if (!user) {
         throw new Error('Credenciales incorrectas');
@@ -82,7 +82,6 @@ const loginUser = async (numero_documento, contrasena) => {
         }
     };
 };
-
 module.exports = {
     getUsers,
     getUserById,

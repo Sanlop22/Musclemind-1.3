@@ -17,6 +17,15 @@ const getUserById = async (id) => {
     return rows[0];
 };
 
+const getUserByEmail = async (correo) => {
+    const [rows] = await pool.query(
+        'SELECT * FROM usuario WHERE correo = ?',
+        [correo]
+    );
+
+    return rows[0];
+};
+
 const createUser = async (userData) => {
     const {
         nombre,
@@ -41,7 +50,9 @@ const createUser = async (userData) => {
             numero_documento,
             peso,
             altura,
-            pais
+            pais,
+            correo,
+            contrasena
         ]
     );
 
@@ -105,4 +116,5 @@ module.exports = {
     createUser,
     updateUser,
     deleteUser
+    getUserByEmail
 };

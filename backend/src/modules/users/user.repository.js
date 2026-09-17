@@ -18,14 +18,14 @@ class UserRepository {
 
         return rows[0];
     }
-     async getUserByDocument(numero_documento) {
-        const [rows] = await pool.query(
-            'SELECT * FROM usuario WHERE numero_documento = ?',
-            [numero_documento]
-        );
+     async getUserByEmail(correo) {
+    const [rows] = await pool.query(
+        'SELECT * FROM usuario WHERE correo = ?',
+        [correo]
+    );
 
-        return rows[0];
-    }
+    return rows[0];
+}
 
     async createUser(userData) {
         const {
