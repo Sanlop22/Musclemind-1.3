@@ -3,3 +3,5 @@
 .env.*
 dist/
 build/
+desktop.ini
+**/desktop.ini
