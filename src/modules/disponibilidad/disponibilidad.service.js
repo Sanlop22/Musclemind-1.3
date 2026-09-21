@@ -27,9 +27,7 @@ class SolapamientoError extends Error {
  * Dos rangos se solapan si uno empieza antes de que el otro termine,
  * en ambas direcciones.
  */
-function seSolapan(inicioA, finA, inicioB, finB) {
-  return inicioA < finB && inicioB < finA;
-}
+function horaAMinutos(hora) { const [h, m] = hora.split(':').map(Number); return h * 60 + m; } function seSolapan(inicioA, finA, inicioB, finB) { return horaAMinutos(inicioA) < horaAMinutos(finB) && horaAMinutos(inicioB) < horaAMinutos(finA); }
 
 /**
  * Crea un nuevo bloque de disponibilidad.
