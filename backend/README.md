@@ -1,292 +1,178 @@
-## Repositorio 
-https://github.com/Sanlop22/Musclemind-1.3/blob/main/src/app.js
+## Repositorio
+https://github.com/Sanlop22/Musclemind-1.3
 
-MuscleMind Backend
+# MuscleMind Backend
 
-Backend del proyecto MuscleMind, una aplicación orientada a la promoción de hábitos saludables mediante la planificación y seguimiento de rutinas de entrenamiento personalizadas.
+Backend del proyecto **MuscleMind**, una aplicación orientada a la promoción de hábitos saludables mediante la planificación y seguimiento de rutinas de entrenamiento personalizadas, con acompañamiento de instructores certificados.
 
-Descripción
+## Descripción
 
-MuscleMind permite gestionar información relacionada con los usuarios de la aplicación y proporciona servicios para el registro e inicio de sesión.
+MuscleMind conecta usuarios con instructores de entrenamiento físico, permitiendo:
 
-El backend proporciona una API REST desarrollada con Node.js y Express, conectada a una base de datos MySQL.
+- Gestión de usuarios e instructores (registro, autenticación).
+- Consulta y administración de la disponibilidad horaria de los instructores.
+- Reserva de sesiones de entrenamiento, validando disponibilidad y evitando solapamientos.
+- Registro de rutinas de entrenamiento y seguimiento del progreso físico del usuario.
+- Mensajería directa entre usuario e instructor.
+- Historial de progreso personal del usuario.
+- Gestión de pagos asociados a cada reserva.
+- Calificación mutua entre usuario e instructor al finalizar una sesión.
 
-La aplicación implementa una arquitectura modular que permite separar las responsabilidades de las diferentes partes del sistema.
+El backend expone una **API REST** desarrollada con Node.js y Express, conectada a una base de datos MySQL, siguiendo una **arquitectura modular por capas** (rutas → validador → controlador → servicio → repositorio) para separar responsabilidades y facilitar el mantenimiento.
 
-Tecnologías utilizadas
-Node.js
-Express.js
-MySQL
-MySQL2
-Dotenv
-Bcrypt
-Git
-GitHub
-Visual Studio Code
-Postman
-Arquitectura del proyecto
+## Tecnologías utilizadas
 
-El proyecto utiliza una arquitectura modular para separar las responsabilidades del sistema.
+- Node.js
+- Express.js
+- MySQL
+- MySQL2 (con pool de conexiones)
+- express-validator
+- Bcrypt / bcryptjs
+- Dotenv
+- CORS
+- Git y GitHub
+- Visual Studio Code
+- Postman
+- MySQL Workbench
 
-musclemind-backend/
+## Arquitectura del proyecto
+
+Cada módulo del sistema sigue la misma estructura de capas, replicable y consistente en todo el proyecto:
+
+```
+backend/
 │
 ├── src/
 │   ├── database/
-│   │   └── connection.js
+│   │   └── connection.js          # Pool de conexiones a MySQL
 │   │
-│   └── modules/
-│       └── users/
-│           ├── user.controller.js
-│           ├── user.repository.js
-│           ├── user.service.js
-│           ├── user.routes.js
-│           └── user.validator.js
+│   ├── middlewares/
+│   │   └── error.middleware.js    # Manejo centralizado de errores
+│   │
+│   ├── modules/
+│   │   ├── users/                 # Usuarios: CRUD + autenticación
+│   │   ├── instructor/            # Instructores: CRUD + autenticación
+│   │   ├── disponibilidad/        # Bloques horarios de instructores
+│   │   ├── reserva/               # Reservas de sesiones de entrenamiento
+│   │   ├── rutinas/               # Catálogo de rutinas de entrenamiento
+│   │   ├── seguimiento/           # Seguimiento físico del usuario por rutina
+│   │   ├── mensaje/               # Mensajería usuario ↔ instructor
+│   │   ├── historial/             # Historial de progreso del usuario
+│   │   ├── pago/                  # Pagos asociados a una reserva
+│   │   └── calificacion/          # Calificación mutua usuario ↔ instructor
+│   │
+│   └── app.js                     # Configuración de Express y registro de rutas
 │
-├── .env
+├── .env                           # Variables de entorno (no se sube a git)
 ├── .gitignore
-├── app.js
-├── index.js
+├── index.js                       # Punto de entrada del servidor
 ├── package.json
 ├── package-lock.json
 └── README.md
-Módulo de usuarios
+```
 
-Actualmente se encuentra implementado el módulo de usuarios.
+Cada módulo, salvo excepciones puntuales, contiene:
 
-El módulo permite realizar operaciones CRUD sobre los usuarios almacenados en la base de datos y cuenta además con un servicio de autenticación para el inicio de sesión.
+| Archivo | Responsabilidad |
+|---|---|
+| `*.routes.js` | Define los endpoints y qué middlewares/controladores usa cada uno |
+| `*.validator.js` | Valida la forma de los datos de entrada (tipos, obligatoriedad, longitudes) |
+| `*.controller.js` | Recibe la petición HTTP, delega al service y responde |
+| `*.service.js` | Contiene las reglas de negocio del módulo |
+| `*.repository.js` | Única capa que ejecuta consultas SQL contra MySQL |
+| `*.model.js` | Representa una fila de la tabla correspondiente |
 
-Funcionalidades implementadas
-Consultar todos los usuarios.
-Consultar un usuario por su ID.
-Registrar nuevos usuarios.
-Actualizar información de usuarios.
-Eliminar usuarios.
-Iniciar sesión mediante número de documento y contraseña.
-Validar información recibida.
-Conectar el sistema con MySQL.
-Manejar errores básicos de la API.
-Encriptar las contraseñas mediante Bcrypt.
-API REST
+Regla de dependencia entre módulos: **un módulo solo puede llamar al Service de otro módulo, nunca a su Repository directamente** (por ejemplo, `reserva` consulta la disponibilidad de un instructor a través de `disponibilidadService`, no accediendo a su tabla).
 
-La API se ejecuta localmente mediante:
+## Módulos desarrollados
 
-http://localhost:3000
-Endpoints de usuarios
-Método	Endpoint	Descripción
-GET	/api/usuarios	Consultar todos los usuarios
-GET	/api/usuarios/:id	Consultar un usuario por ID
-POST	/api/usuarios	Registrar un nuevo usuario
-POST	/api/usuarios/login	Iniciar sesión
-PUT	/api/usuarios/:id	Actualizar un usuario
-DELETE	/api/usuarios/:id	Eliminar un usuario
-Registro de usuario
-Endpoint
-POST /api/usuarios
-Ejemplo de solicitud
-{
-  "nombre": "Sandra",
-  "apellido": "Prueba",
-  "edad": 30,
-  "tipo_documento": "CC",
-  "numero_documento": "88888888",
-  "peso": 70,
-  "altura": 165,
-  "pais": "Colombia",
-  "correo": "sandra.prueba888@gmail.com",
-  "contrasena": "123456"
-}
-Respuesta
+| Módulo | Descripción | Desarrollado por |
+|---|---|---|
+| `users` | Registro, consulta, actualización, eliminación e inicio de sesión de usuarios | Sandra López |
+| `instructor` | Registro, consulta e inicio de sesión de instructores | Bárbara Jaramillo |
+| `disponibilidad` | Bloques horarios en los que un instructor está disponible, con validación de solapamientos | Bárbara Jaramillo |
+| `reserva` | Reserva de sesiones, validando disponibilidad del instructor y evitando solapamientos con otras reservas | Bárbara Jaramillo |
+| `mensaje` | Mensajería directa entre un usuario y un instructor | Bárbara Jaramillo |
+| `historial` | Registro de progreso personal del usuario | Bárbara Jaramillo |
+| `pago` | Registro y actualización del pago asociado a una reserva | Bárbara Jaramillo |
+| `calificacion` | Calificación mutua (usuario → instructor e instructor → usuario) al completar una reserva | Bárbara Jaramillo |
+| `rutinas` | Catálogo de rutinas de entrenamiento disponibles | Ronald Muñoz |
+| `seguimiento` | Registro del progreso físico del usuario durante una rutina (peso, % grasa, series, etc.) | Ronald Muñoz |
 
-La API devuelve una respuesta de creación exitosa con código HTTP 201 Created.
+> La documentación detallada de cada endpoint (método HTTP, parámetros, ejemplos de solicitud y respuesta) está en [`API_ENDPOINTS.md`](./API_ENDPOINTS.md).
 
-Inicio de sesión
-Endpoint
-POST /api/usuarios/login
-Ejemplo de solicitud
-{
-  "numero_documento": "88888888",
-  "contrasena": "123456"
-}
-Respuesta exitosa
+## Reglas de negocio destacadas
 
-Código HTTP:
+- **Disponibilidad:** no se pueden crear dos bloques horarios que se solapen para un mismo instructor, el mismo día.
+- **Reserva:** solo puede crearse si el horario solicitado cae dentro de un bloque de disponibilidad del instructor, y no se solapa con otra reserva activa del mismo instructor.
+- **Cambio de estado de reserva:** una reserva no puede modificarse una vez está `completada` o `cancelada`; y no puede marcarse `completada` si la fecha/hora aún no ha pasado.
+- **Pago:** cada reserva tiene, como máximo, un único registro de pago (`id_reserva` es `UNIQUE`). Un nuevo intento de pago actualiza la fila existente en vez de crear una nueva.
+- **Calificación:** solo puede calificarse una reserva cuyo estado sea `completada`. El usuario y el instructor califican de forma independiente sobre la misma fila (`id_reserva` también es `UNIQUE`).
 
-200 OK
+## Seguridad
 
-Ejemplo:
+- Las contraseñas de usuarios e instructores se almacenan como **hash** (Bcrypt/bcryptjs), nunca en texto plano.
+- El inicio de sesión compara la contraseña ingresada contra el hash almacenado, sin exponer la contraseña real en ninguna respuesta.
+- **Pendiente:** el proyecto todavía no implementa autenticación basada en tokens (JWT). Actualmente, los identificadores de usuario/instructor se reciben directamente en el cuerpo de la petición. Este es el próximo paso de seguridad recomendado antes de un despliegue en producción.
 
-{
-  "mensaje": "Inicio de sesión exitoso",
-  "usuario": {
-    "id_usuario": 1,
-    "nombre": "Sandra",
-    "apellido": "Prueba",
-    "correo": "sandra.prueba888@gmail.com"
-  }
-}
-Credenciales incorrectas
+## Base de datos
 
-Cuando el número de documento o la contraseña no son correctos, la API responde con:
+El proyecto utiliza **MySQL**. La conexión se administra mediante un *pool de conexiones* (`mysql2`), configurado en `src/database/connection.js` y alimentado por variables de entorno:
 
-401 Unauthorized
-
-Ejemplo:
-
-{
-  "error": "Credenciales incorrectas"
-}
-Campos obligatorios
-
-Si no se envía el número de documento o la contraseña, la API responde con:
-
-400 Bad Request
-
-Ejemplo:
-
-{
-  "error": "El número de documento y la contraseña son obligatorios"
-}
-Consultar usuarios
-Endpoint
-GET /api/usuarios
-
-Permite obtener la información de los usuarios registrados en la base de datos.
-
-Consultar usuario por ID
-Endpoint
-GET /api/usuarios/:id
-
-Ejemplo:
-
-GET /api/usuarios/1
-
-Permite consultar un usuario específico mediante su identificador.
-
-Actualizar usuario
-Endpoint
-PUT /api/usuarios/:id
-
-Ejemplo:
-
-PUT /api/usuarios/1
-
-Permite actualizar la información de un usuario existente.
-
-Eliminar usuario
-Endpoint
-DELETE /api/usuarios/:id
-
-Ejemplo:
-
-DELETE /api/usuarios/1
-
-Permite eliminar un usuario existente de la base de datos.
-
-Validaciones
-
-El módulo de usuarios cuenta con validaciones para controlar la información recibida por la API.
-
-Entre las validaciones implementadas se encuentran:
-
-Nombre obligatorio.
-Nombre con mínimo de caracteres.
-Apellido obligatorio.
-Número de documento obligatorio.
-Validación de edad.
-Validación del tipo de documento.
-Validación del peso.
-Validación de la altura.
-Validación básica del país.
-Validación de los campos necesarios para el inicio de sesión.
-Seguridad de contraseñas
-
-Las contraseñas de los usuarios no se almacenan directamente en texto plano.
-
-Antes de guardar una contraseña en la base de datos, el servicio utiliza Bcrypt para generar un hash de la contraseña.
-
-Durante el inicio de sesión se compara la contraseña ingresada con el hash almacenado en la base de datos.
-
-Base de datos
-
-El proyecto utiliza MySQL como sistema de gestión de base de datos.
-
-La conexión se realiza mediante un pool de conexiones utilizando el paquete mysql2.
-
-Las variables de configuración de la base de datos se almacenan en un archivo .env para evitar colocar información sensible directamente en el código fuente.
-
-Ejemplo:
-
+```
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=tu_usuario
 DB_PASSWORD=tu_contraseña
 DB_NAME=musclemind
+DB_CONNECTION_LIMIT=10
+PORT=3000
+```
 
-El archivo .env no debe subirse al repositorio de GitHub.
+El archivo `.env` **no se sube al repositorio** (está en `.gitignore`).
 
-Instalación
+## Instalación y ejecución local
 
-Para ejecutar el proyecto localmente:
+1. Clonar el repositorio:
+   ```
+   git clone https://github.com/Sanlop22/Musclemind-1.3.git
+   ```
+2. Entrar a la carpeta del backend (**importante:** el proyecto real vive dentro de `backend/`, no en la raíz del repositorio):
+   ```
+   cd Musclemind-1.3/backend
+   ```
+3. Instalar las dependencias:
+   ```
+   npm install
+   ```
+4. Crear el archivo `.env` en `backend/` con los datos de conexión a MySQL (ver sección anterior).
+5. Ejecutar el servidor:
+   ```
+   node index.js
+   ```
+   El servidor queda disponible en `http://localhost:3000`.
 
-1. Clonar el repositorio
-git clone https://github.com/Sanlop22/Musclemind-1.3.git
-2. Entrar a la carpeta del proyecto
-cd Musclemind-1.3
-3. Instalar las dependencias
-npm install
-4. Configurar las variables de entorno
+## Pruebas de la API
 
-Crear un archivo .env en la raíz del proyecto y configurar los datos de conexión a MySQL.
+Las pruebas funcionales de todos los endpoints se realizaron manualmente con **Postman** y verificando los resultados directamente en **MySQL Workbench**, cubriendo tanto los casos exitosos como los casos de error de cada regla de negocio (por ejemplo: solapamiento de horarios, reserva fuera de disponibilidad, calificación de una reserva no completada, etc.).
 
-5. Ejecutar el servidor
-node index.js
+## Control de versiones
 
-El servidor se ejecutará en:
+El proyecto utiliza Git para el control de versiones y GitHub como repositorio remoto, con un flujo de trabajo basado en ramas por funcionalidad (`feature/...`) y Pull Requests hacia `main`.
 
-http://localhost:3000
-Pruebas de la API
+Repositorio: https://github.com/Sanlop22/Musclemind-1.3
 
-Las pruebas funcionales de los endpoints se realizaron utilizando Postman.
+## Estado del proyecto
 
-Se verificaron diferentes operaciones, entre ellas:
+Actualmente se encuentran implementados y probados los 10 módulos backend del sistema: `users`, `instructor`, `disponibilidad`, `reserva`, `rutinas`, `seguimiento`, `mensaje`, `historial`, `pago` y `calificacion`.
 
-Registro de usuarios.
-Consulta de usuarios.
-Consulta de usuario por ID.
-Actualización de usuarios.
-Eliminación de usuarios.
-Inicio de sesión exitoso.
-Inicio de sesión con credenciales incorrectas.
-Validación de campos obligatorios.
-Control de versiones
+Pendientes conocidos:
+- Autenticación basada en JWT.
+- Validación de entrada (`express-validator`) en los módulos `rutinas` y `seguimiento`.
+- Integración completa del frontend con la API.
 
-El proyecto utiliza Git para el control de versiones y GitHub como repositorio remoto.
+## Autores
 
-Los cambios realizados durante el desarrollo se registran mediante commits para mantener un historial del proyecto.
-
-Repositorio:
-
-https://github.com/Sanlop22/Musclemind-1.3
-
-Estado del proyecto
-
-Actualmente se encuentra implementado el backend inicial de MuscleMind, incluyendo:
-
-API REST.
-Módulo de usuarios.
-Operaciones CRUD.
-Registro de usuarios.
-Inicio de sesión.
-Validaciones.
-Conexión con MySQL.
-Manejo básico de errores.
-Encriptación de contraseñas.
-Pruebas mediante Postman.
-
-El proyecto continuará con el desarrollo e integración de los demás módulos requeridos para MuscleMind.
-
-Autores
-Sandra Lopez
-Barbara Jaramillo
-Ronald Muñoz
-David Lizcano
+- Sandra López
+- Bárbara Jaramillo
+- Ronald Muñoz
