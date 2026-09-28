@@ -39,6 +39,14 @@ class TransicionEstadoInvalidaError extends Error {
   }
 }
 
+/**
+ * Convierte una hora en formato "HH:MM" o "HH:MM:SS" a minutos totales,
+ * para poder comparar horas numéricamente en vez de como texto.
+ * Esto es necesario porque MySQL devuelve las horas con segundos
+ * ("06:00:00"), mientras que el body de la petición las envía sin
+ * segundos ("06:00") — comparar los strings directamente da resultados
+ * incorrectos en casos donde uno es prefijo del otro.
+ */
 function horaAMinutos(hora) {
   const [h, m] = hora.split(':').map(Number);
   return h * 60 + m;
@@ -73,18 +81,19 @@ async function crearReserva({ idUsuario, idInstructor, idRutina, objetivo, fecha
 
   // Cruce con el módulo disponibilidad: llamamos a su Service,
   // nunca directo a su Repository — así respetamos el límite entre módulos.
- const bloquesDelInstructor = await disponibilidadService.listarPorInstructor(idInstructor);
+  const bloquesDelInstructor = await disponibilidadService.listarPorInstructor(idInstructor);
 
- const hayBloqueDisponible = bloquesDelInstructor.some(
-  (bloque) =>
-    bloque.dia_semana === diaSemana &&
-    bloque.estado === 'disponible' &&
-    horaAMinutos(horaInicio) >= horaAMinutos(bloque.hora_inicio) &&
-    horaAMinutos(horaFin) <= horaAMinutos(bloque.hora_fin)
-);
-if (!hayBloqueDisponible) {
-  throw new FueraDeDisponibilidadError();
-}
+  const hayBloqueDisponible = bloquesDelInstructor.some(
+    (bloque) =>
+      bloque.dia_semana === diaSemana &&
+      bloque.estado === 'disponible' &&
+      horaAMinutos(horaInicio) >= horaAMinutos(bloque.hora_inicio) &&
+      horaAMinutos(horaFin) <= horaAMinutos(bloque.hora_fin)
+  );
+
+  if (!hayBloqueDisponible) {
+    throw new FueraDeDisponibilidadError();
+  }
 
   const reservasExistentes = await repository.buscarPorInstructorYFecha(idInstructor, fecha);
 
@@ -109,6 +118,20 @@ async function listarPorUsuario(idUsuario) {
 async function listarPorInstructor(idInstructor) {
   const reservas = await repository.listarPorInstructor(idInstructor);
   return reservas.map((r) => new Reserva(r));
+}
+
+/**
+ * Busca una reserva por su id. Se agregó para que otros módulos
+ * (como calificacion) puedan consultar el estado de una reserva sin
+ * tocar el Repository de reserva directamente — solo su Service,
+ * respetando el límite entre módulos.
+ */
+async function buscarPorId(idReserva) {
+  const reserva = await repository.buscarPorId(idReserva);
+  if (!reserva) {
+    throw new ReservaNoEncontradaError();
+  }
+  return new Reserva(reserva);
 }
 
 /**
@@ -148,6 +171,7 @@ module.exports = {
   crearReserva,
   listarPorUsuario,
   listarPorInstructor,
+  buscarPorId,
   cambiarEstado,
   RangoHorarioInvalidoError,
   FueraDeDisponibilidadError,
