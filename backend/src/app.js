@@ -8,6 +8,8 @@ const mensajeRoutes = require('./modules/mensaje/mensaje.routes');
 const historialRoutes = require('./modules/historial/historial.routes');
 const pagoRoutes = require('./modules/pago/pago.routes');
 const calificacionRoutes = require('./modules/calificacion/calificacion.routes');
+const rutinaRoutes = require('./modules/rutinas/rutina.routes');
+const seguimientoRoutes = require('./modules/seguimiento/seguimiento.routes');
 // Registra el middleware encargado de manejar los errores de la aplicación
 const errorMiddleware = require('./middlewares/error.middleware');
 
@@ -28,6 +30,8 @@ app.use('/api/mensaje', mensajeRoutes);
 app.use('/api/historial', historialRoutes);
 app.use('/api/pago', pagoRoutes);
 app.use('/api/calificacion', calificacionRoutes);
+app.use('/api/rutinas', rutinaRoutes);
+app.use('/api/seguimiento', seguimientoRoutes);
 // Ruta principal de la API
 
 app.get('/', (req, res) => {
