@@ -499,3 +499,25 @@ select {
   color: #111;
   transform: translateX(-3px);
 }
+/* ========================================
+   BOTÓN MI SEGUIMIENTO
+   ======================================== */
+
+.btn-seguimiento {
+  margin-top: 25px;
+  padding: 13px 24px;
+  background-color: #E63946;
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-seguimiento:hover {
+  background-color: #c92f3b;
+  transform: translateX(3px);
+}

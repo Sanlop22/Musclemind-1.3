@@ -77,6 +77,14 @@ function Progreso() {
               </li>
 
             </ul>
+
+            <button
+              className="btn-seguimiento"
+              onClick={() => window.location.href = '/seguimiento'}
+            >
+              Ver mi seguimiento →
+            </button>
+            
           </div>
 
           <div className="progress-visual">

@@ -1,4 +1,12 @@
+import { useState } from "react";
+
 function Rutinas() {
+    const [rutinaSeleccionada, setRutinaSeleccionada] = useState("");
+
+    const seleccionarRutina = (nombreRutina) => {
+        setRutinaSeleccionada(nombreRutina);
+    };
+
     return (
         <section id="rutinas">
             <div className="section-inner">
@@ -19,6 +27,7 @@ function Rutinas() {
                 <div className="routines-grid">
 
                     <div className="routine-card">
+
                         <div className="routine-badge">
                             Intermedio
                         </div>
@@ -42,9 +51,18 @@ function Rutinas() {
                                 💪 8 ejercicios
                             </span>
                         </div>
+
+                        <button
+                            type="button"
+                            onClick={() => seleccionarRutina("Pecho & Tríceps")}
+                        >
+                            Elegir rutina
+                        </button>
+
                     </div>
 
                     <div className="routine-card">
+
                         <div className="routine-badge">
                             Avanzado
                         </div>
@@ -68,9 +86,18 @@ function Rutinas() {
                                 💪 10 ejercicios
                             </span>
                         </div>
+
+                        <button
+                            type="button"
+                            onClick={() => seleccionarRutina("Espalda & Bíceps")}
+                        >
+                            Elegir rutina
+                        </button>
+
                     </div>
 
                     <div className="routine-card">
+
                         <div className="routine-badge">
                             Avanzado
                         </div>
@@ -94,9 +121,18 @@ function Rutinas() {
                                 💪 8 ejercicios
                             </span>
                         </div>
+
+                        <button
+                            type="button"
+                            onClick={() => seleccionarRutina("Piernas & Glúteos")}
+                        >
+                            Elegir rutina
+                        </button>
+
                     </div>
 
                     <div className="routine-card">
+
                         <div className="routine-badge">
                             Intermedio
                         </div>
@@ -120,9 +156,34 @@ function Rutinas() {
                                 💪 7 ejercicios
                             </span>
                         </div>
+
+                        <button
+                            type="button"
+                            onClick={() => seleccionarRutina("Hombros & Core")}
+                        >
+                            Elegir rutina
+                        </button>
+
                     </div>
 
                 </div>
+
+                {rutinaSeleccionada && (
+                    <div style={{ marginTop: "30px" }}>
+
+                        <h3>
+                            Rutina seleccionada:
+                        </h3>
+
+                        <p>
+                            Has seleccionado{" "}
+                            <strong>
+                                {rutinaSeleccionada}
+                            </strong>
+                        </p>
+
+                    </div>
+                )}
 
             </div>
         </section>

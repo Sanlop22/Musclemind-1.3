@@ -1,0 +1,231 @@
+.seguimiento-page {
+  min-height: 100vh;
+  background: #111111;
+  color: white;
+  padding: 30px 50px;
+  font-family: Arial, sans-serif;
+}
+
+/* ENCABEZADO */
+
+.seguimiento-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.seguimiento-header h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.seguimiento-header h1 span {
+  color: #e63946;
+}
+
+.seguimiento-header p {
+  margin-top: 8px;
+  color: #bbbbbb;
+  font-size: 17px;
+}
+
+.btn-volver {
+  background: transparent;
+  color: white;
+  border: 1px solid #e63946;
+  padding: 10px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-volver:hover {
+  background: #e63946;
+}
+
+/* TITULOS */
+
+.resumen h2,
+.formulario-seguimiento h2,
+.ultimo-seguimiento h2 {
+  margin-bottom: 20px;
+}
+
+/* TARJETAS */
+
+.estadisticas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 45px;
+}
+
+.tarjeta {
+  background: #1d1d1d;
+  border: 1px solid #303030;
+  border-radius: 12px;
+  padding: 22px;
+  transition: 0.2s;
+}
+
+.tarjeta:hover {
+  border-color: #e63946;
+  transform: translateY(-2px);
+}
+
+.icono {
+  font-size: 25px;
+}
+
+.tarjeta p {
+  color: #aaaaaa;
+  margin: 12px 0 5px;
+}
+
+.tarjeta h3 {
+  margin: 0;
+  font-size: 25px;
+}
+
+/* FORMULARIO */
+
+.formulario-seguimiento {
+  background: #1a1a1a;
+  border-radius: 15px;
+  padding: 30px;
+  border: 1px solid #303030;
+  margin-bottom: 40px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.campo label {
+  font-size: 14px;
+  color: #dddddd;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  background: #111111;
+  color: white;
+  border: 1px solid #444444;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 15px;
+  outline: none;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  border-color: #e63946;
+}
+
+.campo select option {
+  background: #111111;
+  color: white;
+}
+
+.comentarios {
+  margin-top: 20px;
+}
+
+.campo textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* BOTON GUARDAR */
+
+.btn-guardar {
+  margin-top: 25px;
+  background: #e63946;
+  color: white;
+  border: none;
+  padding: 13px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-guardar:hover {
+  background: #c92f3c;
+}
+
+/* ULTIMO REGISTRO */
+
+.ultimo-seguimiento {
+  margin-bottom: 40px;
+}
+
+.registro {
+  background: #1a1a1a;
+  border: 1px solid #303030;
+  border-radius: 12px;
+  padding: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.registro strong {
+  font-size: 17px;
+}
+
+.registro p {
+  color: #aaaaaa;
+  margin-bottom: 0;
+}
+
+.registro-datos {
+  display: flex;
+  gap: 20px;
+  color: #dddddd;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .estadisticas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .registro {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .registro-datos {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 600px) {
+  .seguimiento-page {
+    padding: 20px;
+  }
+
+  .estadisticas,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .seguimiento-header {
+    align-items: flex-start;
+  }
+}
