@@ -1,125 +1,166 @@
-## Repositorio
+MuscleMind Backend
+
+Backend del proyecto MuscleMind, una aplicación orientada a la promoción de hábitos saludables mediante la planificación y seguimiento de rutinas de entrenamiento personalizadas, con acompañamiento de instructores.
+
+Repositorio
+
 https://github.com/Sanlop22/Musclemind-1.3
 
-# MuscleMind Backend
-
-Backend del proyecto **MuscleMind**, una aplicación orientada a la promoción de hábitos saludables mediante la planificación y seguimiento de rutinas de entrenamiento personalizadas, con acompañamiento de instructores certificados.
-
-## Descripción
+Descripción
 
 MuscleMind conecta usuarios con instructores de entrenamiento físico, permitiendo:
 
-- Gestión de usuarios e instructores (registro, autenticación).
-- Consulta y administración de la disponibilidad horaria de los instructores.
-- Reserva de sesiones de entrenamiento, validando disponibilidad y evitando solapamientos.
-- Registro de rutinas de entrenamiento y seguimiento del progreso físico del usuario.
-- Mensajería directa entre usuario e instructor.
-- Historial de progreso personal del usuario.
-- Gestión de pagos asociados a cada reserva.
-- Calificación mutua entre usuario e instructor al finalizar una sesión.
+Gestión de usuarios e instructores.
+Registro e inicio de sesión.
+Consulta y administración de la disponibilidad horaria de los instructores.
+Reserva de sesiones de entrenamiento.
+Validación de disponibilidad y prevención de solapamientos.
+Registro de rutinas de entrenamiento.
+Seguimiento del progreso físico del usuario.
+Mensajería entre usuario e instructor.
+Consulta del historial.
+Gestión de pagos asociados a las reservas.
+Calificación de usuarios e instructores después de completar una sesión.
 
-El backend expone una **API REST** desarrollada con Node.js y Express, conectada a una base de datos MySQL, siguiendo una **arquitectura modular por capas** (rutas → validador → controlador → servicio → repositorio) para separar responsabilidades y facilitar el mantenimiento.
+El backend expone una API REST desarrollada con Node.js y Express, conectada a una base de datos MySQL.
 
-## Tecnologías utilizadas
+El proyecto utiliza una arquitectura modular por capas:
 
-- Node.js
-- Express.js
-- MySQL
-- MySQL2 (con pool de conexiones)
-- express-validator
-- Bcrypt / bcryptjs
-- Dotenv
-- CORS
-- Git y GitHub
-- Visual Studio Code
-- Postman
-- MySQL Workbench
+Routes → Validator → Controller → Service → Repository → MySQL
 
-## Arquitectura del proyecto
+Esta estructura permite separar responsabilidades y facilitar el mantenimiento del sistema.
 
-Cada módulo del sistema sigue la misma estructura de capas, replicable y consistente en todo el proyecto:
-
-```
+Tecnologías utilizadas
+Node.js
+Express.js
+MySQL
+MySQL2
+express-validator
+Bcrypt / bcryptjs
+Dotenv
+CORS
+Git
+GitHub
+Visual Studio Code
+Postman
+MySQL Workbench
+Arquitectura del proyecto
 backend/
 │
 ├── src/
-│   ├── database/
-│   │   └── connection.js          # Pool de conexiones a MySQL
+│   │
+│   ├── config/
+│   │   └── db.js
 │   │
 │   ├── middlewares/
-│   │   └── error.middleware.js    # Manejo centralizado de errores
+│   │   └── error.middleware.js
 │   │
 │   ├── modules/
-│   │   ├── users/                 # Usuarios: CRUD + autenticación
-│   │   ├── instructor/            # Instructores: CRUD + autenticación
-│   │   ├── disponibilidad/        # Bloques horarios de instructores
-│   │   ├── reserva/               # Reservas de sesiones de entrenamiento
-│   │   ├── rutinas/               # Catálogo de rutinas de entrenamiento
-│   │   ├── seguimiento/           # Seguimiento físico del usuario por rutina
-│   │   ├── mensaje/               # Mensajería usuario ↔ instructor
-│   │   ├── historial/             # Historial de progreso del usuario
-│   │   ├── pago/                  # Pagos asociados a una reserva
-│   │   └── calificacion/          # Calificación mutua usuario ↔ instructor
+│   │   ├── users/
+│   │   ├── instructor/
+│   │   ├── disponibilidad/
+│   │   ├── reserva/
+│   │   ├── rutinas/
+│   │   ├── seguimiento/
+│   │   ├── mensaje/
+│   │   ├── historial/
+│   │   ├── pago/
+│   │   └── calificacion/
 │   │
-│   └── app.js                     # Configuración de Express y registro de rutas
+│   └── app.js
 │
-├── .env                           # Variables de entorno (no se sube a git)
+├── .env
 ├── .gitignore
-├── index.js                       # Punto de entrada del servidor
+├── index.js
 ├── package.json
 ├── package-lock.json
 └── README.md
-```
+Organización por capas
 
-Cada módulo, salvo excepciones puntuales, contiene:
+Cada módulo utiliza una estructura organizada por responsabilidades.
 
-| Archivo | Responsabilidad |
-|---|---|
-| `*.routes.js` | Define los endpoints y qué middlewares/controladores usa cada uno |
-| `*.validator.js` | Valida la forma de los datos de entrada (tipos, obligatoriedad, longitudes) |
-| `*.controller.js` | Recibe la petición HTTP, delega al service y responde |
-| `*.service.js` | Contiene las reglas de negocio del módulo |
-| `*.repository.js` | Única capa que ejecuta consultas SQL contra MySQL |
-| `*.model.js` | Representa una fila de la tabla correspondiente |
+Archivo	Responsabilidad
+*.routes.js	Define los endpoints y las rutas del módulo.
+*.validator.js	Valida los datos recibidos en las solicitudes.
+*.controller.js	Recibe la petición HTTP y genera la respuesta.
+*.service.js	Contiene las reglas de negocio.
+*.repository.js	Realiza las consultas a la base de datos MySQL.
+*.model.js	Representa la información correspondiente a una entidad cuando aplica.
 
-Regla de dependencia entre módulos: **un módulo solo puede llamar al Service de otro módulo, nunca a su Repository directamente** (por ejemplo, `reserva` consulta la disponibilidad de un instructor a través de `disponibilidadService`, no accediendo a su tabla).
+La comunicación entre módulos se realiza respetando la separación de responsabilidades.
 
-## Módulos desarrollados
+Módulos desarrollados
+Módulo	Descripción	Desarrollado por
+users	Registro, consulta, actualización, eliminación e inicio de sesión de usuarios.	Sandra López
+instructor	Registro, consulta e inicio de sesión de instructores.	Bárbara Jaramillo
+disponibilidad	Gestión de horarios disponibles de los instructores.	Bárbara Jaramillo
+reserva	Creación y gestión de reservas de entrenamiento.	Bárbara Jaramillo
+mensaje	Mensajería entre usuario e instructor.	Bárbara Jaramillo
+historial	Consulta del historial del usuario.	Bárbara Jaramillo
+pago	Registro y actualización de pagos asociados a reservas.	Bárbara Jaramillo
+calificacion	Calificación de usuarios e instructores.	Bárbara Jaramillo
+rutinas	Catálogo de rutinas de entrenamiento.	Ronald Muñoz
+seguimiento	Registro del progreso físico del usuario.	Ronald Muñoz
+Reglas de negocio destacadas
+Disponibilidad
 
-| Módulo | Descripción | Desarrollado por |
-|---|---|---|
-| `users` | Registro, consulta, actualización, eliminación e inicio de sesión de usuarios | Sandra López |
-| `instructor` | Registro, consulta e inicio de sesión de instructores | Bárbara Jaramillo |
-| `disponibilidad` | Bloques horarios en los que un instructor está disponible, con validación de solapamientos | Bárbara Jaramillo |
-| `reserva` | Reserva de sesiones, validando disponibilidad del instructor y evitando solapamientos con otras reservas | Bárbara Jaramillo |
-| `mensaje` | Mensajería directa entre un usuario y un instructor | Bárbara Jaramillo |
-| `historial` | Registro de progreso personal del usuario | Bárbara Jaramillo |
-| `pago` | Registro y actualización del pago asociado a una reserva | Bárbara Jaramillo |
-| `calificacion` | Calificación mutua (usuario → instructor e instructor → usuario) al completar una reserva | Bárbara Jaramillo |
-| `rutinas` | Catálogo de rutinas de entrenamiento disponibles | Ronald Muñoz |
-| `seguimiento` | Registro del progreso físico del usuario durante una rutina (peso, % grasa, series, etc.) | Ronald Muñoz |
+No se pueden crear dos bloques horarios que se solapen para un mismo instructor y día.
 
-> La documentación detallada de cada endpoint (método HTTP, parámetros, ejemplos de solicitud y respuesta) está en [`API_ENDPOINTS.md`](./API_ENDPOINTS.md).
+Reserva
 
-## Reglas de negocio destacadas
+Una reserva solamente puede realizarse cuando:
 
-- **Disponibilidad:** no se pueden crear dos bloques horarios que se solapen para un mismo instructor, el mismo día.
-- **Reserva:** solo puede crearse si el horario solicitado cae dentro de un bloque de disponibilidad del instructor, y no se solapa con otra reserva activa del mismo instructor.
-- **Cambio de estado de reserva:** una reserva no puede modificarse una vez está `completada` o `cancelada`; y no puede marcarse `completada` si la fecha/hora aún no ha pasado.
-- **Pago:** cada reserva tiene, como máximo, un único registro de pago (`id_reserva` es `UNIQUE`). Un nuevo intento de pago actualiza la fila existente en vez de crear una nueva.
-- **Calificación:** solo puede calificarse una reserva cuyo estado sea `completada`. El usuario y el instructor califican de forma independiente sobre la misma fila (`id_reserva` también es `UNIQUE`).
+El instructor tiene disponibilidad.
+La fecha y hora solicitadas están dentro del horario disponible.
+No existe otra reserva activa que se solape con el horario solicitado.
+Estado de la reserva
 
-## Seguridad
+Las reservas manejan diferentes estados, entre ellos:
 
-- Las contraseñas de usuarios e instructores se almacenan como **hash** (Bcrypt/bcryptjs), nunca en texto plano.
-- El inicio de sesión compara la contraseña ingresada contra el hash almacenado, sin exponer la contraseña real en ninguna respuesta.
-- **Pendiente:** el proyecto todavía no implementa autenticación basada en tokens (JWT). Actualmente, los identificadores de usuario/instructor se reciben directamente en el cuerpo de la petición. Este es el próximo paso de seguridad recomendado antes de un despliegue en producción.
+pendiente
+completada
+cancelada
 
-## Base de datos
+Una reserva completada o cancelada no puede modificarse como una reserva activa.
 
-El proyecto utiliza **MySQL**. La conexión se administra mediante un *pool de conexiones* (`mysql2`), configurado en `src/database/connection.js` y alimentado por variables de entorno:
+Pago
 
-```
+Cada reserva puede tener un registro de pago asociado.
+
+El sistema permite registrar y actualizar el estado del pago.
+
+Calificación
+
+Una reserva debe encontrarse en estado completada para poder realizar una calificación.
+
+El usuario puede calificar al instructor y el instructor puede calificar al usuario.
+
+Seguridad
+
+Las contraseñas de usuarios e instructores se almacenan mediante hash utilizando Bcrypt/bcryptjs, evitando almacenarlas directamente en texto plano.
+
+El inicio de sesión compara la contraseña ingresada con el hash almacenado.
+
+Mejora pendiente
+
+El proyecto actualmente no implementa autenticación mediante tokens JWT.
+
+La implementación de JWT se considera una mejora futura para aumentar la seguridad antes de un despliegue en producción.
+
+Base de datos
+
+El proyecto utiliza MySQL como sistema gestor de base de datos.
+
+La conexión se administra mediante mysql2 y un pool de conexiones.
+
+La configuración se encuentra en:
+
+src/config/db.js
+
+Las credenciales se manejan mediante variables de entorno.
+
+Ejemplo:
+
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=tu_usuario
@@ -127,52 +168,189 @@ DB_PASSWORD=tu_contraseña
 DB_NAME=musclemind
 DB_CONNECTION_LIMIT=10
 PORT=3000
-```
 
-El archivo `.env` **no se sube al repositorio** (está en `.gitignore`).
+El archivo .env contiene información de configuración y no debe publicarse en GitHub cuando contiene credenciales reales.
 
-## Instalación y ejecución local
+API REST
 
-1. Clonar el repositorio:
-   ```
-   git clone https://github.com/Sanlop22/Musclemind-1.3.git
-   ```
-2. Entrar a la carpeta del backend (**importante:** el proyecto real vive dentro de `backend/`, no en la raíz del repositorio):
-   ```
-   cd Musclemind-1.3/backend
-   ```
-3. Instalar las dependencias:
-   ```
-   npm install
-   ```
-4. Crear el archivo `.env` en `backend/` con los datos de conexión a MySQL (ver sección anterior).
-5. Ejecutar el servidor:
-   ```
-   node index.js
-   ```
-   El servidor queda disponible en `http://localhost:3000`.
+El backend proporciona diferentes endpoints para la comunicación con el frontend.
 
-## Pruebas de la API
+Usuarios
+GET    /api/usuarios
+POST   /api/usuarios
+PUT    /api/usuarios/:id
+DELETE /api/usuarios/:id
+Instructores
+GET  /api/instructor
+POST /api/instructor
+Disponibilidad
+GET  /api/disponibilidad
+POST /api/disponibilidad
+Reservas
+POST /api/reserva
+GET  /api/reserva/usuario/:idUsuario
+Rutinas
+GET /api/rutinas
+Seguimiento
+GET  /api/seguimiento/usuario/:idUsuario
+POST /api/seguimiento
+Mensajes
+GET  /api/mensaje/conversacion/:idUsuario/:idInstructor
+POST /api/mensaje
+Historial
+GET /api/historial/usuario/:idUsuario
+Pagos
+POST  /api/pago
+GET   /api/pago/reserva/:idReserva
+PATCH /api/pago/reserva/:idReserva/estado
+Calificaciones
+POST /api/calificacion/usuario
+POST /api/calificacion/instructor
+GET  /api/calificacion/reserva/:idReserva
+Flujo principal
 
-Las pruebas funcionales de todos los endpoints se realizaron manualmente con **Postman** y verificando los resultados directamente en **MySQL Workbench**, cubriendo tanto los casos exitosos como los casos de error de cada regla de negocio (por ejemplo: solapamiento de horarios, reserva fuera de disponibilidad, calificación de una reserva no completada, etc.).
+El funcionamiento general del sistema se puede representar así:
 
-## Control de versiones
+Usuario
+   ↓
+Frontend React
+   ↓
+API REST
+   ↓
+Routes
+   ↓
+Validator
+   ↓
+Controller
+   ↓
+Service
+   ↓
+Repository
+   ↓
+MySQL
 
-El proyecto utiliza Git para el control de versiones y GitHub como repositorio remoto, con un flujo de trabajo basado en ramas por funcionalidad (`feature/...`) y Pull Requests hacia `main`.
+El flujo funcional principal de MuscleMind es:
 
-Repositorio: https://github.com/Sanlop22/Musclemind-1.3
+Rutinas
+   ↓
+Instructores
+   ↓
+Disponibilidad
+   ↓
+Reserva
+   ↓
+Mis Reservas
+   ↓
+Pago / Calificación
+   ↓
+Historial
 
-## Estado del proyecto
+También se encuentran disponibles los módulos de:
 
-Actualmente se encuentran implementados y probados los 10 módulos backend del sistema: `users`, `instructor`, `disponibilidad`, `reserva`, `rutinas`, `seguimiento`, `mensaje`, `historial`, `pago` y `calificacion`.
+Seguimiento
+Mensajes
+Instalación y ejecución local
+1. Clonar el repositorio
+git clone https://github.com/Sanlop22/Musclemind-1.3.git
+2. Entrar a la carpeta del backend
+cd Musclemind-1.3/backend
+3. Instalar dependencias
+npm install
+4. Configurar las variables de entorno
 
-Pendientes conocidos:
-- Autenticación basada en JWT.
-- Validación de entrada (`express-validator`) en los módulos `rutinas` y `seguimiento`.
-- Integración completa del frontend con la API.
+Crear el archivo:
 
-## Autores
+.env
 
-- Sandra López
-- Bárbara Jaramillo
-- Ronald Muñoz
+dentro de la carpeta backend.
+
+Agregar las variables de conexión a MySQL.
+
+5. Ejecutar el servidor
+node index.js
+
+El backend se ejecuta en:
+
+http://localhost:3000
+Pruebas de la API
+
+Las funcionalidades del backend fueron probadas mediante solicitudes HTTP utilizando Postman y verificando los resultados en MySQL Workbench.
+
+Se realizaron pruebas de:
+
+Registro de usuarios.
+Inicio de sesión.
+Consulta de instructores.
+Consulta de disponibilidad.
+Creación de reservas.
+Consulta de reservas.
+Registro de pagos.
+Actualización del estado de pagos.
+Calificación de instructores.
+Consulta de historial.
+Registro de seguimiento.
+Consulta y envío de mensajes.
+
+También se verificaron reglas de negocio como disponibilidad, reservas y estados de las sesiones.
+
+Integración con el Frontend
+
+El backend se encuentra integrado con el frontend desarrollado en React.
+
+La comunicación se realiza mediante solicitudes HTTP a la API REST.
+
+El frontend consume principalmente los siguientes módulos:
+
+Usuarios
+Rutinas
+Instructores
+Disponibilidad
+Reservas
+Mis Reservas
+Pagos
+Calificaciones
+Seguimiento
+Historial
+Mensajes
+Control de versiones
+
+El proyecto utiliza Git y GitHub para el control de versiones.
+
+Repositorio:
+
+https://github.com/Sanlop22/Musclemind-1.3
+
+Rama principal:
+
+main
+
+Último commit de integración:
+
+06fc770 - Integrar modulos principales de MuscleMind
+Estado actual del proyecto
+
+Actualmente se encuentran integrados los principales módulos del sistema:
+
+users
+instructor
+disponibilidad
+reserva
+rutinas
+seguimiento
+mensaje
+historial
+pago
+calificacion
+
+El backend se encuentra conectado con el frontend y con la base de datos MySQL.
+
+Mejoras futuras
+Implementación de autenticación mediante JWT.
+Fortalecimiento de las validaciones.
+Mejoras de seguridad.
+Integración con una pasarela de pagos real.
+Mejoras adicionales en la gestión de usuarios y permisos.
+Autores
+Sandra López
+Bárbara Jaramillo
+Ronald Muñoz

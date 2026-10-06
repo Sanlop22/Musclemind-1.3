@@ -1,229 +1,205 @@
-MuscleMind Frontend
-## Repositorio 
-https://github.com/Sanlop22/Musclemind-1.3/blob/main/src/app.js
+MuscleMind – Frontend
+Repositorio
+
+https://github.com/Sanlop22/Musclemind-1.3
 
 Descripción
 
-MuscleMind es una aplicación web orientada al entrenamiento físico, la creación de rutinas y el seguimiento del progreso de los usuarios.
+MuscleMind es una aplicación web orientada al entrenamiento físico, la selección de instructores y el seguimiento del progreso de los usuarios.
 
-Este repositorio contiene el componente frontend del proyecto, desarrollado utilizando React JS y Vite.
+Este repositorio contiene el componente Frontend del proyecto, desarrollado con React y Vite.
 
-La interfaz permite al usuario navegar por las diferentes secciones de la aplicación, acceder al formulario de inicio de sesión y crear una cuenta mediante un formulario conectado con el backend.
+El frontend permite al usuario interactuar con las diferentes funcionalidades de la aplicación y comunicarse con el backend mediante una API REST.
 
 Tecnologías utilizadas
-React JS
+React
 Vite
 JavaScript
 JSX
 React Router DOM
+Axios
+HTML
 CSS
-Fetch API
-Node.js
 Git
 GitHub
 Visual Studio Code
-Estructura del proyecto
+Arquitectura del Frontend
+
+El frontend utiliza una estructura organizada por páginas y servicios.
+
+El funcionamiento general es:
+
+Usuario → React → Páginas → Servicios/Axios → API REST → Backend → Base de datos MySQL
+
+Esta organización permite separar la interfaz de usuario de la comunicación con el backend.
+
+Estructura principal
 frontend/
 │
-├── public/
-│
 ├── src/
-│   ├── components/
-│   │   ├── Navbar.jsx
-│   │   ├── Hero.jsx
-│   │   ├── StatsBar.jsx
-│   │   ├── Pilares.jsx
-│   │   ├── Rutinas.jsx
-│   │   ├── Progreso.jsx
-│   │   ├── CtaFinal.jsx
-│   │   └── Footer.jsx
 │   │
 │   ├── pages/
 │   │   ├── Home.jsx
 │   │   ├── Login.jsx
-│   │   └── Register.jsx
+│   │   ├── Register.jsx
+│   │   ├── Rutinas.jsx
+│   │   ├── Instructores.jsx
+│   │   ├── Reserva.jsx
+│   │   ├── MisReservas.jsx
+│   │   ├── Pagos.jsx
+│   │   ├── Calificaciones.jsx
+│   │   ├── Seguimiento.jsx
+│   │   ├── Historial.jsx
+│   │   └── Mensajes.jsx
 │   │
 │   ├── services/
+│   │   ├── instructorService.js
+│   │   ├── disponibilidadService.js
+│   │   ├── reservaService.js
+│   │   ├── mensajeService.js
+│   │   ├── historialService.js
+│   │   ├── pagoService.js
+│   │   └── ...
 │   │
 │   ├── App.jsx
-│   ├── App.css
-│   ├── index.css
-│   └── main.jsx
+│   └── ...
 │
 ├── package.json
 ├── package-lock.json
 └── README.md
-Componentes principales
+Funcionalidades principales
 
-El frontend fue dividido en componentes reutilizables para organizar mejor la interfaz.
+El frontend permite:
 
-Navbar
-
-Contiene la navegación principal de la aplicación.
-
-Hero
-
-Es la sección principal de la página de inicio. Presenta el propósito de MuscleMind y contiene botones para acceder al inicio de sesión y al registro.
-
-StatsBar
-
-Presenta información estadística relacionada con la propuesta de la aplicación.
-
-Pilares
-
-Muestra los principales pilares o características de MuscleMind.
-
-Rutinas
-
-Presenta información relacionada con las rutinas de entrenamiento.
-
-Progreso
-
-Representa la sección destinada al seguimiento del progreso del usuario.
-
-CtaFinal
-
-Contiene una llamada a la acción para incentivar al usuario a comenzar a utilizar la aplicación.
-
-Footer
-
-Contiene la información final de la página.
-
-Páginas
+Registrar usuarios.
+Iniciar sesión.
+Consultar y seleccionar rutinas.
+Consultar y seleccionar instructores.
+Consultar disponibilidad de los instructores.
+Realizar reservas de entrenamiento.
+Consultar las reservas realizadas.
+Realizar el proceso de pago de una reserva.
+Calificar al instructor después de completar una reserva.
+Consultar el historial.
+Registrar y consultar el seguimiento del progreso.
+Enviar y consultar mensajes con los instructores.
+Páginas principales
 Inicio
 
-Ruta:
-
-/
-
-La página de inicio presenta la propuesta principal de MuscleMind y sus diferentes secciones informativas.
-
-Inicio de sesión
-
-Ruta:
-
-/login
-
-Permite visualizar el formulario para que el usuario pueda ingresar sus credenciales.
-
-Actualmente se encuentra implementada la interfaz de inicio de sesión y su navegación dentro de la aplicación.
+Presenta la información general de MuscleMind y permite acceder a las principales funcionalidades de la aplicación.
 
 Registro
 
-Ruta:
+Permite crear una nueva cuenta de usuario.
 
-/register
+Inicio de sesión
 
-Contiene el formulario para crear una nueva cuenta de usuario.
+Permite al usuario ingresar a la aplicación mediante sus credenciales.
 
-El formulario solicita información como:
+Rutinas
 
-Nombre
-Apellido
-Tipo de documento
-Número de documento
-Contraseña
-Edad
-Peso
-Altura
-País
-Navegación
+Permite consultar las rutinas disponibles y seleccionar una rutina para continuar con el proceso de selección del instructor.
 
-Para controlar la navegación entre las páginas se utiliza React Router DOM.
+Instructores
 
-Las rutas principales son:
+Permite consultar los instructores disponibles y seleccionar un instructor relacionado con la rutina escogida.
 
-/
-├── /login
-└── /register
+Reserva
 
-Los botones de la página principal permiten navegar directamente a las páginas correspondientes.
+Permite seleccionar una fecha y un horario disponible para realizar el entrenamiento con el instructor seleccionado.
 
-También se incorporaron botones para regresar a la página de inicio.
+Mis Reservas
 
-Registro de usuarios
+Permite consultar las reservas realizadas por el usuario y acceder a las opciones disponibles según el estado de cada reserva.
 
-El formulario de registro se encuentra conectado con el backend de MuscleMind.
+Pagos
 
-Al enviar el formulario, React recopila la información ingresada y realiza una solicitud POST hacia:
+Permite registrar el pago asociado a una reserva.
 
-http://localhost:3000/api/usuarios
+Calificaciones
 
-Los datos son enviados en formato JSON.
+Permite calificar al instructor después de completar una reserva y agregar un comentario.
 
-Ejemplo:
+Seguimiento
 
-{
-  "nombre": "Sandra",
-  "apellido": "Prueba",
-  "numero_documento": "99999999",
-  "tipo_documento": "CC",
-  "contrasena": "123456",
-  "edad": 30,
-  "peso": 70,
-  "altura": 165,
-  "pais": "Colombia"
-}
+Permite registrar y consultar información relacionada con el progreso del usuario.
 
-Cuando el registro es exitoso, el frontend muestra un mensaje de confirmación al usuario y limpia nuevamente el formulario.
+Historial
 
-Comunicación Frontend - Backend
+Permite consultar el historial de actividades realizadas.
 
-La comunicación entre los componentes se realiza mediante solicitudes HTTP.
+Mensajes
 
-El flujo del registro es:
+Permite establecer comunicación entre el usuario y el instructor.
 
-Usuario
-   ↓
-Formulario Register.jsx
-   ↓
-React
-   ↓
-Fetch API
-   ↓
-Backend Express
-   ↓
-Controller
-   ↓
-Service
-   ↓
-Repository
-   ↓
-MySQL
+Rutas principales
 
-Después de realizar el registro, la respuesta del backend es procesada por el frontend para informar al usuario si la operación fue exitosa o si ocurrió algún error.
+El proyecto utiliza React Router DOM para controlar la navegación entre las diferentes páginas.
 
-Manejo de estado
+Ruta	Funcionalidad
+/	Página de inicio
+/login	Inicio de sesión
+/register	Registro
+/rutinas	Rutinas
+/instructores	Instructores
+/reserva	Reservas
+/mis-reservas	Mis reservas
+/pagos	Pagos
+/calificaciones	Calificaciones
+/seguimiento	Seguimiento
+/historial	Historial
+/mensajes/:idInstructor	Mensajes
+Integración con el Backend
 
-El formulario de registro utiliza useState de React para almacenar y actualizar los valores ingresados por el usuario.
+El frontend se comunica con el backend mediante solicitudes HTTP utilizando Axios.
 
-Cada campo del formulario está relacionado con un estado que permite controlar la información introducida.
+El backend se encuentra disponible durante el desarrollo en:
 
-También se utilizan eventos como onChange y onSubmit para controlar la interacción con el formulario.
+http://localhost:3000
 
-Diseño y estilos
+Algunos de los servicios utilizados por el frontend son:
 
-Los estilos de la aplicación fueron desarrollados utilizando CSS.
+/api/usuarios
+/api/rutinas
+/api/instructor
+/api/disponibilidad
+/api/reserva
+/api/mensaje
+/api/historial
+/api/pago
+/api/calificacion
+/api/seguimiento
 
-Los principales archivos de estilos son:
+De esta manera, el frontend puede enviar y recibir información desde la API REST.
 
-src/App.css
-src/index.css
+Flujo principal de la aplicación
 
-Se diseñaron estilos para:
+El flujo principal implementado en MuscleMind es:
 
-Barra de navegación
-Página principal
-Hero
-Botones
-Formularios
-Página de inicio de sesión
-Página de registro
-Secciones informativas
-Pie de página
+Registro / Inicio de sesión
+          ↓
+       Rutinas
+          ↓
+     Instructores
+          ↓
+       Reserva
+          ↓
+    Mis Reservas
+       ↙      ↘
+    Pago    Calificación
+          ↓
+       Historial
+
+Adicionalmente, el usuario puede utilizar:
+
+Seguimiento
+Mensajes
+
+para complementar su experiencia dentro de la aplicación.
+
 Instalación
 
-Clonar el repositorio:
+Para utilizar el frontend se debe clonar el repositorio:
 
 git clone https://github.com/Sanlop22/Musclemind-1.3.git
 
@@ -240,45 +216,98 @@ Para iniciar el servidor de desarrollo:
 
 npm run dev
 
-Vite proporciona una dirección local similar a:
+Vite mostrará en la terminal la dirección local disponible para acceder a la aplicación.
 
-http://localhost:5173/
-Integración con el Backend
+Generalmente se encuentra disponible en:
 
-Para utilizar correctamente el registro de usuarios se debe tener el backend ejecutándose en:
+http://localhost:5173
+Ejecución completa del proyecto
+
+Para utilizar MuscleMind correctamente se deben ejecutar los dos componentes del proyecto.
+
+Backend
+
+Desde la carpeta:
+
+Musclemind-1.3/backend
+
+ejecutar:
+
+node index.js
+
+El backend utiliza:
 
 http://localhost:3000
+Frontend
 
-y el frontend ejecutándose mediante Vite.
+Desde otra terminal, ingresar a:
 
-De esta manera, el formulario de registro puede enviar la información desde React hacia la API del backend.
+Musclemind-1.3/frontend
+
+y ejecutar:
+
+npm run dev
+
+El frontend se conecta al backend mediante la API REST.
+
+Pruebas
+
+Durante el desarrollo se realizaron pruebas de las diferentes funcionalidades mediante:
+
+Navegación entre páginas.
+Registro de usuarios.
+Inicio de sesión.
+Consulta de rutinas.
+Selección de instructores.
+Consulta de disponibilidad.
+Creación de reservas.
+Consulta de mis reservas.
+Registro de pagos.
+Calificación de instructores.
+Consulta del historial.
+Registro y consulta de seguimiento.
+Envío y consulta de mensajes.
+
+También se verificó la comunicación entre:
+
+Frontend → API REST → Backend → MySQL
 
 Control de versiones
 
-El proyecto utiliza Git y GitHub para registrar los cambios realizados durante el desarrollo.
+El proyecto utiliza Git y GitHub para el control de versiones.
 
 Repositorio:
 
 https://github.com/Sanlop22/Musclemind-1.3
 
-Entre los cambios realizados se encuentran:
+Rama principal:
 
-Implementación del frontend con React.
-Creación de componentes reutilizables.
-Implementación de las páginas de inicio, login y registro.
-Configuración de React Router.
-Integración del formulario de registro con la API.
-Organización de estilos CSS.
-Corrección y reorganización de componentes.
-Integración entre frontend, backend y base de datos.
+main
+
+El proyecto cuenta con commits que registran los avances y modificaciones realizadas durante el desarrollo.
+
 Estado actual del proyecto
 
-El frontend de MuscleMind cuenta con una interfaz funcional desarrollada en React JS, navegación entre las principales páginas y un formulario de registro conectado con el backend.
+El frontend se encuentra integrado con el backend y permite navegar por los principales módulos funcionales de MuscleMind.
 
-La integración permite registrar usuarios desde la interfaz web y almacenar la información en la base de datos MySQL mediante la API REST.
+Actualmente se encuentran integrados los módulos de:
 
+Usuarios
+Rutinas
+Instructores
+Disponibilidad
+Reservas
+Mis Reservas
+Pagos
+Calificaciones
+Seguimiento
+Historial
+Mensajes
 Autores
-Sandra Lopez
-Barbara Jaramillo
+Sandra López
+Bárbara Jaramillo
 Ronald Muñoz
-David Lizcano
+
+Proyecto SENA
+
+Proyecto desarrollado como parte del proceso formativo del programa Tecnólogo en Análisis y Desarrollo de Software – SENA.

@@ -1,189 +1,276 @@
-## Repositorio 
-https://github.com/Sanlop22/Musclemind-1.3/blob/main/src/app.js
+MuscleMind – Frontend
+Repositorio
 
-MuscleMind Backend
+https://github.com/Sanlop22/Musclemind-1.3
+
 Descripción
 
-MuscleMind es una aplicación web orientada al entrenamiento físico y al seguimiento del progreso de los usuarios.
+MuscleMind es una aplicación web orientada al entrenamiento físico, la selección de instructores y el seguimiento del progreso de los usuarios.
 
-Este repositorio contiene el componente backend del proyecto, desarrollado con Node.js y Express.js. El backend proporciona una API REST encargada de gestionar la información de los usuarios y establecer la comunicación con la base de datos MySQL.
+Este repositorio contiene el componente Frontend del proyecto, desarrollado con React y Vite.
+
+El frontend permite al usuario interactuar con las diferentes funcionalidades de la aplicación y comunicarse con el backend mediante una API REST.
 
 Tecnologías utilizadas
-Node.js
-Express.js
-MySQL
-MySQL2
-Dotenv
-CORS
+React
+Vite
+JavaScript
+JSX
+React Router DOM
+Axios
+HTML
+CSS
 Git
 GitHub
 Visual Studio Code
-Arquitectura del proyecto
+Arquitectura del Frontend
 
-El backend utiliza una arquitectura organizada por responsabilidades para facilitar el mantenimiento y la escalabilidad del código.
+El frontend utiliza una estructura organizada por páginas y servicios.
 
-backend/
-│
-├── database/
-│   └── connection.js
+El funcionamiento general es:
+
+Usuario → React → Páginas → Servicios/Axios → API REST → Backend → Base de datos MySQL
+
+Esta organización permite separar la interfaz de usuario de la comunicación con el backend.
+
+Estructura principal
+frontend/
 │
 ├── src/
-│   ├── modules/
-│   │   └── users/
-│   │       ├── user.controller.js
-│   │       ├── user.repository.js
-│   │       ├── user.routes.js
-│   │       ├── user.service.js
-│   │       └── user.validator.js
 │   │
-│   └── app.js
+│   ├── pages/
+│   │   ├── Home.jsx
+│   │   ├── Login.jsx
+│   │   ├── Register.jsx
+│   │   ├── Rutinas.jsx
+│   │   ├── Instructores.jsx
+│   │   ├── Reserva.jsx
+│   │   ├── MisReservas.jsx
+│   │   ├── Pagos.jsx
+│   │   ├── Calificaciones.jsx
+│   │   ├── Seguimiento.jsx
+│   │   ├── Historial.jsx
+│   │   └── Mensajes.jsx
+│   │
+│   ├── services/
+│   │   ├── instructorService.js
+│   │   ├── disponibilidadService.js
+│   │   ├── reservaService.js
+│   │   ├── mensajeService.js
+│   │   ├── historialService.js
+│   │   ├── pagoService.js
+│   │   └── ...
+│   │
+│   ├── App.jsx
+│   └── ...
 │
-├── .env
-├── .gitignore
-├── index.js
 ├── package.json
 ├── package-lock.json
 └── README.md
-Funciones principales
+Funcionalidades principales
 
-El módulo de usuarios permite:
+El frontend permite:
 
-Consultar los usuarios registrados.
-Consultar usuarios mediante la API.
-Registrar nuevos usuarios.
-Actualizar información de usuarios.
-Eliminar usuarios.
-Validar los datos recibidos desde las solicitudes.
-Conectar el backend con la base de datos MySQL.
-Organización de las capas
-Routes
+Registrar usuarios.
+Iniciar sesión.
+Consultar y seleccionar rutinas.
+Consultar y seleccionar instructores.
+Consultar disponibilidad de los instructores.
+Realizar reservas de entrenamiento.
+Consultar las reservas realizadas.
+Realizar el proceso de pago de una reserva.
+Calificar al instructor después de completar una reserva.
+Consultar el historial.
+Registrar y consultar el seguimiento del progreso.
+Enviar y consultar mensajes con los instructores.
+Páginas principales
+Inicio
 
-Las rutas reciben las solicitudes HTTP y las dirigen al controlador correspondiente.
+Presenta la información general de MuscleMind y permite acceder a las principales funcionalidades de la aplicación.
 
-Ejemplo:
+Registro
+
+Permite crear una nueva cuenta de usuario.
+
+Inicio de sesión
+
+Permite al usuario ingresar a la aplicación mediante sus credenciales.
+
+Rutinas
+
+Permite consultar las rutinas disponibles y seleccionar una rutina para continuar con el proceso de selección del instructor.
+
+Instructores
+
+Permite consultar los instructores disponibles y seleccionar un instructor relacionado con la rutina escogida.
+
+Reserva
+
+Permite seleccionar una fecha y un horario disponible para realizar el entrenamiento con el instructor seleccionado.
+
+Mis Reservas
+
+Permite consultar las reservas realizadas por el usuario y acceder a las opciones disponibles según el estado de cada reserva.
+
+Pagos
+
+Permite registrar el pago asociado a una reserva.
+
+Calificaciones
+
+Permite calificar al instructor después de completar una reserva y agregar un comentario.
+
+Seguimiento
+
+Permite registrar y consultar información relacionada con el progreso del usuario.
+
+Historial
+
+Permite consultar el historial de actividades realizadas.
+
+Mensajes
+
+Permite establecer comunicación entre el usuario y el instructor.
+
+Rutas principales
+
+El proyecto utiliza React Router DOM para controlar la navegación entre las diferentes páginas.
+
+Ruta	Funcionalidad
+/	Página de inicio
+/login	Inicio de sesión
+/register	Registro
+/rutinas	Rutinas
+/instructores	Instructores
+/reserva	Reservas
+/mis-reservas	Mis reservas
+/pagos	Pagos
+/calificaciones	Calificaciones
+/seguimiento	Seguimiento
+/historial	Historial
+/mensajes/:idInstructor	Mensajes
+Integración con el Backend
+
+El frontend se comunica con el backend mediante solicitudes HTTP utilizando Axios.
+
+El backend se encuentra disponible durante el desarrollo en:
+
+http://localhost:3000
+
+Algunos de los servicios utilizados por el frontend son:
 
 /api/usuarios
-Controller
+/api/rutinas
+/api/instructor
+/api/disponibilidad
+/api/reserva
+/api/mensaje
+/api/historial
+/api/pago
+/api/calificacion
+/api/seguimiento
 
-El controlador recibe las solicitudes y las respuestas HTTP. Se encarga de comunicarse con la capa de servicios.
+De esta manera, el frontend puede enviar y recibir información desde la API REST.
 
-Service
+Flujo principal de la aplicación
 
-La capa de servicios contiene la lógica de negocio de las operaciones realizadas sobre los usuarios.
+El flujo principal implementado en MuscleMind es:
 
-Repository
+Registro / Inicio de sesión
+          ↓
+       Rutinas
+          ↓
+     Instructores
+          ↓
+       Reserva
+          ↓
+    Mis Reservas
+       ↙      ↘
+    Pago    Calificación
+          ↓
+       Historial
 
-El repositorio se encarga de realizar las operaciones directamente sobre la base de datos MySQL.
+Adicionalmente, el usuario puede utilizar:
 
-Validator
+Seguimiento
+Mensajes
 
-El validador comprueba que los datos enviados cumplan con las condiciones requeridas antes de realizar las operaciones correspondientes.
+para complementar su experiencia dentro de la aplicación.
 
-Base de datos
-
-El proyecto utiliza MySQL como sistema gestor de base de datos.
-
-La base de datos utilizada es:
-
-musclemind
-
-Una de las tablas principales es:
-
-usuario
-
-La información gestionada por el registro de usuarios incluye datos como:
-
-Nombre
-Apellido
-Tipo de documento
-Número de documento
-Contraseña
-Edad
-Peso
-Altura
-País
-Variables de entorno
-
-La conexión a MySQL se configura mediante variables de entorno almacenadas en el archivo .env.
-
-Ejemplo:
-
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=tu_usuario
-DB_PASSWORD=tu_contraseña
-DB_NAME=musclemind
-DB_CONNECTION_LIMIT=10
-
-El archivo .env no debe publicarse en GitHub cuando contiene información real de acceso a la base de datos.
-
-API REST
-
-El backend funciona mediante una API REST.
-
-Obtener usuarios
-GET http://localhost:3000/api/usuarios
-
-Permite consultar los usuarios almacenados en la base de datos.
-
-Registrar usuario
-POST http://localhost:3000/api/usuarios
-
-Permite registrar un nuevo usuario mediante el envío de los datos correspondientes.
-
-Actualizar usuario
-PUT http://localhost:3000/api/usuarios/:id
-
-Permite modificar la información de un usuario existente.
-
-Eliminar usuario
-DELETE http://localhost:3000/api/usuarios/:id
-
-Permite eliminar un usuario mediante su identificador.
-
-Ejemplo de registro
-
-El endpoint POST recibe información como:
-
-{
-  "nombre": "Sandra",
-  "apellido": "Prueba",
-  "numero_documento": "99999999",
-  "tipo_documento": "CC",
-  "contrasena": "123456",
-  "edad": 30,
-  "peso": 70,
-  "altura": 165,
-  "pais": "Colombia"
-}
 Instalación
 
-Clonar el repositorio:
+Para utilizar el frontend se debe clonar el repositorio:
 
 git clone https://github.com/Sanlop22/Musclemind-1.3.git
 
-Ingresar a la carpeta del backend:
+Ingresar a la carpeta del frontend:
 
-cd Musclemind-1.3/backend
+cd Musclemind-1.3/frontend
 
 Instalar las dependencias:
 
 npm install
-
-Configurar las variables de entorno en el archivo .env.
-
 Ejecución
 
-Para iniciar el servidor:
+Para iniciar el servidor de desarrollo:
+
+npm run dev
+
+Vite mostrará en la terminal la dirección local disponible para acceder a la aplicación.
+
+Generalmente se encuentra disponible en:
+
+http://localhost:5173
+Ejecución completa del proyecto
+
+Para utilizar MuscleMind correctamente se deben ejecutar los dos componentes del proyecto.
+
+Backend
+
+Desde la carpeta:
+
+Musclemind-1.3/backend
+
+ejecutar:
 
 node index.js
 
-El servidor se ejecuta en:
+El backend utiliza:
 
 http://localhost:3000
+Frontend
+
+Desde otra terminal, ingresar a:
+
+Musclemind-1.3/frontend
+
+y ejecutar:
+
+npm run dev
+
+El frontend se conecta al backend mediante la API REST.
+
 Pruebas
 
-Las rutas de la API fueron probadas mediante solicitudes HTTP utilizando herramientas de prueba de API y verificando posteriormente la información almacenada en MySQL.
+Durante el desarrollo se realizaron pruebas de las diferentes funcionalidades mediante:
+
+Navegación entre páginas.
+Registro de usuarios.
+Inicio de sesión.
+Consulta de rutinas.
+Selección de instructores.
+Consulta de disponibilidad.
+Creación de reservas.
+Consulta de mis reservas.
+Registro de pagos.
+Calificación de instructores.
+Consulta del historial.
+Registro y consulta de seguimiento.
+Envío y consulta de mensajes.
+
+También se verificó la comunicación entre:
+
+Frontend → API REST → Backend → MySQL
 
 Control de versiones
 
@@ -193,13 +280,34 @@ Repositorio:
 
 https://github.com/Sanlop22/Musclemind-1.3
 
-Se han realizado commits para registrar los avances y modificaciones realizadas durante el desarrollo del proyecto.
+Rama principal:
 
+main
+
+El proyecto cuenta con commits que registran los avances y modificaciones realizadas durante el desarrollo.
+
+Estado actual del proyecto
+
+El frontend se encuentra integrado con el backend y permite navegar por los principales módulos funcionales de MuscleMind.
+
+Actualmente se encuentran integrados los módulos de:
+
+Usuarios
+Rutinas
+Instructores
+Disponibilidad
+Reservas
+Mis Reservas
+Pagos
+Calificaciones
+Seguimiento
+Historial
+Mensajes
 Autores
-Sandra Lopez
-Barbara Jaramillo
+Sandra López
+Bárbara Jaramillo
 Ronald Muñoz
-David Lizcano
-Estado del proyecto
 
-El backend cuenta con el módulo de usuarios desarrollado y conectado con una base de datos MySQL, permitiendo realizar operaciones CRUD y validar la información recibida mediante la API REST.
+Proyecto SENA
+
+Proyecto desarrollado como parte del proceso formativo del programa Tecnólogo en Análisis y Desarrollo de Software – SENA.
