@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 function Rutinas() {
+    const navigate = useNavigate();
+
     return (
         <section id="rutinas">
             <div className="section-inner">
@@ -121,6 +125,18 @@ function Rutinas() {
                             </span>
                         </div>
                     </div>
+
+                </div>
+
+                <div className="routines-action">
+
+                    <button
+                        type="button"
+                        className="routines-button"
+                        onClick={() => navigate("/rutinas")}
+                    >
+                        VER TODAS LAS RUTINAS
+                    </button>
 
                 </div>
 

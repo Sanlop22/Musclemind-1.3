@@ -1,15 +1,67 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { obtenerRutinas } from "../services/rutinaService";
 
 function Rutinas() {
-    const [rutinaSeleccionada, setRutinaSeleccionada] = useState("");
+    const navigate = useNavigate();
 
-    const seleccionarRutina = (nombreRutina) => {
-        setRutinaSeleccionada(nombreRutina);
+    const [rutinas, setRutinas] = useState([]);
+    const [rutinaSeleccionada, setRutinaSeleccionada] = useState(null);
+    const [cargando, setCargando] = useState(true);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        const cargarRutinas = async () => {
+            try {
+                const datos = await obtenerRutinas();
+
+                setRutinas(datos);
+            } catch (error) {
+                console.error("Error al cargar las rutinas:", error);
+
+                setError("No fue posible cargar las rutinas.");
+            } finally {
+                setCargando(false);
+            }
+        };
+
+        cargarRutinas();
+    }, []);
+
+    const seleccionarRutina = (rutina) => {
+        setRutinaSeleccionada(rutina);
     };
 
     return (
         <section id="rutinas">
             <div className="section-inner">
+
+                <button
+    type="button"
+    className="routines-back-button"
+    onClick={() => navigate("/")}
+>
+    ← Volver al inicio
+</button>
+
+<button
+    type="button"
+    className="instructors-button"
+    onClick={() => {
+        if (!rutinaSeleccionada) {
+            alert("Primero debes elegir una rutina.");
+            return;
+        }
+
+        navigate("/instructores", {
+            state: {
+                rutina: rutinaSeleccionada
+            }
+        });
+    }}
+>
+    Ver instructores
+</button>
 
                 <p className="section-tag">
                     Entrenamiento
@@ -24,149 +76,64 @@ function Rutinas() {
                     Cada plan fue diseñado por entrenadores certificados.
                 </p>
 
-                <div className="routines-grid">
+                {cargando && (
+                    <p>
+                        Cargando rutinas...
+                    </p>
+                )}
 
-                    <div className="routine-card">
+                {error && (
+                    <p>
+                        {error}
+                    </p>
+                )}
 
-                        <div className="routine-badge">
-                            Intermedio
-                        </div>
+                {!cargando && !error && (
+                    <div className="routines-grid">
 
-                        <h3>
-                            Pecho & Tríceps
-                        </h3>
+                        {rutinas.map((rutina) => (
+                            <div
+                                className="routine-card"
+                                key={rutina.id_rutina}
+                            >
 
-                        <p>
-                            Enfocado en fuerza funcional y masa muscular
-                            en tren superior. Incluye press banca,
-                            fondos y cables.
-                        </p>
+                                <div className="routine-badge">
+                                    {rutina.nivel}
+                                </div>
 
-                        <div className="routine-meta">
-                            <span>
-                                ⏱️ 55 min
-                            </span>
+                                <h3>
+                                    {rutina.nombre_rutina}
+                                </h3>
 
-                            <span>
-                                💪 8 ejercicios
-                            </span>
-                        </div>
+                                <p>
+                                    {rutina.descripcion ||
+                                        "Rutina diseñada para ayudarte a alcanzar tus objetivos."}
+                                </p>
 
-                        <button
-                            type="button"
-                            onClick={() => seleccionarRutina("Pecho & Tríceps")}
-                        >
-                            Elegir rutina
-                        </button>
+                                <div className="routine-meta">
 
-                    </div>
+                                    <span>
+                                        ⏱️ {rutina.duracion_minutos} min
+                                    </span>
 
-                    <div className="routine-card">
+                                    <span>
+                                        📅 {rutina.dias_por_semana} días/semana
+                                    </span>
 
-                        <div className="routine-badge">
-                            Avanzado
-                        </div>
+                                </div>
 
-                        <h3>
-                            Espalda & Bíceps
-                        </h3>
+                                <button
+                                    type="button"
+                                    onClick={() => seleccionarRutina(rutina)}
+                                >
+                                    Elegir rutina
+                                </button>
 
-                        <p>
-                            Volumen alto para máximo crecimiento.
-                            Dominadas, remos y curls en superset
-                            para mayor densidad.
-                        </p>
-
-                        <div className="routine-meta">
-                            <span>
-                                ⏱️ 60 min
-                            </span>
-
-                            <span>
-                                💪 10 ejercicios
-                            </span>
-                        </div>
-
-                        <button
-                            type="button"
-                            onClick={() => seleccionarRutina("Espalda & Bíceps")}
-                        >
-                            Elegir rutina
-                        </button>
+                            </div>
+                        ))}
 
                     </div>
-
-                    <div className="routine-card">
-
-                        <div className="routine-badge">
-                            Avanzado
-                        </div>
-
-                        <h3>
-                            Piernas & Glúteos
-                        </h3>
-
-                        <p>
-                            Sentadillas, peso muerto y prensa para
-                            desarrollar potencia y definición en
-                            tren inferior.
-                        </p>
-
-                        <div className="routine-meta">
-                            <span>
-                                ⏱️ 65 min
-                            </span>
-
-                            <span>
-                                💪 8 ejercicios
-                            </span>
-                        </div>
-
-                        <button
-                            type="button"
-                            onClick={() => seleccionarRutina("Piernas & Glúteos")}
-                        >
-                            Elegir rutina
-                        </button>
-
-                    </div>
-
-                    <div className="routine-card">
-
-                        <div className="routine-badge">
-                            Intermedio
-                        </div>
-
-                        <h3>
-                            Hombros & Core
-                        </h3>
-
-                        <p>
-                            Estabilidad y fuerza en deltoides y núcleo.
-                            Clave para prevenir lesiones y mejorar
-                            postura.
-                        </p>
-
-                        <div className="routine-meta">
-                            <span>
-                                ⏱️ 45 min
-                            </span>
-
-                            <span>
-                                💪 7 ejercicios
-                            </span>
-                        </div>
-
-                        <button
-                            type="button"
-                            onClick={() => seleccionarRutina("Hombros & Core")}
-                        >
-                            Elegir rutina
-                        </button>
-
-                    </div>
-
-                </div>
+                )}
 
                 {rutinaSeleccionada && (
                     <div style={{ marginTop: "30px" }}>
@@ -178,7 +145,7 @@ function Rutinas() {
                         <p>
                             Has seleccionado{" "}
                             <strong>
-                                {rutinaSeleccionada}
+                                {rutinaSeleccionada.nombre_rutina}
                             </strong>
                         </p>
 

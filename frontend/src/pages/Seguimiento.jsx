@@ -70,6 +70,13 @@ function Seguimiento() {
   Volver
 </button>
 
+<button
+  className="btn-volver"
+  onClick={() => navigate("/historial")}
+>
+  Ver historial
+</button>
+
       </header>
 
 

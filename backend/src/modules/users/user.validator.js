@@ -18,12 +18,13 @@ const validateUser = (user) => {
 
     if (user.edad !== undefined && user.edad !== null) {
         if (isNaN(user.edad) || user.edad < 0 || user.edad > 120) {
-            throw new Error('La edad debe ser un número válido entre 0 y 120');
+            throw new Error(
+                'La edad debe ser un número válido entre 0 y 120'
+            );
         }
     }
 
     if (user.tipo_documento) {
-
         const tiposValidos = ['CC', 'TI', 'CE', 'PASAPORTE'];
 
         if (!tiposValidos.includes(user.tipo_documento.toUpperCase())) {
@@ -35,13 +36,17 @@ const validateUser = (user) => {
 
     if (user.peso !== undefined && user.peso !== null) {
         if (isNaN(user.peso) || user.peso <= 0 || user.peso > 500) {
-            throw new Error('El peso debe ser un número válido en kg');
+            throw new Error(
+                'El peso debe ser un número válido en kg'
+            );
         }
     }
 
     if (user.altura !== undefined && user.altura !== null) {
         if (isNaN(user.altura) || user.altura <= 0 || user.altura > 300) {
-            throw new Error('La altura debe ser un número válido en cm');
+            throw new Error(
+                'La altura debe ser un número válido en cm'
+            );
         }
     }
 
@@ -49,6 +54,40 @@ const validateUser = (user) => {
         throw new Error('El país no es válido');
     }
 
+    // Validaciones adicionales para instructor
+    if (user.rol === 'instructor') {
+
+        if (
+            user.experiencia === undefined ||
+            user.experiencia === null ||
+            user.experiencia === ''
+        ) {
+            throw new Error(
+                'La experiencia es obligatoria para el instructor'
+            );
+        }
+
+        if (
+            isNaN(user.experiencia) ||
+            user.experiencia < 0
+        ) {
+            throw new Error(
+                'La experiencia debe ser un número válido'
+            );
+        }
+
+        if (!user.especialidad) {
+            throw new Error(
+                'La especialidad es obligatoria para el instructor'
+            );
+        }
+
+        if (user.especialidad.length < 2) {
+            throw new Error(
+                'La especialidad debe tener mínimo 2 caracteres'
+            );
+        }
+    }
 };
 
 module.exports = {

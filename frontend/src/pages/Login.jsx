@@ -41,9 +41,14 @@ function Login() {
 
       alert(data.mensaje)
 
-      console.log('Usuario:', data.usuario)
+console.log('Usuario:', data.usuario)
 
-      navigate('/')
+localStorage.setItem(
+  'usuario',
+  JSON.stringify(data.usuario)
+)
+
+navigate('/')
 
     } catch (error) {
       console.error('Error:', error)

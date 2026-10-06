@@ -1,7 +1,9 @@
 
+
 const UserRepository = require('./user.repository');
 const userValidator = require('./user.validator');
 const bcrypt = require('bcrypt');
+const instructorRepository = require('../instructor/instructor.repository');
 
 const userRepository = new UserRepository();
 
@@ -22,14 +24,35 @@ const getUserById = async (id) => {
 const createUser = async (userData) => {
     userValidator.validateUser(userData);
 
-    const hashedPassword = await bcrypt.hash(userData.contrasena, 10);
+    const hashedPassword = await bcrypt.hash(
+        userData.contrasena,
+        10
+    );
 
     const userWithPassword = {
         ...userData,
         contrasena: hashedPassword
     };
 
-    return await userRepository.createUser(userWithPassword);
+    // Crear el usuario
+    const usuarioCreado = await userRepository.createUser(
+        userWithPassword
+    );
+
+    // Si es instructor, crear también su registro
+    // en la tabla instructor
+    if (userData.rol === 'instructor') {
+
+        await instructorRepository.crear({
+            nombre: userData.nombre,
+            apellido: userData.apellido,
+            experiencia: userData.experiencia,
+            especialidad: userData.especialidad,
+            id_usuario: usuarioCreado.id_usuario
+        });
+    }
+
+    return usuarioCreado;
 };
 
 const updateUser = async (id, userData) => {

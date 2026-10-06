@@ -23,7 +23,8 @@ body {
 
 button,
 input,
-select {
+select,
+textarea {
   font-family: inherit;
 }
 
@@ -479,14 +480,17 @@ select {
   #spacer {
     height: 48px;
   }
-  * ========================================
-   BOTON VOLVER CREAR CUENTA 
-   ======================================== */
 }
+
+
+/* ========================================
+   BOTÓN VOLVER - CREAR CUENTA
+   ======================================== */
+
 .btn-back {
   background: transparent;
   border: none;
-  color: #666;
+  color: #666666;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -496,9 +500,11 @@ select {
 }
 
 .btn-back:hover {
-  color: #111;
+  color: #E63946;
   transform: translateX(-3px);
 }
+
+
 /* ========================================
    BOTÓN MI SEGUIMIENTO
    ======================================== */
@@ -520,4 +526,1154 @@ select {
 .btn-seguimiento:hover {
   background-color: #c92f3b;
   transform: translateX(3px);
+}
+
+
+/* ========================================
+   BOTONES - RUTINAS
+   ======================================== */
+
+.routines-action {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.routines-button {
+  padding: 14px 30px;
+  background-color: #E63946;
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.routines-button:hover {
+  background-color: #c92f3b;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(230, 57, 70, 0.25);
+}
+
+
+/* ========================================
+   BOTÓN ELEGIR RUTINA
+   ======================================== */
+
+.routine-card button {
+  margin-top: 20px;
+  padding: 11px 22px;
+  background-color: transparent;
+  color: #E63946;
+  border: 1px solid #E63946;
+  border-radius: 50px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.routine-card button:hover {
+  background-color: #E63946;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+
+/* ========================================
+   BOTÓN VOLVER AL INICIO - RUTINAS
+   ======================================== */
+
+.routines-back-button {
+  margin-bottom: 30px;
+  padding: 10px 20px;
+  background-color: transparent;
+  color: #888888;
+  border: 1px solid #333333;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.routines-back-button:hover {
+  color: #ffffff;
+  border-color: #E63946;
+  transform: translateX(-3px);
+}
+
+
+/* ========================================
+   BOTÓN INSTRUCTORES
+   ======================================== */
+
+.instructors-button {
+  margin-left: 15px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #E63946;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.instructors-button:hover {
+  background-color: #c92f3b;
+  transform: translateY(-2px);
+}
+
+
+/* ========================================
+   MENSAJES DE DISPONIBILIDAD
+   ======================================== */
+
+.disponibilidad-section > p {
+  color: #888888;
+  font-size: 14px;
+}
+
+
+/* ========================================
+   RESERVAS - CONTENEDOR PRINCIPAL
+   ======================================== */
+
+.reserva-page {
+  min-height: 100vh;
+  background-color: #111111;
+  padding: 50px 20px;
+}
+
+.reserva-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+
+/* ========================================
+   ENCABEZADO DE RESERVA
+   ======================================== */
+
+.reserva-header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.reserva-header .section-tag {
+  color: #E63946;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.reserva-header h1 {
+  margin: 0;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+}
+
+.reserva-header p {
+  margin-top: 12px;
+  color: #888888;
+  font-size: 14px;
+}
+
+
+/* ========================================
+   TARJETA DE RESERVA
+   ======================================== */
+
+.reserva-card {
+  width: 100%;
+  background-color: #1A1A1A;
+  border: 1px solid #2a2a2a;
+  border-radius: 20px;
+  padding: 35px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+
+/* ========================================
+   FORMULARIO DE RESERVA
+   ======================================== */
+
+.reserva-form {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.reserva-campo {
+  flex: 1;
+  min-width: 220px;
+}
+
+.reserva-campo label {
+  display: block;
+  margin-bottom: 8px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.reserva-campo input,
+.reserva-campo select {
+  width: 100%;
+  padding: 13px 15px;
+  background-color: #111111;
+  border: 1px solid #333333;
+  border-radius: 10px;
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.reserva-campo input:focus,
+.reserva-campo select:focus {
+  border-color: #E63946;
+}
+
+
+/* ========================================
+   DISPONIBILIDAD
+   ======================================== */
+
+.disponibilidad-section {
+  margin-top: 30px;
+}
+
+.disponibilidad-section h3 {
+  margin-bottom: 8px;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.disponibilidad-section > p {
+  color: #777777;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+
+/* ========================================
+   LISTA DE HORARIOS
+   ======================================== */
+
+.horarios-lista {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+
+/* ========================================
+   HORARIO
+   ======================================== */
+
+.horario-item {
+  position: relative;
+  padding: 18px;
+  background-color: #111111;
+  border: 1px solid #333333;
+  border-radius: 14px;
+  color: #ffffff;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.25s ease;
+}
+
+.horario-item:hover {
+  border-color: #E63946;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(230, 57, 70, 0.12);
+}
+
+.horario-item.seleccionado {
+  background-color: rgba(230, 57, 70, 0.12);
+  border-color: #E63946;
+  box-shadow: 0 0 0 1px #E63946;
+}
+
+.horario-hora {
+  display: block;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.horario-estado {
+  display: block;
+  margin-top: 6px;
+  color: #777777;
+  font-size: 11px;
+}
+
+.horario-item.seleccionado .horario-estado {
+  color: #E63946;
+  font-weight: 700;
+}
+
+
+/* ========================================
+   BOTÓN RESERVAR
+   ======================================== */
+
+.btn-reservar-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 35px;
+}
+
+.btn-reservar {
+  min-width: 240px;
+  padding: 15px 30px;
+  background-color: #E63946;
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-reservar:hover {
+  background-color: #c92f3b;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(230, 57, 70, 0.25);
+}
+
+.btn-reservar:disabled {
+  background-color: #333333;
+  color: #777777;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+
+/* ========================================
+   RESERVA CREADA - CONFIRMACIÓN
+   ======================================== */
+
+.reserva-exitosa {
+  margin-top: 30px;
+  padding: 30px;
+  background-color: #1A1A1A;
+  border: 1px solid rgba(230, 57, 70, 0.35);
+  border-radius: 18px;
+  text-align: center;
+}
+
+.reserva-exitosa-icono {
+  width: 55px;
+  height: 55px;
+  margin: 0 auto 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(230, 57, 70, 0.12);
+  border: 1px solid rgba(230, 57, 70, 0.35);
+  border-radius: 50%;
+  color: #E63946;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.reserva-exitosa h2 {
+  margin: 0 0 8px;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.reserva-exitosa > p {
+  margin: 0 0 25px;
+  color: #888888;
+  font-size: 13px;
+}
+
+
+/* ========================================
+   DETALLES DE LA RESERVA
+   ======================================== */
+
+.reserva-detalles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  text-align: left;
+}
+
+.reserva-detalle {
+  padding: 15px;
+  background-color: #111111;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+}
+
+.reserva-detalle span {
+  display: block;
+  margin-bottom: 5px;
+  color: #666666;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.reserva-detalle strong {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* ========================================
+   ESTADO DE LA RESERVA
+   ======================================== */
+
+.reserva-estado {
+  display: inline-flex;
+  margin-top: 20px;
+  padding: 7px 14px;
+  background-color: rgba(230, 57, 70, 0.12);
+  border: 1px solid rgba(230, 57, 70, 0.3);
+  border-radius: 50px;
+  color: #E63946;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+
+/* ========================================
+   CHAT - MENSAJES
+   ======================================== */
+
+.chat-container {
+  width: 100%;
+  max-width: 850px;
+  margin: 35px auto 0;
+  background-color: #1A1A1A;
+  border: 1px solid #2a2a2a;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+}
+
+
+/* ========================================
+   LISTA DE MENSAJES
+   ======================================== */
+
+.mensajes-lista {
+  min-height: 350px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+
+/* ========================================
+   MENSAJE VACÍO
+   ======================================== */
+
+.chat-vacio {
+  margin: auto;
+  color: #777777;
+  font-size: 14px;
+  text-align: center;
+}
+
+
+/* ========================================
+   MENSAJES
+   ======================================== */
+
+.mensaje {
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: 14px;
+}
+
+.mensaje p {
+  margin: 6px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
+/* ========================================
+   MENSAJE DEL USUARIO
+   ======================================== */
+
+.mensaje-usuario {
+  align-self: flex-end;
+  background-color: #E63946;
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+}
+
+
+/* ========================================
+   MENSAJE DEL INSTRUCTOR
+   ======================================== */
+
+.mensaje-instructor {
+  align-self: flex-start;
+  background-color: #2a2a2a;
+  color: #ffffff;
+  border-bottom-left-radius: 4px;
+}
+
+
+/* ========================================
+   REMITENTE
+   ======================================== */
+
+.mensaje-remitente {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+}
+
+
+/* ========================================
+   FORMULARIO DEL CHAT
+   ======================================== */
+
+.chat-form {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #2a2a2a;
+}
+
+.chat-form textarea {
+  flex: 1;
+  min-height: 50px;
+  max-height: 120px;
+  resize: vertical;
+  padding: 13px 15px;
+  background-color: #111111;
+  border: 1px solid #333333;
+  border-radius: 10px;
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  outline: none;
+}
+
+.chat-form textarea::placeholder {
+  color: #666666;
+}
+
+.chat-form textarea:focus {
+  border-color: #E63946;
+}
+
+
+/* ========================================
+   BOTÓN ENVIAR MENSAJE
+   ======================================== */
+
+.btn-enviar-mensaje {
+  align-self: flex-end;
+  padding: 13px 24px;
+  background-color: #E63946;
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-enviar-mensaje:hover {
+  background-color: #c92f3b;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(230, 57, 70, 0.25);
+}
+
+
+/* ========================================
+   ERROR DEL CHAT
+   ======================================== */
+
+.mensaje-error {
+  max-width: 850px;
+  margin: 20px auto;
+  padding: 12px 15px;
+  border-radius: 8px;
+  background-color: rgba(230, 57, 70, 0.1);
+  border: 1px solid rgba(230, 57, 70, 0.3);
+  color: #E63946;
+  font-size: 13px;
+}
+
+
+/* ========================================
+   RESPONSIVE - CHAT
+   ======================================== */
+
+@media (max-width: 600px) {
+
+  .chat-container {
+    padding: 18px;
+  }
+
+  .mensajes-lista {
+    min-height: 300px;
+  }
+
+  .mensaje {
+    max-width: 85%;
+  }
+
+  .chat-form {
+    flex-direction: column;
+  }
+
+  .btn-enviar-mensaje {
+    align-self: stretch;
+    width: 100%;
+  }
+
+}
+
+
+/* ========================================
+   RESERVA - FLUJO POR PASOS
+   ======================================== */
+
+.reserva-pasos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 0 auto 30px;
+    max-width: 650px;
+}
+
+.reserva-paso-indicador {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666666;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.reserva-paso-indicador span {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #1A1A1A;
+    border: 1px solid #333333;
+    border-radius: 50%;
+
+    color: #777777;
+
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+
+    transition: all 0.3s ease;
+}
+
+.reserva-paso-indicador.activo {
+    color: #ffffff;
+}
+
+.reserva-paso-indicador.activo span {
+    background-color: #E63946;
+    border-color: #E63946;
+    color: #ffffff;
+
+    box-shadow:
+        0 0 0 5px rgba(230, 57, 70, 0.12),
+        0 5px 15px rgba(230, 57, 70, 0.20);
+}
+
+.reserva-paso-linea {
+    width: 70px;
+    height: 2px;
+    margin: 0 12px;
+
+    background-color: #333333;
+}
+
+
+/* ========================================
+   SECCIONES DE LOS PASOS
+   ======================================== */
+
+.reserva-seccion {
+    margin-top: 30px;
+    padding-top: 30px;
+
+    border-top: 1px solid #2a2a2a;
+}
+
+.reserva-paso-titulo {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.reserva-paso-numero {
+    min-width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgba(230, 57, 70, 0.12);
+    border: 1px solid rgba(230, 57, 70, 0.35);
+    border-radius: 50%;
+
+    color: #E63946;
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.reserva-paso-titulo h3 {
+    margin: 0 0 5px;
+
+    color: #ffffff;
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.reserva-paso-titulo p {
+    margin: 0;
+
+    color: #888888;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* ========================================
+   AYUDA E INSTRUCCIONES
+   ======================================== */
+
+.reserva-ayuda {
+    margin-top: 20px;
+    padding: 15px 18px;
+
+    background-color: rgba(230, 57, 70, 0.06);
+
+    border: 1px solid rgba(230, 57, 70, 0.20);
+    border-left: 3px solid #E63946;
+
+    border-radius: 10px;
+
+    color: #cccccc;
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.reserva-ayuda small {
+    display: inline-block;
+    margin-top: 6px;
+
+    color: #888888;
+}
+
+.reserva-instruccion {
+    margin-bottom: 15px;
+
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* ========================================
+   FECHA SELECCIONADA
+   ======================================== */
+
+.reserva-fecha-elegida {
+    margin-bottom: 20px;
+    padding: 13px 16px;
+
+    background-color: #111111;
+
+    border: 1px solid #333333;
+    border-radius: 10px;
+
+    color: #888888;
+
+    font-size: 13px;
+}
+
+.reserva-fecha-elegida strong {
+    color: #E63946;
+    font-weight: 700;
+}
+
+
+/* ========================================
+   BOTÓN CONTINUAR
+   ======================================== */
+
+.reserva-continuar {
+    margin-top: 25px;
+    padding-top: 20px;
+
+    border-top: 1px solid #2a2a2a;
+}
+
+.btn-continuar {
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 15px 25px;
+
+    background-color: #E63946;
+
+    color: #ffffff;
+
+    border: none;
+    border-radius: 12px;
+
+    font-family: 'Montserrat', sans-serif;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    letter-spacing: 0.03em;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.btn-continuar:hover {
+    background-color: #c92f3b;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(230, 57, 70, 0.25);
+}
+
+
+/* ========================================
+   HORARIO SELECCIONADO
+   ======================================== */
+
+.reserva-seleccion-confirmada {
+    padding: 15px 18px;
+
+    background-color: rgba(230, 57, 70, 0.08);
+
+    border: 1px solid rgba(230, 57, 70, 0.30);
+
+    border-radius: 10px;
+
+    color: #cccccc;
+
+    font-size: 13px;
+}
+
+.reserva-seleccion-confirmada strong {
+    color: #E63946;
+    font-weight: 800;
+}
+
+
+/* ========================================
+   RESUMEN FINAL
+   ======================================== */
+
+.reserva-resumen {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 12px;
+
+    margin-top: 25px;
+}
+
+.reserva-resumen-item {
+    padding: 18px;
+
+    background-color: #111111;
+
+    border: 1px solid #333333;
+
+    border-radius: 12px;
+
+    transition: all 0.25s ease;
+}
+
+.reserva-resumen-item:hover {
+    border-color: rgba(230, 57, 70, 0.45);
+
+    transform: translateY(-2px);
+}
+
+.reserva-resumen-item span {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #777777;
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+}
+
+.reserva-resumen-item strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+/* ========================================
+   MENSAJE DE CONFIRMACIÓN
+   ======================================== */
+
+.reserva-confirmacion-ayuda {
+    margin-top: 20px;
+    padding: 14px 16px;
+
+    background-color: rgba(230, 57, 70, 0.06);
+
+    border-left: 3px solid #E63946;
+
+    border-radius: 8px;
+
+    color: #aaaaaa;
+
+    font-size: 13px;
+}
+
+
+/* ========================================
+   BOTONES FINALES
+   ======================================== */
+
+.reserva-botones-finales {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 15px;
+
+    margin-top: 30px;
+}
+
+.btn-volver-paso {
+    padding: 13px 22px;
+
+    background-color: transparent;
+
+    border: 1px solid #444444;
+
+    border-radius: 50px;
+
+    color: #aaaaaa;
+
+    font-family: 'Montserrat', sans-serif;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.btn-volver-paso:hover {
+    border-color: #E63946;
+
+    color: #ffffff;
+}
+
+
+/* ========================================
+   MEJORA VISUAL DEL HORARIO
+   ======================================== */
+
+.horario-item {
+    min-height: 105px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 4px;
+
+    background-color: #151515;
+
+    border: 1px solid #363636;
+
+    transition:
+        border-color 0.25s ease,
+        background-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.horario-item:hover {
+    background-color: rgba(230, 57, 70, 0.07);
+
+    border-color: #E63946;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 8px 20px rgba(230, 57, 70, 0.15);
+}
+
+.horario-item.seleccionado {
+    background-color: rgba(230, 57, 70, 0.13);
+
+    border: 2px solid #E63946;
+
+    box-shadow:
+        0 0 0 4px rgba(230, 57, 70, 0.10),
+        0 10px 25px rgba(230, 57, 70, 0.15);
+
+    transform: translateY(-2px);
+}
+
+.horario-item.seleccionado .horario-hora {
+    color: #ffffff;
+}
+
+.horario-item.seleccionado .horario-estado {
+    color: #E63946;
+}
+
+
+/* ========================================
+   MEJORA DEL CAMPO DE FECHA
+   ======================================== */
+
+.reserva-campo {
+    margin-top: 10px;
+}
+
+.reserva-campo label {
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.reserva-campo input {
+    margin-top: 3px;
+
+    min-height: 48px;
+
+    background-color: #151515;
+
+    border: 1px solid #3a3a3a;
+
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.reserva-campo input:hover {
+    border-color: #666666;
+}
+
+.reserva-campo input:focus {
+    border-color: #E63946;
+
+    box-shadow:
+        0 0 0 3px rgba(230, 57, 70, 0.10);
+}
+
+
+/* ========================================
+   TARJETA PRINCIPAL - DETALLES VISUALES
+   ======================================== */
+
+.reserva-card {
+    border-color: #303030;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.40);
+}
+
+.reserva-detalle {
+    transition:
+        border-color 0.25s ease,
+        background-color 0.25s ease;
+}
+
+.reserva-detalle:hover {
+    background-color: #151515;
+
+    border-color: rgba(230, 57, 70, 0.35);
+}
+
+.reserva-detalle strong {
+    color: #ffffff;
 }

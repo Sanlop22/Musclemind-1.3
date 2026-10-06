@@ -44,4 +44,14 @@ async function crearInstructor({ nombre, apellido, experiencia, especialidad, co
   return new Instructor(instructorCreado);
 }
 
-module.exports = { crearInstructor, EmailYaExisteError };
+async function listarInstructores() {
+  const instructores = await repository.listar();
+
+  return instructores.map((instructor) => new Instructor(instructor));
+}
+
+module.exports = {
+  crearInstructor,
+  listarInstructores,
+  EmailYaExisteError
+};

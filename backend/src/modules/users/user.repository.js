@@ -18,14 +18,15 @@ class UserRepository {
 
         return rows[0];
     }
-     async getUserByEmail(correo) {
-    const [rows] = await pool.query(
-        'SELECT * FROM usuario WHERE correo = ?',
-        [correo]
-    );
 
-    return rows[0];
-}
+    async getUserByEmail(correo) {
+        const [rows] = await pool.query(
+            'SELECT * FROM usuario WHERE correo = ?',
+            [correo]
+        );
+
+        return rows[0];
+    }
 
     async createUser(userData) {
         const {
@@ -38,13 +39,26 @@ class UserRepository {
             altura,
             pais,
             correo,
-            contrasena
+            contrasena,
+            rol
         } = userData;
 
         const [result] = await pool.query(
             `INSERT INTO usuario
-            (nombre, apellido, edad, tipo_documento, numero_documento, peso, altura, pais, correo, contrasena)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            (
+                nombre,
+                apellido,
+                edad,
+                tipo_documento,
+                numero_documento,
+                peso,
+                altura,
+                pais,
+                correo,
+                contrasena,
+                rol
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 nombre,
                 apellido,
@@ -55,7 +69,8 @@ class UserRepository {
                 altura,
                 pais,
                 correo,
-                contrasena
+                contrasena,
+                rol || "usuario"
             ]
         );
 
