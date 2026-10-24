@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { iniciarSesion } from '../services/usuarioService'
+import { guardarSesion } from '../utils/session'
 
 function Login() {
   const navigate = useNavigate()
@@ -22,33 +24,15 @@ function Login() {
     e.preventDefault()
 
     try {
-      const response = await fetch(
-        'http://localhost:3000/api/usuarios/login',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        }
+      const data = await iniciarSesion(
+        formData.correo,
+        formData.contrasena
       )
 
-      const data = await response.json()
+      // Se guarda el token JWT y los datos básicos del usuario
+      guardarSesion(data.token, data.usuario)
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Error al iniciar sesión')
-      }
-
-      alert(data.mensaje)
-
-console.log('Usuario:', data.usuario)
-
-localStorage.setItem(
-  'usuario',
-  JSON.stringify(data.usuario)
-)
-
-navigate('/')
+      navigate('/')
 
     } catch (error) {
       console.error('Error:', error)

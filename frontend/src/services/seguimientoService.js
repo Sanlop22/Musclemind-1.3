@@ -1,27 +1,9 @@
-const API_URL = 'http://localhost:3000/api/seguimiento';
+import { apiFetch } from "./api";
 
-export async function crearSeguimiento(datos) {
-  const respuesta = await fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(datos),
-  });
-
-  if (!respuesta.ok) {
-    throw new Error('No se pudo guardar el seguimiento');
-  }
-
-  return await respuesta.json();
+export function crearSeguimiento(datos) {
+  return apiFetch("/seguimiento", { method: "POST", body: datos });
 }
 
-export async function obtenerSeguimientos() {
-  const respuesta = await fetch(API_URL);
-
-  if (!respuesta.ok) {
-    throw new Error('No se pudieron obtener los seguimientos');
-  }
-
-  return await respuesta.json();
+export function obtenerSeguimientos() {
+  return apiFetch("/seguimiento");
 }

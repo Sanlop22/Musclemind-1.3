@@ -1,4 +1,23 @@
-const validateUser = (user) => {
+const ROLES_REGISTRABLES = ['usuario', 'instructor'];
+
+const validateUser = (user, { esRegistro = false } = {}) => {
+
+    if (esRegistro) {
+        // El rol 'admin' NUNCA se puede asignar desde el registro público.
+        if (user.rol !== undefined && !ROLES_REGISTRABLES.includes(user.rol)) {
+            throw new Error(
+                `El rol debe ser uno de: ${ROLES_REGISTRABLES.join(', ')}`
+            );
+        }
+
+        if (!user.correo || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.correo)) {
+            throw new Error('El correo electrónico no es válido');
+        }
+
+        if (typeof user.contrasena !== 'string' || user.contrasena.length < 6) {
+            throw new Error('La contraseña debe tener mínimo 6 caracteres');
+        }
+    }
 
     if (!user.nombre) {
         throw new Error('El nombre es obligatorio');

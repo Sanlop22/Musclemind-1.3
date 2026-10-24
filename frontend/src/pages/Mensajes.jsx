@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { obtenerUsuario } from "../utils/session";
 import {
     obtenerConversacion,
     crearMensaje
@@ -15,36 +16,37 @@ function Mensajes() {
     const [contenido, setContenido] = useState("");
     const [error, setError] = useState("");
 
-    const idUsuario = 29;
+    // Usuario autenticado (viene de la sesión, no es un valor fijo)
+    const idUsuario = obtenerUsuario().id_usuario;
     const instructorId = Number(idInstructor);
 
     useEffect(() => {
+        const cargarConversacion = async () => {
+
+            try {
+
+                const data = await obtenerConversacion(
+                    idUsuario,
+                    instructorId
+                );
+
+                setMensajes(data);
+
+            } catch (error) {
+
+                console.error(
+                    "Error al cargar la conversación:",
+                    error
+                );
+
+                setError(
+                    "No fue posible cargar la conversación."
+                );
+            }
+        };
+
         cargarConversacion();
-    }, [idInstructor]);
-
-    const cargarConversacion = async () => {
-
-        try {
-
-            const data = await obtenerConversacion(
-                idUsuario,
-                instructorId
-            );
-
-            setMensajes(data);
-
-        } catch (error) {
-
-            console.error(
-                "Error al cargar la conversación:",
-                error
-            );
-
-            setError(
-                "No fue posible cargar la conversación."
-            );
-        }
-    };
+    }, [idUsuario, instructorId]);
 
     const enviarMensaje = async () => {
 

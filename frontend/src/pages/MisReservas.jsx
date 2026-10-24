@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { obtenerUsuario } from "../utils/session";
 
 import { obtenerReservasPorUsuario } from "../services/reservaService";
 
@@ -15,7 +16,8 @@ function MisReservas() {
     const [error, setError] = useState("");
 
 
-    const idUsuario = 29;
+    // Usuario autenticado (viene de la sesión, no es un valor fijo)
+    const idUsuario = obtenerUsuario().id_usuario;
 
 
     useEffect(() => {
@@ -55,7 +57,7 @@ function MisReservas() {
 
         cargarReservas();
 
-    }, []);
+    }, [idUsuario]);
 
 
     const irACalificar = (reserva) => {

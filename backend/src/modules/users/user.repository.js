@@ -1,5 +1,12 @@
 const pool = require('../../database/connection');
 
+/**
+ * Quita el hash de la contraseña de una fila antes de sacarla de este
+ * módulo. La contraseña (hash) solo debe viajar dentro del servidor, para
+ * el login (getUserByEmail); nunca debe llegar a una respuesta HTTP.
+ */
+const sinContrasena = ({ contrasena, ...usuario }) => usuario;
+
 class UserRepository {
 
     async getUsers() {
@@ -7,7 +14,7 @@ class UserRepository {
             'SELECT * FROM usuario'
         );
 
-        return rows;
+        return rows.map(sinContrasena);
     }
 
     async getUserById(id) {
@@ -16,9 +23,11 @@ class UserRepository {
             [id]
         );
 
-        return rows[0];
+        return rows[0] ? sinContrasena(rows[0]) : undefined;
     }
 
+    // Único método que devuelve el hash: lo necesita loginUser para
+    // comparar la contraseña. No debe exponerse directamente en ninguna ruta.
     async getUserByEmail(correo) {
         const [rows] = await pool.query(
             'SELECT * FROM usuario WHERE correo = ?',
@@ -76,7 +85,16 @@ class UserRepository {
 
         return {
             id_usuario: result.insertId,
-            ...userData
+            nombre,
+            apellido,
+            edad,
+            tipo_documento,
+            numero_documento,
+            peso,
+            altura,
+            pais,
+            correo,
+            rol: rol || 'usuario'
         };
     }
 

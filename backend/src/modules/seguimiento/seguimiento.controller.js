@@ -2,9 +2,10 @@ const seguimientoService = require('./seguimiento.service');
 
 const getSeguimientos = async (req, res) => {
     try {
-        // Permite filtrar: GET /api/seguimiento?id_usuario=3&id_rutina=2
+        // Solo los seguimientos del usuario autenticado (token).
+        // Opcionalmente se puede filtrar por rutina: ?id_rutina=2
         const seguimientos = await seguimientoService.getSeguimientos({
-            id_usuario: req.query.id_usuario,
+            id_usuario: req.user.id_usuario,
             id_rutina: req.query.id_rutina
         });
 

@@ -210,6 +210,9 @@ cd Musclemind-1.3/frontend
 Instalar las dependencias:
 
 npm install
+
+Configurar la URL de la API: copiar frontend/.env.example como frontend/.env
+(contiene VITE_API_URL=http://localhost:3000/api; solo se cambia si el backend usa otra dirección).
 Ejecución
 
 Para iniciar el servidor de desarrollo:
@@ -249,6 +252,13 @@ y ejecutar:
 npm run dev
 
 El frontend se conecta al backend mediante la API REST.
+
+Antes de iniciar el backend por primera vez:
+1. Crear la base de datos ejecutando backend/sql/schema.sql en MySQL Workbench.
+2. Copiar backend/.env.example como backend/.env y completar las credenciales de la base de datos y JWT_SECRET.
+
+Para usar la aplicación hay que registrarse e iniciar sesión; las páginas internas (rutinas, seguimiento,
+reservas, mensajes, historial, pagos) requieren sesión iniciada.
 
 Pruebas
 

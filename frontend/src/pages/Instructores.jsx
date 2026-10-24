@@ -15,25 +15,25 @@ function Instructores() {
     const [error, setError] = useState("");
 
     useEffect(() => {
+        const cargarInstructores = async () => {
+            try {
+                const data = await obtenerInstructores();
+
+                setInstructores(data);
+            } catch (error) {
+                console.error(
+                    "Error al cargar instructores:",
+                    error
+                );
+
+                setError(
+                    "No fue posible cargar los instructores."
+                );
+            }
+        };
+
         cargarInstructores();
     }, []);
-
-    const cargarInstructores = async () => {
-        try {
-            const data = await obtenerInstructores();
-
-            setInstructores(data);
-        } catch (error) {
-            console.error(
-                "Error al cargar instructores:",
-                error
-            );
-
-            setError(
-                "No fue posible cargar los instructores."
-            );
-        }
-    };
 
     const seleccionarInstructor = (instructor) => {
         setInstructorSeleccionado(instructor);

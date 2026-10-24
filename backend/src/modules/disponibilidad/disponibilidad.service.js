@@ -66,6 +66,20 @@ async function listarPorInstructor(idInstructor) {
 }
 
 /**
+ * Busca un bloque por id (404 si no existe). Lo usan las rutas para
+ * comprobar que el bloque pertenece al instructor autenticado.
+ */
+async function buscarPorId(idDisponibilidad) {
+  const bloque = await repository.buscarPorId(idDisponibilidad);
+  if (!bloque) {
+    const error = new Error('No existe un bloque de disponibilidad con ese id.');
+    error.status = 404;
+    throw error;
+  }
+  return new Disponibilidad(bloque);
+}
+
+/**
  * Actualiza un bloque existente, re-validando las mismas reglas
  * de negocio (rango horario y solapamiento), excluyendo el propio
  * bloque que se está editando de la comparación.
@@ -85,7 +99,7 @@ async function actualizarDisponibilidad(idDisponibilidad, { diaSemana, horaInici
   const bloquesExistentes = await repository.buscarPorInstructorYDia(bloqueActual.id_instructor, diaSemana);
 
   const haySolapamiento = bloquesExistentes.some((bloque) =>
-    bloque.id_disponibilidad !== idDisponibilidad &&
+    Number(bloque.id_disponibilidad) !== Number(idDisponibilidad) &&
     seSolapan(horaInicio, horaFin, bloque.hora_inicio, bloque.hora_fin)
   );
 
@@ -110,6 +124,7 @@ async function eliminarDisponibilidad(idDisponibilidad) {
 module.exports = {
   crearDisponibilidad,
   listarPorInstructor,
+  buscarPorId,
   actualizarDisponibilidad,
   eliminarDisponibilidad,
   RangoHorarioInvalidoError,

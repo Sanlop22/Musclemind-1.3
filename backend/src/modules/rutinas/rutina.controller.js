@@ -2,8 +2,8 @@ const rutinaService = require('./rutina.service');
 
 const getRutinas = async (req, res) => {
     try {
-        // Permite filtrar por usuario: GET /api/rutinas?id_usuario=3
-        const rutinas = await rutinaService.getRutinas(req.query.id_usuario);
+        // Siempre se filtra por el usuario autenticado (token), no por la URL
+        const rutinas = await rutinaService.getRutinas(req.user.id_usuario);
 
         res.json(rutinas);
     } catch (error) {
@@ -37,7 +37,11 @@ const createRutina = async (req, res) => {
 
 const updateRutina = async (req, res) => {
     try {
-        const rutina = await rutinaService.updateRutina(req.params.id, req.body);
+        const rutina = await rutinaService.updateRutina(
+            req.params.id,
+            // Los campos que no se envían conservan su valor actual
+            { ...req.rutina, ...req.body }
+        );
 
         res.json(rutina);
     } catch (error) {
