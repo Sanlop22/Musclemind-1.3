@@ -1,4 +1,15 @@
+import { useNavigate } from 'react-router-dom'
+import { haySesion, obtenerUsuario, cerrarSesion } from '../utils/session'
+
 function Navbar() {
+  const navigate = useNavigate()
+  const sesionActiva = haySesion()
+
+  const handleCerrarSesion = () => {
+    cerrarSesion()
+    navigate('/login')
+  }
+
   return (
     <nav>
       <div className="nav-logo">
@@ -19,9 +30,15 @@ function Navbar() {
         </li>
       </ul>
 
-      <button className="nav-cta">
-        EMPEZAR AHORA
-      </button>
+      {sesionActiva ? (
+        <button className="nav-cta" onClick={handleCerrarSesion}>
+          CERRAR SESIÓN ({obtenerUsuario().nombre})
+        </button>
+      ) : (
+        <button className="nav-cta" onClick={() => navigate('/login')}>
+          EMPEZAR AHORA
+        </button>
+      )}
     </nav>
   )
 }

@@ -1,60 +1,14 @@
-const API_URL = "http://localhost:3000/api/reserva";
+import { apiFetch } from "./api";
 
-export async function crearReserva(datos) {
-
-    const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(datos),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-        const mensaje =
-            data.error ||
-            data.errores?.join(", ") ||
-            "Error al crear la reserva";
-
-        throw new Error(mensaje);
-    }
-
-    return data;
+// El backend toma el usuario de la reserva desde el token.
+export function crearReserva(datos) {
+  return apiFetch("/reserva", { method: "POST", body: datos });
 }
 
-export async function obtenerReservasPorUsuario(idUsuario) {
-
-    const response = await fetch(
-        `${API_URL}/usuario/${idUsuario}`
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-        throw new Error(
-            data.error || "Error al obtener las reservas"
-        );
-    }
-
-    return data;
+export function obtenerReservasPorUsuario(idUsuario) {
+  return apiFetch(`/reserva/usuario/${idUsuario}`);
 }
 
-export async function obtenerReservasPorInstructor(idInstructor) {
-
-    const response = await fetch(
-        `${API_URL}/instructor/${idInstructor}`
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-        throw new Error(
-            data.error ||
-            "Error al obtener las reservas del instructor"
-        );
-    }
-
-    return data;
+export function obtenerReservasPorInstructor(idInstructor) {
+  return apiFetch(`/reserva/instructor/${idInstructor}`);
 }

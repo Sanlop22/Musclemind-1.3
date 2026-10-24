@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { apiFetch } from "../services/api";
 
 
 function Calificaciones() {
@@ -48,39 +49,14 @@ function Calificaciones() {
 
         try {
 
-            const response = await fetch(
-                "http://localhost:3000/api/calificacion/usuario",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-
-                    body: JSON.stringify({
-                        idReserva:
-                            reservaSeleccionada.id_reserva,
-
-                        puntuacion: puntuacion,
-
-                        comentario:
-                            comentario.trim() || null,
-                    }),
-                }
-            );
-
-
-            const data = await response.json();
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    data.error ||
-                    data.errores?.join(", ") ||
-                    "No fue posible guardar la calificación."
-                );
-            }
+            await apiFetch("/calificacion/usuario", {
+                method: "POST",
+                body: {
+                    idReserva: reservaSeleccionada.id_reserva,
+                    puntuacion: puntuacion,
+                    comentario: comentario.trim() || null,
+                },
+            });
 
 
             setMensaje(

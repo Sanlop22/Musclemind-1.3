@@ -5,7 +5,9 @@ class RutinaRepository {
     async getRutinas(id_usuario) {
         if (id_usuario) {
             const [rows] = await pool.query(
-                'SELECT * FROM rutina WHERE id_usuario = ? ORDER BY fecha_creacion DESC',
+                `SELECT * FROM rutina
+                 WHERE id_usuario = ? OR id_usuario IS NULL
+                 ORDER BY fecha_creacion DESC`,
                 [id_usuario]
             );
 

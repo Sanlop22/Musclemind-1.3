@@ -168,6 +168,24 @@ DB_PASSWORD=tu_contraseña
 DB_NAME=musclemind
 DB_CONNECTION_LIMIT=10
 PORT=3000
+JWT_SECRET=una_clave_larga_y_secreta
+JWT_EXPIRES_IN=8h
+
+El archivo backend/.env.example tiene todas las variables; cópialo como .env y completa los valores.
+JWT_SECRET es obligatorio: el servidor no inicia sin él.
+
+Autenticación
+
+La API usa JWT. Se inicia sesión con POST /api/usuarios/login, que devuelve un token, y en cada
+petición se envía el encabezado Authorization: Bearer <token>. Los roles son usuario, instructor
+y admin. El detalle de qué puede hacer cada rol está en API_ENDPOINTS.md.
+
+Base de datos
+
+La estructura de las tablas está en backend/sql/schema.sql. Para crearla: abrir el archivo en
+MySQL Workbench y ejecutarlo.
+Si ya tenías la base creada con una versión anterior del proyecto (usuario sin correo/contrasena/rol),
+ejecuta en su lugar backend/sql/migracion_usuario_instructor.sql, una sola vez.
 
 El archivo .env contiene información de configuración y no debe publicarse en GitHub cuando contiene credenciales reales.
 

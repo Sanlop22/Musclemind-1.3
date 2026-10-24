@@ -415,8 +415,6 @@ function Seguimiento() {
 
               const datos = {
 
-                id_usuario: 29,
-
                 id_rutina: 1,
 
                 fecha: formulario.fecha,

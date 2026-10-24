@@ -14,6 +14,7 @@ import Historial from './pages/Historial'
 import Calificaciones from './pages/Calificaciones'
 import MisReservas from './pages/MisReservas'
 import Pagos from './pages/Pagos'
+import RutaProtegida from './components/RutaProtegida'
 
 function App() {
     return (
@@ -33,47 +34,22 @@ function App() {
                     element={<Register />}
                 />
 
-                <Route
-                    path="/seguimiento"
-                    element={<Seguimiento />}
-                />
+                <Route path="/seguimiento" element={<RutaProtegida><Seguimiento /></RutaProtegida>} />
 
-                <Route
-                    path="/rutinas"
-                    element={<Rutinas />}
-                />
+                <Route path="/rutinas" element={<RutaProtegida><Rutinas /></RutaProtegida>} />
 
-                <Route
-                    path="/instructores"
-                    element={<Instructores />}
-                />
+                <Route path="/instructores" element={<RutaProtegida><Instructores /></RutaProtegida>} />
 
-                <Route
-                    path="/mensajes/:idInstructor"
-                    element={<Mensajes />}
-                />
+                <Route path="/mensajes/:idInstructor" element={<RutaProtegida><Mensajes /></RutaProtegida>} />
 
-                <Route
-                    path="/reserva"
-                    element={<Reserva />}
-                />
+                <Route path="/reserva" element={<RutaProtegida><Reserva /></RutaProtegida>} />
 
-                <Route
-    path="/historial"
-    element={<Historial />}
-/>
+                <Route path="/historial" element={<RutaProtegida><Historial /></RutaProtegida>} />
 
-<Route
-    path="/calificaciones"
-    element={<Calificaciones />}
-/>
-<Route
-    path="/mis-reservas"
-    element={<MisReservas />}
-/>
+<Route path="/calificaciones" element={<RutaProtegida><Calificaciones /></RutaProtegida>} />
+<Route path="/mis-reservas" element={<RutaProtegida><MisReservas /></RutaProtegida>} />
 
-<Route path="/mis-reservas" element={<MisReservas />} />
-<Route path="/pagos" element={<Pagos />} />
+<Route path="/pagos" element={<RutaProtegida><Pagos /></RutaProtegida>} />
 
             </Routes>
 

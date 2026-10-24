@@ -66,6 +66,27 @@ async function buscarPorCorreo(correo) {
 }
 
 /**
+ * Busca el instructor asociado a una cuenta de usuario.
+ * Se usa en el login para incluir id_instructor en el token.
+ */
+async function buscarPorUsuario(idUsuario) {
+    const [rows] = await pool.query(
+        `SELECT
+            id_instructor,
+            nombre,
+            apellido,
+            experiencia,
+            especialidad,
+            id_usuario
+         FROM instructor
+         WHERE id_usuario = ?`,
+        [idUsuario]
+    );
+
+    return rows[0] || null;
+}
+
+/**
  * Obtiene todos los instructores.
  */
 async function listar() {
@@ -86,5 +107,6 @@ async function listar() {
 module.exports = {
     crear,
     buscarPorId,
+    buscarPorUsuario,
     listar
 };

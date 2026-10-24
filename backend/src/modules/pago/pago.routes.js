@@ -7,17 +7,36 @@ const {
   manejarErroresValidacion,
 } = require('./pago.validator');
 
-// POST /api/pago -> registra (o reemplaza) el intento de pago de una reserva
-router.post('/', registrarPagoValidator, manejarErroresValidacion, controller.registrar);
+const { verificarToken, autorizarRoles } = require('../../middlewares/auth.middleware');
+const { participanteDeReserva } = require('../../middlewares/permisos.middleware');
 
-// GET /api/pago/reserva/:idReserva -> consulta el pago de una reserva
-router.get('/reserva/:idReserva', controller.buscarPorReserva);
+// POST /api/pago -> registra (o reemplaza) el intento de pago de una reserva.
+// Solo el usuario que hizo la reserva puede pagarla.
+router.post(
+  '/',
+  verificarToken,
+  autorizarRoles('usuario'),
+  registrarPagoValidator,
+  manejarErroresValidacion,
+  participanteDeReserva({ desde: 'body', campo: 'idReserva', como: 'usuario' }),
+  controller.registrar
+);
 
-// PATCH /api/pago/reserva/:idReserva/estado -> cambia el estado del pago
+// GET /api/pago/reserva/:idReserva -> solo quienes participan en la reserva
+router.get(
+  '/reserva/:idReserva',
+  verificarToken,
+  participanteDeReserva({ desde: 'params', campo: 'idReserva' }),
+  controller.buscarPorReserva
+);
+
+// PATCH /api/pago/reserva/:idReserva/estado -> solo quienes participan en la reserva
 router.patch(
   '/reserva/:idReserva/estado',
+  verificarToken,
   actualizarEstadoPagoValidator,
   manejarErroresValidacion,
+  participanteDeReserva({ desde: 'params', campo: 'idReserva' }),
   controller.actualizarEstado
 );
 

@@ -25,14 +25,10 @@ const getUserById = async (req, res) => {
 
 const createUser = async (req, res) => {
     try {
-        console.log("BODY DEL POST:", req.body);
-
         const user = await userService.createUser(req.body);
 
         res.status(201).json(user);
     } catch (error) {
-        console.log("ERROR DEL POST:", error.message);
-
         res.status(400).json({ error: error.message });
     }
 };

@@ -2,19 +2,14 @@ const { Router } = require('express');
 
 const controller = require('./instructor.controller');
 
-const { validarCrearInstructor, manejarErroresValidacion } = require('./instructor.validator');
+const { verificarToken } = require('../../middlewares/auth.middleware');
 
 const router = Router();
 
-// GET /api/instructor
-router.get('/', controller.listar);
+// GET /api/instructor -> lista de instructores (requiere sesión iniciada)
+router.get('/', verificarToken, controller.listar);
 
-// POST /api/instructor
-router.post(
-    '/',
-    validarCrearInstructor,
-    manejarErroresValidacion,
-    controller.crear
-);
+// Nota: los instructores se registran desde POST /api/usuarios con
+// rol "instructor" (así se crea su cuenta y su perfil a la vez).
 
 module.exports = router;

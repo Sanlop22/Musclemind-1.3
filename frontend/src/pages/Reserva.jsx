@@ -350,8 +350,6 @@ function Reserva() {
 
             const datosReserva = {
 
-                idUsuario: 29,
-
                 idInstructor:
                     instructorSeleccionado.id_instructor,
 

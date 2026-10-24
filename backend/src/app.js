@@ -19,27 +19,20 @@ const errorMiddleware = require('./middlewares/error.middleware');
 
 const app = express();
 
-console.log("ESTE ES EL APP.JS DE MUSCLEMIND");
-
-app.use(cors());
+// CORS: por defecto permite cualquier origen (desarrollo). En producción se
+// define CORS_ORIGIN en el .env con la URL del frontend.
+app.use(cors({
+    origin: process.env.CORS_ORIGIN || true
+}));
 
 // Permite recibir y procesar datos en formato JSON
 app.use(express.json());
 
 // Registra las rutas del módulo de usuarios
 app.use('/api/usuarios', userRoutes);
-app.get('/hola', (req, res) => {
-    res.send('Hola desde Express');
-});
 
-// Rutas agregadas al proyecto
-// Rutas agregadas al proyecto
-
+// Rutas de los demás módulos
 app.use('/api/instructor', instructorRoutes);
-
-app.get('/prueba-instructor', (req, res) => {
-    res.send('Ruta de prueba funcionando');
-});
 
 app.use('/api/disponibilidad', disponibilidadRoutes);
 app.use('/api/reserva', reservaRoutes);

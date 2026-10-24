@@ -1,8 +1,7 @@
-
-
 const UserRepository = require('./user.repository');
 const userValidator = require('./user.validator');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const instructorRepository = require('../instructor/instructor.repository');
 
 const userRepository = new UserRepository();
@@ -22,7 +21,7 @@ const getUserById = async (id) => {
 };
 
 const createUser = async (userData) => {
-    userValidator.validateUser(userData);
+    userValidator.validateUser(userData, { esRegistro: true });
 
     const hashedPassword = await bcrypt.hash(
         userData.contrasena,
@@ -34,7 +33,7 @@ const createUser = async (userData) => {
         contrasena: hashedPassword
     };
 
-    // Crear el usuario
+    // Crear el usuario (el repository devuelve el usuario SIN contraseña)
     const usuarioCreado = await userRepository.createUser(
         userWithPassword
     );
@@ -64,9 +63,29 @@ const updateUser = async (id, userData) => {
         throw new Error('Usuario no encontrado');
     }
 
+    // Se devuelven únicamente los campos que realmente se actualizan;
+    // así nunca se "devuelve" una contraseña que venga en el body.
+    const {
+        nombre,
+        apellido,
+        edad,
+        tipo_documento,
+        numero_documento,
+        peso,
+        altura,
+        pais
+    } = userData;
+
     return {
-        id_usuario: id,
-        ...userData
+        id_usuario: Number(id),
+        nombre,
+        apellido,
+        edad,
+        tipo_documento,
+        numero_documento,
+        peso,
+        altura,
+        pais
     };
 };
 
@@ -79,6 +98,23 @@ const deleteUser = async (id) => {
 
     return true;
 };
+
+/**
+ * Genera el JWT de la sesión. El token lleva solo lo necesario para
+ * autenticar y autorizar: id del usuario, su rol y, si es instructor,
+ * su id_instructor. Nunca lleva la contraseña.
+ */
+const generarToken = ({ id_usuario, rol, id_instructor }) => {
+    return jwt.sign(
+        { id_usuario, rol, id_instructor },
+        process.env.JWT_SECRET,
+        {
+            algorithm: 'HS256',
+            expiresIn: process.env.JWT_EXPIRES_IN || '8h'
+        }
+    );
+};
+
 const loginUser = async (correo, contrasena) => {
     const user = await userRepository.getUserByEmail(correo);
 
@@ -95,16 +131,40 @@ const loginUser = async (correo, contrasena) => {
         throw new Error('Credenciales incorrectas');
     }
 
+    const rol = user.rol || 'usuario';
+
+    // Si la cuenta es de instructor, se busca su id_instructor para que
+    // los endpoints de instructor puedan validar a quién pertenece cada dato.
+    let idInstructor = null;
+
+    if (rol === 'instructor') {
+        const instructor = await instructorRepository.buscarPorUsuario(
+            user.id_usuario
+        );
+
+        idInstructor = instructor ? instructor.id_instructor : null;
+    }
+
+    const token = generarToken({
+        id_usuario: user.id_usuario,
+        rol,
+        id_instructor: idInstructor
+    });
+
     return {
         mensaje: 'Inicio de sesión exitoso',
+        token,
         usuario: {
             id_usuario: user.id_usuario,
             nombre: user.nombre,
             apellido: user.apellido,
-            correo: user.correo
+            correo: user.correo,
+            rol,
+            id_instructor: idInstructor
         }
     };
 };
+
 module.exports = {
     getUsers,
     getUserById,

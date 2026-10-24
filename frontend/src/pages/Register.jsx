@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { registrarUsuario } from "../services/usuarioService";
 
 function Register() {
     const navigate = useNavigate();
@@ -38,41 +39,22 @@ function Register() {
         e.preventDefault();
 
         try {
-            const response = await fetch(
-                "http://localhost:3000/api/usuarios",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        ...formData,
-                        rol: tipoCuenta,
-                        edad:
-                            tipoCuenta === "usuario"
-                                ? Number(formData.edad)
-                                : null,
-                        peso:
-                            tipoCuenta === "usuario"
-                                ? Number(formData.peso)
-                                : null,
-                        altura:
-                            tipoCuenta === "usuario"
-                                ? Number(formData.altura)
-                                : null,
-                    }),
-                }
-            );
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(
-                    data.mensaje ||
-                    data.error ||
-                    "Error al registrar la cuenta"
-                );
-            }
+            await registrarUsuario({
+                ...formData,
+                rol: tipoCuenta,
+                edad:
+                    tipoCuenta === "usuario"
+                        ? Number(formData.edad)
+                        : null,
+                peso:
+                    tipoCuenta === "usuario"
+                        ? Number(formData.peso)
+                        : null,
+                altura:
+                    tipoCuenta === "usuario"
+                        ? Number(formData.altura)
+                        : null,
+            });
 
             alert(
                 tipoCuenta === "usuario"

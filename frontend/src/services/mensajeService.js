@@ -1,48 +1,10 @@
-const API_URL = "http://localhost:3000/api/mensaje";
+import { apiFetch } from "./api";
 
-export async function crearMensaje(datos) {
-
-    const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(datos),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-
-        const mensaje =
-            data.error ||
-            data.errores?.join(", ") ||
-            "Error al enviar el mensaje";
-
-        throw new Error(mensaje);
-    }
-
-    return data;
+// El backend toma usuario/instructor y remitente del token.
+export function crearMensaje(datos) {
+  return apiFetch("/mensaje", { method: "POST", body: datos });
 }
 
-export async function obtenerConversacion(
-    idUsuario,
-    idInstructor
-) {
-
-    const response = await fetch(
-        `${API_URL}/conversacion/${idUsuario}/${idInstructor}`
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-
-        throw new Error(
-            data.error ||
-            "Error al obtener la conversación"
-        );
-    }
-
-    return data;
+export function obtenerConversacion(idUsuario, idInstructor) {
+  return apiFetch(`/mensaje/conversacion/${idUsuario}/${idInstructor}`);
 }
