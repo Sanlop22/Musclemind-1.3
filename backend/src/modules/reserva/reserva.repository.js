@@ -1,46 +1,103 @@
+
 const pool = require('../../database/connection');
 
-async function crear({ idUsuario, idInstructor, idRutina, objetivo, fecha, horaInicio, horaFin, precio }) {
-  const [result] = await pool.query(
-    `INSERT INTO reserva (id_usuario, id_instructor, id_rutina, objetivo, fecha, hora_inicio, hora_fin, estado, precio)
-     VALUES (?, ?, ?, ?, ?, ?, ?, 'pendiente', ?)`,
-    [idUsuario, idInstructor, idRutina, objetivo, fecha, horaInicio, horaFin, precio]
+async function bloquearInstructor(idInstructor, conexion) {
+  const [rows] = await conexion.query(
+    `SELECT id_instructor
+     FROM instructor
+     WHERE id_instructor = ?
+     FOR UPDATE`,
+    [idInstructor]
   );
-  return result.insertId;
-}
 
-async function buscarPorId(idReserva) {
-  const [rows] = await pool.query('SELECT * FROM reserva WHERE id_reserva = ?', [idReserva]);
   return rows[0] || null;
 }
 
+async function crear(datos, conexion = pool) {
+  const {
+    idUsuario,
+    idInstructor,
+    idRutina,
+    objetivo,
+    fecha,
+    horaInicio,
+    horaFin,
+    precio
+  } = datos;
+
+  const [result] = await conexion.query(
+    `INSERT INTO reserva
+     (id_usuario, id_instructor, id_rutina, objetivo,
+      fecha, hora_inicio, hora_fin, estado, precio)
+     VALUES (?, ?, ?, ?, ?, ?, ?, 'pendiente', ?)`,
+    [
+      idUsuario,
+      idInstructor,
+      idRutina,
+      objetivo,
+      fecha,
+      horaInicio,
+      horaFin,
+      precio
+    ]
+  );
+
+  return result.insertId;
+}
+
+async function buscarPorId(idReserva, conexion = pool) {
+  const [rows] = await conexion.query(
+    'SELECT * FROM reserva WHERE id_reserva = ?',
+    [idReserva]
+  );
+
+  return rows[0] || null;
+}
+
+// Lista las reservas del usuario e indica si ya fueron calificadas.
 async function listarPorUsuario(idUsuario) {
   const [rows] = await pool.query(
-    'SELECT * FROM reserva WHERE id_usuario = ? ORDER BY fecha DESC, hora_inicio DESC',
+    `SELECT
+        r.*,
+        CASE
+          WHEN c.puntuacion_usuario_a_instructor IS NOT NULL THEN 1
+          ELSE 0
+        END AS calificada
+     FROM reserva r
+     LEFT JOIN calificacion c
+       ON c.id_reserva = r.id_reserva
+     WHERE r.id_usuario = ?
+     ORDER BY r.fecha DESC, r.hora_inicio DESC`,
     [idUsuario]
   );
+
   return rows;
 }
 
 async function listarPorInstructor(idInstructor) {
   const [rows] = await pool.query(
-    'SELECT * FROM reserva WHERE id_instructor = ? ORDER BY fecha DESC, hora_inicio DESC',
+    `SELECT * FROM reserva
+     WHERE id_instructor = ?
+     ORDER BY fecha DESC, hora_inicio DESC`,
     [idInstructor]
   );
+
   return rows;
 }
 
-/**
- * Trae las reservas activas (no canceladas) de un instructor en una
- * fecha específica. El Service usa esto para verificar solapamiento
- * antes de crear una reserva nueva.
- */
-async function buscarPorInstructorYFecha(idInstructor, fecha) {
-  const [rows] = await pool.query(
+async function buscarPorInstructorYFecha(
+  idInstructor,
+  fecha,
+  conexion = pool
+) {
+  const [rows] = await conexion.query(
     `SELECT * FROM reserva
-     WHERE id_instructor = ? AND fecha = ? AND estado != 'cancelada'`,
+     WHERE id_instructor = ?
+     AND fecha = ?
+     AND estado != 'cancelada'`,
     [idInstructor, fecha]
   );
+
   return rows;
 }
 
@@ -49,14 +106,16 @@ async function actualizarEstado(idReserva, nuevoEstado) {
     'UPDATE reserva SET estado = ? WHERE id_reserva = ?',
     [nuevoEstado, idReserva]
   );
+
   return result.affectedRows > 0;
 }
 
 module.exports = {
+  bloquearInstructor,
   crear,
   buscarPorId,
   listarPorUsuario,
   listarPorInstructor,
   buscarPorInstructorYFecha,
-  actualizarEstado,
+  actualizarEstado
 };

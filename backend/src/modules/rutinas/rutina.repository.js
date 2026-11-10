@@ -2,25 +2,18 @@ const pool = require('../../database/connection');
 
 class RutinaRepository {
 
-    async getRutinas(id_usuario) {
-        if (id_usuario) {
-            const [rows] = await pool.query(
-                `SELECT * FROM rutina
-                 WHERE id_usuario = ? OR id_usuario IS NULL
-                 ORDER BY fecha_creacion DESC`,
-                [id_usuario]
-            );
-
-            return rows;
-        }
-
+    // Obtener todas las rutinas activas
+    async getRutinas() {
         const [rows] = await pool.query(
-            'SELECT * FROM rutina ORDER BY fecha_creacion DESC'
+            `SELECT * FROM rutina
+             WHERE estado = 'activa'
+             ORDER BY fecha_creacion DESC`
         );
 
         return rows;
     }
 
+    // Obtener una rutina por su ID
     async getRutinaById(id) {
         const [rows] = await pool.query(
             'SELECT * FROM rutina WHERE id_rutina = ?',
@@ -30,9 +23,10 @@ class RutinaRepository {
         return rows[0];
     }
 
+    // Crear una rutina asociada a un instructor
     async createRutina(rutinaData) {
         const {
-            id_usuario,
+            id_instructor,
             nombre_rutina,
             descripcion,
             objetivo,
@@ -44,10 +38,19 @@ class RutinaRepository {
 
         const [result] = await pool.query(
             `INSERT INTO rutina
-            (id_usuario, nombre_rutina, descripcion, objetivo, nivel, dias_por_semana, duracion_minutos, estado)
+            (
+                id_instructor,
+                nombre_rutina,
+                descripcion,
+                objetivo,
+                nivel,
+                dias_por_semana,
+                duracion_minutos,
+                estado
+            )
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
             [
-                id_usuario,
+                id_instructor || null,
                 nombre_rutina,
                 descripcion || null,
                 objetivo || null,
@@ -64,6 +67,7 @@ class RutinaRepository {
         };
     }
 
+    // Actualizar una rutina
     async updateRutina(id, rutinaData) {
         const {
             nombre_rutina,
@@ -100,6 +104,7 @@ class RutinaRepository {
         return result.affectedRows > 0;
     }
 
+    // Eliminar una rutina
     async deleteRutina(id) {
         const [result] = await pool.query(
             'DELETE FROM rutina WHERE id_rutina = ?',

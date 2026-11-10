@@ -1,9 +1,10 @@
+
 const rutinaService = require('./rutina.service');
 
+// Obtener todas las rutinas disponibles
 const getRutinas = async (req, res) => {
     try {
-        // Siempre se filtra por el usuario autenticado (token), no por la URL
-        const rutinas = await rutinaService.getRutinas(req.user.id_usuario);
+        const rutinas = await rutinaService.getRutinas();
 
         res.json(rutinas);
     } catch (error) {
@@ -11,46 +12,57 @@ const getRutinas = async (req, res) => {
     }
 };
 
+// Obtener una rutina por su ID
 const getRutinaById = async (req, res) => {
     try {
         const rutina = await rutinaService.getRutinaById(req.params.id);
 
         res.json(rutina);
     } catch (error) {
-        const status = error.message === 'Rutina no encontrada' ? 404 : 400;
+        const status =
+            error.message === 'Rutina no encontrada' ? 404 : 400;
 
         res.status(status).json({ error: error.message });
     }
 };
 
+// Crear una rutina
 const createRutina = async (req, res) => {
     try {
-        const rutina = await rutinaService.createRutina(req.body);
+        const rutinaData = {
+            ...req.body,
+            id_instructor: req.user.id_instructor
+        };
+
+        const rutina = await rutinaService.createRutina(rutinaData);
 
         res.status(201).json(rutina);
     } catch (error) {
-        const status = error.message === 'El usuario indicado no existe' ? 404 : 400;
+        const status =
+            error.message === 'El instructor indicado no existe' ? 404 : 400;
 
         res.status(status).json({ error: error.message });
     }
 };
 
+// Actualizar una rutina
 const updateRutina = async (req, res) => {
     try {
         const rutina = await rutinaService.updateRutina(
             req.params.id,
-            // Los campos que no se envían conservan su valor actual
             { ...req.rutina, ...req.body }
         );
 
         res.json(rutina);
     } catch (error) {
-        const status = error.message === 'Rutina no encontrada' ? 404 : 400;
+        const status =
+            error.message === 'Rutina no encontrada' ? 404 : 400;
 
         res.status(status).json({ error: error.message });
     }
 };
 
+// Eliminar una rutina
 const deleteRutina = async (req, res) => {
     try {
         await rutinaService.deleteRutina(req.params.id);

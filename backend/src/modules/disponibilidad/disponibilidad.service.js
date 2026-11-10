@@ -2,7 +2,7 @@ const repository = require('./disponibilidad.repository');
 const Disponibilidad = require('./disponibilidad.model');
 
 /**
- * Error de negocio: rango horario inválido (hora_fin <= hora_inicio).
+ * Error de negocio: rango horario inválido.
  */
 class RangoHorarioInvalidoError extends Error {
   constructor() {
@@ -12,110 +12,180 @@ class RangoHorarioInvalidoError extends Error {
 }
 
 /**
- * Error de negocio: el nuevo bloque se solapa con uno ya existente
- * del mismo instructor, el mismo día.
+ * Error de negocio: horario que coincide con otro registrado.
  */
 class SolapamientoError extends Error {
   constructor() {
-    super('Ya existe un bloque de disponibilidad que se solapa con este horario.');
+    super('Este horario coincide con otro que ya tienes registrado. Por favor, elige un horario diferente.');
     this.status = 409;
   }
 }
 
 /**
- * Compara dos rangos horarios (strings "HH:MM") y determina si se solapan.
- * Dos rangos se solapan si uno empieza antes de que el otro termine,
- * en ambas direcciones.
+ * Convierte una hora HH:MM a minutos.
  */
-function horaAMinutos(hora) { const [h, m] = hora.split(':').map(Number); return h * 60 + m; } function seSolapan(inicioA, finA, inicioB, finB) { return horaAMinutos(inicioA) < horaAMinutos(finB) && horaAMinutos(inicioB) < horaAMinutos(finA); }
+function horaAMinutos(hora) {
+  const [h, m] = String(hora).slice(0, 5).split(':').map(Number);
+  return h * 60 + m;
+}
+
+/**
+ * Comprueba si dos horarios se cruzan.
+ */
+function seSolapan(inicioA, finA, inicioB, finB) {
+  return (
+    horaAMinutos(inicioA) < horaAMinutos(finB) &&
+    horaAMinutos(inicioB) < horaAMinutos(finA)
+  );
+}
 
 /**
  * Crea un nuevo bloque de disponibilidad.
- * Nota: idInstructor llega directo en el body por ahora, ya que el
- * proyecto no tiene JWT implementado todavía. Cuando se agregue
- * autenticación, este sería el único punto a ajustar (tomarlo de
- * req.user.id en el controller en vez del body) — el resto del
- * módulo no cambiaría.
  */
-async function crearDisponibilidad({ idInstructor, diaSemana, horaInicio, horaFin }) {
+async function crearDisponibilidad({
+  idInstructor,
+  diaSemana,
+  horaInicio,
+  horaFin
+}) {
   if (horaFin <= horaInicio) {
     throw new RangoHorarioInvalidoError();
   }
 
-  const bloquesExistentes = await repository.buscarPorInstructorYDia(idInstructor, diaSemana);
+  const bloquesExistentes =
+    await repository.buscarPorInstructorYDia(
+      idInstructor,
+      diaSemana
+    );
 
   const haySolapamiento = bloquesExistentes.some((bloque) =>
-    seSolapan(horaInicio, horaFin, bloque.hora_inicio, bloque.hora_fin)
+    seSolapan(
+      horaInicio,
+      horaFin,
+      bloque.hora_inicio,
+      bloque.hora_fin
+    )
   );
 
   if (haySolapamiento) {
     throw new SolapamientoError();
   }
 
-  const idDisponibilidad = await repository.crear({ idInstructor, diaSemana, horaInicio, horaFin });
+  const idDisponibilidad = await repository.crear({
+    idInstructor,
+    diaSemana,
+    horaInicio,
+    horaFin
+  });
+
   const creado = await repository.buscarPorId(idDisponibilidad);
+
   return new Disponibilidad(creado);
 }
 
 /**
- * Lista todos los bloques de un instructor (su agenda completa).
+ * Lista todos los bloques de un instructor.
  */
 async function listarPorInstructor(idInstructor) {
   const bloques = await repository.listarPorInstructor(idInstructor);
-  return bloques.map((b) => new Disponibilidad(b));
+
+  return bloques.map((bloque) => new Disponibilidad(bloque));
 }
 
 /**
- * Busca un bloque por id (404 si no existe). Lo usan las rutas para
- * comprobar que el bloque pertenece al instructor autenticado.
+ * Busca un bloque por su identificador.
  */
 async function buscarPorId(idDisponibilidad) {
   const bloque = await repository.buscarPorId(idDisponibilidad);
+
   if (!bloque) {
-    const error = new Error('No existe un bloque de disponibilidad con ese id.');
+    const error = new Error(
+      'No existe un bloque de disponibilidad con ese id.'
+    );
+
     error.status = 404;
     throw error;
   }
+
   return new Disponibilidad(bloque);
 }
 
 /**
- * Actualiza un bloque existente, re-validando las mismas reglas
- * de negocio (rango horario y solapamiento), excluyendo el propio
- * bloque que se está editando de la comparación.
+ * Actualiza un bloque existente.
  */
-async function actualizarDisponibilidad(idDisponibilidad, { diaSemana, horaInicio, horaFin, estado }) {
-  if (horaFin <= horaInicio) {
-    throw new RangoHorarioInvalidoError();
-  }
-
+async function actualizarDisponibilidad(
+  idDisponibilidad,
+  { diaSemana, horaInicio, horaFin, estado }
+) {
   const bloqueActual = await repository.buscarPorId(idDisponibilidad);
+
   if (!bloqueActual) {
-    const error = new Error('No existe un bloque de disponibilidad con ese id.');
+    const error = new Error(
+      'No existe un bloque de disponibilidad con ese id.'
+    );
+
     error.status = 404;
     throw error;
   }
 
-  const bloquesExistentes = await repository.buscarPorInstructorYDia(bloqueActual.id_instructor, diaSemana);
+  const horaInicioActual = String(bloqueActual.hora_inicio).slice(0, 5);
+  const horaFinActual = String(bloqueActual.hora_fin).slice(0, 5);
 
-  const haySolapamiento = bloquesExistentes.some((bloque) =>
-    Number(bloque.id_disponibilidad) !== Number(idDisponibilidad) &&
-    seSolapan(horaInicio, horaFin, bloque.hora_inicio, bloque.hora_fin)
-  );
+  const cambioHorario =
+    diaSemana !== bloqueActual.dia_semana ||
+    horaInicio !== horaInicioActual ||
+    horaFin !== horaFinActual;
 
-  if (haySolapamiento) {
-    throw new SolapamientoError();
+  if (horaFin <= horaInicio) {
+    throw new RangoHorarioInvalidoError();
   }
 
-  await repository.actualizar(idDisponibilidad, { diaSemana, horaInicio, horaFin, estado });
+  // Solo comprueba coincidencias cuando cambian el día o las horas.
+  if (cambioHorario) {
+    const bloquesExistentes =
+      await repository.buscarPorInstructorYDia(
+        bloqueActual.id_instructor,
+        diaSemana
+      );
+
+    const haySolapamiento = bloquesExistentes.some((bloque) =>
+      Number(bloque.id_disponibilidad) !== Number(idDisponibilidad) &&
+      seSolapan(
+        horaInicio,
+        horaFin,
+        String(bloque.hora_inicio).slice(0, 5),
+        String(bloque.hora_fin).slice(0, 5)
+      )
+    );
+
+    if (haySolapamiento) {
+      throw new SolapamientoError();
+    }
+  }
+
+  await repository.actualizar(idDisponibilidad, {
+    diaSemana,
+    horaInicio,
+    horaFin,
+    estado
+  });
+
   const actualizado = await repository.buscarPorId(idDisponibilidad);
+
   return new Disponibilidad(actualizado);
 }
 
+/**
+ * Elimina un bloque de disponibilidad.
+ */
 async function eliminarDisponibilidad(idDisponibilidad) {
   const eliminado = await repository.eliminar(idDisponibilidad);
+
   if (!eliminado) {
-    const error = new Error('No existe un bloque de disponibilidad con ese id.');
+    const error = new Error(
+      'No existe un bloque de disponibilidad con ese id.'
+    );
+
     error.status = 404;
     throw error;
   }
@@ -128,5 +198,5 @@ module.exports = {
   actualizarDisponibilidad,
   eliminarDisponibilidad,
   RangoHorarioInvalidoError,
-  SolapamientoError,
+  SolapamientoError
 };

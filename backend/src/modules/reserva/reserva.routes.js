@@ -1,14 +1,21 @@
+
 const { Router } = require('express');
 const controller = require('./reserva.controller');
+
 const {
   validarCrearReserva,
   validarCambioEstado,
   validarIdUsuarioParam,
   validarIdInstructorParam,
+  validarConsultaHorariosOcupados,
   manejarErroresValidacion,
 } = require('./reserva.validator');
 
-const { verificarToken, autorizarRoles } = require('../../middlewares/auth.middleware');
+const {
+  verificarToken,
+  autorizarRoles
+} = require('../../middlewares/auth.middleware');
+
 const {
   soloMismoUsuario,
   soloMismoInstructor,
@@ -17,9 +24,10 @@ const {
 } = require('../../middlewares/permisos.middleware');
 
 const router = Router();
+console.log('RUTAS DE RESERVA CARGADAS');
 
 // POST /api/reserva
-// El usuario que reserva es SIEMPRE el autenticado (se ignora idUsuario del body).
+// El usuario que reserva es siempre el autenticado.
 router.post(
   '/',
   verificarToken,
@@ -30,7 +38,18 @@ router.post(
   controller.crear
 );
 
-// GET /api/reserva/usuario/:idUsuario -> solo las reservas del propio usuario
+// GET /api/reserva/horarios-ocupados/:idInstructor?fecha=YYYY-MM-DD
+// Devuelve únicamente los horarios ocupados.
+router.get(
+  '/horarios-ocupados/:idInstructor',
+  verificarToken,
+  autorizarRoles('usuario'),
+  validarConsultaHorariosOcupados,
+  manejarErroresValidacion,
+  controller.listarHorariosOcupados
+);
+
+// GET /api/reserva/usuario/:idUsuario
 router.get(
   '/usuario/:idUsuario',
   verificarToken,
@@ -40,7 +59,7 @@ router.get(
   controller.listarPorUsuario
 );
 
-// GET /api/reserva/instructor/:idInstructor -> solo las reservas del propio instructor
+// GET /api/reserva/instructor/:idInstructor
 router.get(
   '/instructor/:idInstructor',
   verificarToken,
@@ -51,7 +70,7 @@ router.get(
   controller.listarPorInstructor
 );
 
-// PATCH /api/reserva/:id/estado -> solo quienes participan en la reserva
+// PATCH /api/reserva/:id/estado
 router.patch(
   '/:id/estado',
   verificarToken,

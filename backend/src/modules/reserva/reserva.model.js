@@ -1,3 +1,4 @@
+
 /**
  * Representa la forma de la entidad Reserva.
  * No contiene lógica ni acceso a datos.
@@ -14,6 +15,8 @@ class Reserva {
     hora_fin,
     estado,
     precio,
+    calificada,
+    estado_pago
   }) {
     this.id_reserva = id_reserva;
     this.id_usuario = id_usuario;
@@ -25,6 +28,8 @@ class Reserva {
     this.hora_fin = hora_fin;
     this.estado = estado;
     this.precio = precio;
+    this.calificada = calificada;
+    this.estado_pago = estado_pago;
   }
 }
 

@@ -1,14 +1,16 @@
+
 const RutinaRepository = require('./rutina.repository');
 const rutinaValidator = require('./rutina.validator');
-const UserRepository = require('../users/user.repository');
+const instructorRepository = require('../instructor/instructor.repository');
 
 const rutinaRepository = new RutinaRepository();
-const userRepository = new UserRepository();
 
-const getRutinas = async (id_usuario) => {
-    return await rutinaRepository.getRutinas(id_usuario);
+// Obtener todas las rutinas disponibles
+const getRutinas = async () => {
+    return await rutinaRepository.getRutinas();
 };
 
+// Obtener una rutina por su ID
 const getRutinaById = async (id) => {
     const rutina = await rutinaRepository.getRutinaById(id);
 
@@ -19,22 +21,26 @@ const getRutinaById = async (id) => {
     return rutina;
 };
 
+// Crear una rutina
 const createRutina = async (rutinaData) => {
     rutinaValidator.validateRutina(rutinaData);
 
-    const usuario = await userRepository.getUserById(rutinaData.id_usuario);
+    const instructor = await instructorRepository.buscarPorId(
+        rutinaData.id_instructor
+    );
 
-    if (!usuario) {
-        throw new Error('El usuario indicado no existe');
+    if (!instructor) {
+        throw new Error('El instructor indicado no existe');
     }
 
     return await rutinaRepository.createRutina(rutinaData);
 };
 
+// Actualizar una rutina
 const updateRutina = async (id, rutinaData) => {
-    // El id_usuario de una rutina no se reasigna en la actualización,
-    // así que aquí solo se valida el formato de los demás campos.
-    rutinaValidator.validateRutina(rutinaData, { requireUsuario: false });
+    rutinaValidator.validateRutina(rutinaData, {
+        requireInstructor: false
+    });
 
     const updated = await rutinaRepository.updateRutina(id, rutinaData);
 
@@ -48,6 +54,7 @@ const updateRutina = async (id, rutinaData) => {
     };
 };
 
+// Eliminar una rutina
 const deleteRutina = async (id) => {
     const deleted = await rutinaRepository.deleteRutina(id);
 

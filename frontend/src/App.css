@@ -1677,3 +1677,642 @@ textarea {
 .reserva-detalle strong {
     color: #ffffff;
 }
+
+/* ========================================
+   RUTINA SELECCIONADA Y BOTONES
+   ======================================== */
+
+.rutina-seleccionada {
+    margin: 40px auto 20px;
+    max-width: 650px;
+    padding: 28px;
+    background-color: #1A1A1A;
+    border: 1px solid #333333;
+    border-radius: 18px;
+    text-align: center;
+}
+
+.rutina-seleccionada h3 {
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.rutina-seleccionada p {
+    color: #aaaaaa;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+.rutina-seleccionada strong {
+    color: #E63946;
+}
+
+.rutina-botones {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn-ver-instructores {
+    padding: 13px 25px;
+    background-color: #E63946;
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.btn-ver-instructores:hover {
+    background-color: #c92f3b;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(230, 57, 70, 0.25);
+}
+
+.btn-cancelar-rutina {
+    padding: 13px 25px;
+    background-color: transparent;
+    color: #aaaaaa;
+    border: 1px solid #444444;
+    border-radius: 50px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.btn-cancelar-rutina:hover {
+    color: #ffffff;
+    border-color: #E63946;
+    background-color: rgba(230, 57, 70, 0.08);
+}
+
+@media (max-width: 480px) {
+    .rutina-botones {
+        flex-direction: column;
+    }
+
+    .rutina-botones button {
+        width: 100%;
+    }
+}
+
+
+/* ==========================================
+   MUSCLEMIND - DISEÑO DEL MÓDULO DE RESERVAS
+   ========================================== */
+
+.reserva-page {
+    min-height: 100vh;
+    padding: 120px 25px 70px;
+    background: #111111;
+    color: #ffffff;
+}
+
+.reserva-container {
+    width: 100%;
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+/* ENCABEZADO */
+
+.reserva-header {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.reserva-tag {
+    display: inline-block;
+    color: #E63946;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.reserva-header h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(30px, 5vw, 43px);
+    font-weight: 900;
+    margin-bottom: 12px;
+}
+
+.reserva-header h1 em {
+    color: #E63946;
+    font-style: normal;
+}
+
+.reserva-header p {
+    color: #999999;
+    font-size: 15px;
+}
+
+/* INDICADORES DE LOS PASOS */
+
+.reserva-pasos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 650px;
+    margin: 0 auto 35px;
+    gap: 12px;
+}
+
+.reserva-paso-indicador {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: none;
+    color: #777777;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.reserva-paso-indicador span {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #444444;
+    border-radius: 50%;
+    background: #1A1A1A;
+    font-size: 14px;
+    transition: 0.3s ease;
+}
+
+.reserva-paso-indicador.activo {
+    color: #ffffff;
+}
+
+.reserva-paso-indicador.activo span {
+    background: #E63946;
+    border-color: #E63946;
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(230, 57, 70, 0.25);
+}
+
+.reserva-paso-indicador:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.reserva-paso-linea {
+    flex: 1;
+    max-width: 90px;
+    height: 2px;
+    background: #333333;
+}
+
+/* TARJETA PRINCIPAL */
+
+.reserva-card {
+    background: #1A1A1A;
+    border: 1px solid #303030;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+}
+
+/* INFORMACIÓN DE RUTINA E INSTRUCTOR */
+
+.reserva-detalles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.reserva-detalle {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #222222;
+    border: 1px solid #353535;
+    border-radius: 13px;
+    padding: 18px 20px;
+}
+
+.reserva-detalle span {
+    color: #999999;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.reserva-detalle strong {
+    color: #ffffff;
+    font-size: 15px;
+}
+
+/* BOTONES DE NAVEGACIÓN */
+
+.reserva-navegacion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-bottom: 25px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #333333;
+}
+
+.btn-volver-instructores,
+.btn-cancelar-proceso {
+    padding: 11px 20px;
+    border-radius: 9px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-volver-instructores {
+    background: #292929;
+    color: #ffffff;
+    border: 1px solid #444444;
+}
+
+.btn-volver-instructores:hover {
+    border-color: #E63946;
+    color: #E63946;
+    transform: translateY(-2px);
+}
+
+.btn-cancelar-proceso {
+    background: transparent;
+    color: #999999;
+    border: 1px solid #444444;
+}
+
+.btn-cancelar-proceso:hover {
+    background: rgba(230, 57, 70, 0.1);
+    color: #E63946;
+    border-color: #E63946;
+}
+
+/* CONTENIDO DE CADA PASO */
+
+.reserva-seccion {
+    animation: aparecerReserva 0.35s ease;
+}
+
+@keyframes aparecerReserva {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.reserva-paso-titulo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.reserva-paso-numero {
+    min-width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(230, 57, 70, 0.13);
+    color: #E63946;
+    border: 1px solid rgba(230, 57, 70, 0.35);
+    border-radius: 12px;
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.reserva-paso-titulo h3 {
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 21px;
+    margin-bottom: 5px;
+}
+
+.reserva-paso-titulo p {
+    color: #999999;
+    font-size: 13px;
+}
+
+/* CAMPO DE FECHA */
+
+.reserva-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 450px;
+}
+
+.reserva-campo label {
+    color: #dddddd;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.reserva-campo input {
+    width: 100%;
+    padding: 15px;
+    background: #222222;
+    border: 1px solid #444444;
+    border-radius: 10px;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color-scheme: dark;
+    outline: none;
+    transition: 0.3s ease;
+}
+
+.reserva-campo input:focus {
+    border-color: #E63946;
+    box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.12);
+}
+
+/* MENSAJES DE AYUDA */
+
+.reserva-ayuda,
+.reserva-instruccion,
+.reserva-fecha-elegida,
+.reserva-confirmacion-ayuda {
+    background: #222222;
+    border: 1px solid #353535;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 20px 0;
+    color: #aaaaaa;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.reserva-fecha-elegida strong {
+    color: #E63946;
+}
+
+/* LISTA DE HORARIOS */
+
+.horarios-lista {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+    margin: 20px 0;
+}
+
+.horario-item {
+    background: #222222;
+    border: 1px solid #393939;
+    border-radius: 12px;
+    padding: 18px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.horario-item:hover {
+    border-color: #E63946;
+    transform: translateY(-2px);
+}
+
+.horario-item.seleccionado {
+    background: rgba(230, 57, 70, 0.10);
+    border: 1px solid #E63946;
+}
+
+.horario-hora {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 9px;
+}
+
+.horario-estado {
+    color: #999999;
+    font-size: 12px;
+}
+
+.horario-item.seleccionado .horario-estado {
+    color: #E63946;
+}
+
+/* CONTINUAR Y VOLVER */
+
+.reserva-continuar {
+    margin-top: 25px;
+}
+
+.reserva-seleccion-confirmada {
+    color: #bbbbbb;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.reserva-seleccion-confirmada strong {
+    color: #E63946;
+}
+
+.btn-continuar,
+.btn-reservar {
+    padding: 14px 24px;
+    background: #E63946;
+    color: #ffffff;
+    border: none;
+    border-radius: 9px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-continuar:hover,
+.btn-reservar:hover {
+    background: #c92f3b;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(230, 57, 70, 0.2);
+}
+
+.btn-reservar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-volver-paso {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 11px 18px;
+    background: transparent;
+    color: #aaaaaa;
+    border: 1px solid #444444;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.btn-volver-paso:hover {
+    color: #ffffff;
+    border-color: #E63946;
+}
+
+/* RESUMEN DE LA RESERVA */
+
+.reserva-resumen {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 13px;
+    margin: 25px 0;
+}
+
+.reserva-resumen-item {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: 18px;
+    background: #222222;
+    border: 1px solid #353535;
+    border-radius: 12px;
+}
+
+.reserva-resumen-item span {
+    color: #999999;
+    font-size: 12px;
+}
+
+.reserva-resumen-item strong {
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.reserva-botones-finales {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.reserva-botones-finales .btn-volver-paso {
+    margin-top: 0;
+}
+
+/* ERRORES Y CONFIRMACIÓN */
+
+.reserva-error {
+    margin-top: 22px;
+    padding: 15px;
+    background: rgba(230, 57, 70, 0.1);
+    border: 1px solid #E63946;
+    border-radius: 10px;
+    color: #ff777f;
+    font-size: 13px;
+}
+
+.reserva-exitosa {
+    text-align: center;
+    padding: 35px 15px;
+    animation: aparecerReserva 0.4s ease;
+}
+
+.reserva-exitosa-icono {
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    background: rgba(46, 204, 113, 0.12);
+    border: 1px solid #2ecc71;
+    border-radius: 50%;
+    color: #2ecc71;
+    font-size: 30px;
+}
+
+.reserva-exitosa h2 {
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 12px;
+}
+
+.reserva-exitosa p {
+    color: #aaaaaa;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+/* DISEÑO RESPONSIVE */
+
+@media (max-width: 650px) {
+    .reserva-page {
+        padding: 100px 15px 40px;
+    }
+
+    .reserva-card {
+        padding: 22px 17px;
+    }
+
+    .reserva-detalles,
+    .reserva-resumen,
+    .horarios-lista {
+        grid-template-columns: 1fr;
+    }
+
+    .reserva-pasos {
+        gap: 5px;
+    }
+
+    .reserva-paso-indicador {
+        flex-direction: column;
+        gap: 6px;
+        font-size: 10px;
+    }
+
+    .reserva-paso-indicador span {
+        width: 32px;
+        height: 32px;
+    }
+
+    .reserva-paso-linea {
+        margin-bottom: 17px;
+    }
+
+    .reserva-navegacion,
+    .reserva-botones-finales {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .reserva-navegacion button,
+    .reserva-botones-finales button {
+        width: 100%;
+    }
+
+    .reserva-paso-titulo h3 {
+        font-size: 18px;
+    }
+}

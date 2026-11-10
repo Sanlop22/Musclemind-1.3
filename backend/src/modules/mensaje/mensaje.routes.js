@@ -1,17 +1,21 @@
+
 const express = require('express');
 const router = express.Router();
-const controller = require('./mensaje.controller');
-const { crearMensajeValidator, manejarErroresValidacion } = require('./mensaje.validator');
 
-const { verificarToken } = require('../../middlewares/auth.middleware');
+const controller = require('./mensaje.controller');
+
+const {
+  crearMensajeValidator,
+  manejarErroresValidacion
+} = require('./mensaje.validator');
+
+const {
+  verificarToken
+} = require('../../middlewares/auth.middleware');
 
 /**
- * Completa el body con la identidad REAL del remitente (la del token):
- *  - si escribe un usuario: idUsuario y remitente salen del token;
- *    idInstructor (con quién habla) viene del body.
- *  - si escribe un instructor: idInstructor y remitente salen del token;
- *    idUsuario (con quién habla) viene del body.
- * Así nadie puede enviar un mensaje haciéndose pasar por otra persona.
+ * Identifica al remitente usando el token.
+ * Evita que un usuario suplante a otro.
  */
 function identidadDelRemitente(req, res, next) {
   req.body = req.body || {};
@@ -22,37 +26,51 @@ function identidadDelRemitente(req, res, next) {
     return next();
   }
 
-  if (req.user.rol === 'instructor' && req.user.id_instructor !== null) {
+  if (
+    req.user.rol === 'instructor' &&
+    req.user.id_instructor !== null &&
+    req.user.id_instructor !== undefined
+  ) {
     req.body.idInstructor = req.user.id_instructor;
     req.body.remitente = 'instructor';
     return next();
   }
 
-  return res.status(403).json({ error: 'No tienes permiso para enviar mensajes.' });
+  return res.status(403).json({
+    error: 'No tienes permiso para enviar mensajes.'
+  });
 }
 
 /**
- * Solo los dos participantes de la conversación pueden leerla.
+ * Comprueba que el usuario autenticado
+ * sea participante de la conversación.
  */
 function participanteDeLaConversacion(req, res, next) {
   const { idUsuario, idInstructor } = req.params;
 
   const esElUsuario =
-    req.user.rol === 'usuario' && Number(idUsuario) === Number(req.user.id_usuario);
+    req.user.rol === 'usuario' &&
+    Number(idUsuario) === Number(req.user.id_usuario);
 
   const esElInstructor =
     req.user.rol === 'instructor' &&
     req.user.id_instructor !== null &&
+    req.user.id_instructor !== undefined &&
     Number(idInstructor) === Number(req.user.id_instructor);
 
   if (!esElUsuario && !esElInstructor) {
-    return res.status(403).json({ error: 'No eres parte de esta conversación.' });
+    return res.status(403).json({
+      error: 'No eres parte de esta conversación.'
+    });
   }
 
   next();
 }
 
-// POST /api/mensaje -> envía un nuevo mensaje
+/**
+ * POST /api/mensaje
+ * Envía un mensaje.
+ */
 router.post(
   '/',
   verificarToken,
@@ -62,7 +80,51 @@ router.post(
   controller.crear
 );
 
-// GET /api/mensaje/conversacion/:idUsuario/:idInstructor -> lista la conversación
+/**
+ * GET /api/mensaje/instructor/conversaciones
+ * Lista las conversaciones del instructor autenticado.
+ */
+router.get(
+  '/instructor/conversaciones',
+  verificarToken,
+  (req, res, next) => {
+    if (
+      req.user.rol !== 'instructor' ||
+      !req.user.id_instructor
+    ) {
+      return res.status(403).json({
+        error: 'Solo los instructores pueden consultar sus conversaciones.'
+      });
+    }
+
+    next();
+  },
+  controller.listarConversacionesPorInstructor
+);
+
+/**
+ * GET /api/mensaje/usuario/conversaciones
+ * Lista las conversaciones del deportista autenticado.
+ */
+router.get(
+  '/usuario/conversaciones',
+  verificarToken,
+  (req, res, next) => {
+    if (req.user.rol !== 'usuario') {
+      return res.status(403).json({
+        error: 'Solo los deportistas pueden consultar sus conversaciones.'
+      });
+    }
+
+    next();
+  },
+  controller.listarConversacionesPorUsuario
+);
+
+/**
+ * GET /api/mensaje/conversacion/:idUsuario/:idInstructor
+ * Consulta los mensajes de una conversación.
+ */
 router.get(
   '/conversacion/:idUsuario/:idInstructor',
   verificarToken,

@@ -1,0 +1,276 @@
+/* ───────── CONTENEDOR GENERAL ───────── */
+
+.disponibilidad-container {
+    min-height: 100vh;
+    padding: 40px 6%;
+    background: #111111;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ───────── ENCABEZADO ───────── */
+
+.disponibilidad-header {
+    max-width: 900px;
+    margin: 0 auto 35px;
+}
+
+.btn-volver {
+    background: transparent;
+    color: #bbbbbb;
+    border: 1px solid #444444;
+    border-radius: 7px;
+    padding: 9px 16px;
+    margin-bottom: 25px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-volver:hover {
+    color: #ffffff;
+    border-color: #E63946;
+}
+
+.disponibilidad-header h1 {
+    color: #E63946;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.disponibilidad-header p {
+    color: #bdbdbd;
+    font-size: 14px;
+}
+
+/* ───────── FORMULARIO Y LISTADO ───────── */
+
+.disponibilidad-formulario,
+.disponibilidad-listado {
+    background: #1c1c1c;
+    border: 1px solid #333333;
+    border-radius: 14px;
+    padding: 28px;
+    margin: 0 auto 25px;
+    max-width: 900px;
+}
+
+.disponibilidad-formulario h2,
+.disponibilidad-listado h2 {
+    font-size: 19px;
+    margin-bottom: 25px;
+    color: #ffffff;
+}
+
+/* ───────── CAMPOS ───────── */
+
+.disponibilidad-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-bottom: 20px;
+    flex: 1;
+}
+
+.disponibilidad-campo label {
+    color: #dddddd;
+    font-size: 13px;
+}
+
+.disponibilidad-campo input,
+.disponibilidad-campo select {
+    width: 100%;
+    padding: 12px;
+    background: #292929;
+    color: #ffffff;
+    border: 1px solid #444444;
+    border-radius: 7px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.disponibilidad-campo input:focus,
+.disponibilidad-campo select:focus {
+    outline: none;
+    border-color: #E63946;
+}
+
+.disponibilidad-horas {
+    display: flex;
+    gap: 20px;
+}
+
+/* ───────── BOTÓN GUARDAR ───────── */
+
+.disponibilidad-formulario .disponibilidad-boton {
+    background: #E63946;
+    color: #ffffff;
+    border: none;
+    border-radius: 7px;
+    padding: 13px 25px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.disponibilidad-formulario .disponibilidad-boton:hover {
+    background: #c92d39;
+}
+
+.disponibilidad-boton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ───────── MENSAJES ───────── */
+
+.disponibilidad-error {
+    color: #ff6b6b;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.disponibilidad-exito {
+    color: #4ade80;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.disponibilidad-vacio {
+    color: #aaaaaa;
+    font-size: 14px;
+}
+
+/* ───────── LISTADO DE HORARIOS ───────── */
+
+.disponibilidad-lista {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+/* ───────── TARJETAS ───────── */
+
+.disponibilidad-tarjeta {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    background: #242424;
+    border: 1px solid #383838;
+    border-left: 4px solid #4ade80;
+    border-radius: 10px;
+    padding: 20px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.disponibilidad-tarjeta:hover {
+    transform: translateY(-3px);
+    border-color: #555555;
+}
+
+.disponibilidad-tarjeta h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0 0 7px;
+    color: #ffffff;
+}
+
+.disponibilidad-tarjeta p {
+    color: #bbbbbb;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* ───────── ESTADO ───────── */
+
+.disponibilidad-estado {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    background: rgba(74, 222, 128, 0.12);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.disponibilidad-estado.no-disponible {
+    background: rgba(255, 107, 107, 0.10);
+    color: #ff7777;
+    border-color: rgba(255, 107, 107, 0.3);
+}
+
+/* ───────── ACCIONES ───────── */
+
+.disponibilidad-acciones {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-top: 1px solid #383838;
+    padding-top: 15px;
+}
+
+.disponibilidad-acciones .disponibilidad-boton {
+    background: transparent;
+    color: #E63946;
+    border: 1px solid #E63946;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.disponibilidad-acciones .disponibilidad-boton:hover {
+    background: #E63946;
+    color: #ffffff;
+}
+
+.disponibilidad-acciones .disponibilidad-boton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ───────── TARJETA NO DISPONIBLE ───────── */
+
+.disponibilidad-tarjeta:has(.no-disponible) {
+    border-left-color: #ff7777;
+}
+
+/* ───────── RESPONSIVE ───────── */
+
+@media (max-width: 700px) {
+    .disponibilidad-container {
+        padding: 25px 5%;
+    }
+
+    .disponibilidad-lista {
+        grid-template-columns: 1fr;
+    }
+
+    .disponibilidad-horas {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .disponibilidad-formulario,
+    .disponibilidad-listado {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 420px) {
+    .disponibilidad-acciones {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .disponibilidad-acciones .disponibilidad-boton {
+        width: 100%;
+    }
+}

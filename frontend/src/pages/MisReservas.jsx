@@ -1,93 +1,58 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { obtenerUsuario } from "../utils/session";
-
 import { obtenerReservasPorUsuario } from "../services/reservaService";
 
-
 function MisReservas() {
-
     const navigate = useNavigate();
 
     const [reservas, setReservas] = useState([]);
-
     const [cargando, setCargando] = useState(true);
-
     const [error, setError] = useState("");
 
-
-    // Usuario autenticado (viene de la sesión, no es un valor fijo)
-    const idUsuario = obtenerUsuario().id_usuario;
-
+    const usuario = obtenerUsuario();
+    const idUsuario = usuario?.id_usuario;
 
     useEffect(() => {
-
         const cargarReservas = async () => {
-
             try {
-
                 setCargando(true);
-
                 setError("");
 
-                const datos =
-                    await obtenerReservasPorUsuario(idUsuario);
-
+                const datos = await obtenerReservasPorUsuario(idUsuario);
                 setReservas(datos);
-
             } catch (error) {
-
-                console.error(
-                    "Error al cargar las reservas:",
-                    error
-                );
-
-                setError(
-                    "No fue posible cargar tus reservas."
-                );
-
+                console.error("Error al cargar las reservas:", error);
+                setError("No fue posible cargar tus reservas.");
             } finally {
-
                 setCargando(false);
-
             }
-
         };
 
-
-        cargarReservas();
-
+        if (idUsuario) {
+            cargarReservas();
+        } else {
+            setError("No se encontró la sesión del usuario.");
+            setCargando(false);
+        }
     }, [idUsuario]);
 
-
     const irACalificar = (reserva) => {
-
         navigate("/calificaciones", {
-            state: {
-                reserva: reserva
-            }
+            state: { reserva }
         });
-
     };
-
 
     const irAPagar = (reserva) => {
-
         navigate("/pagos", {
-            state: {
-                reserva: reserva
-            }
+            state: { reserva }
         });
-
     };
 
-
     return (
-
         <section id="mis-reservas">
-
             <div className="section-inner">
-
 
                 <button
                     type="button"
@@ -97,190 +62,116 @@ function MisReservas() {
                     ← Volver al inicio
                 </button>
 
-
                 <p className="section-tag">
                     Mis entrenamientos
                 </p>
 
-
                 <h2 className="section-title">
                     Mis <em>reservas</em>
                 </h2>
-
 
                 <p className="section-desc">
                     Consulta tus entrenamientos reservados
                     y califica aquellos que ya hayas realizado.
                 </p>
 
-
                 {cargando && (
-
-                    <p>
-                        Cargando reservas...
-                    </p>
-
+                    <p>Cargando reservas...</p>
                 )}
-
 
                 {error && (
-
-                    <p>
-                        {error}
-                    </p>
-
+                    <p>{error}</p>
                 )}
 
+                {!cargando && !error && reservas.length === 0 && (
+                    <div className="reserva-card">
+                        <h3>No tienes reservas todavía</h3>
+                        <p>
+                            Cuando reserves un entrenamiento
+                            aparecerá aquí.
+                        </p>
+                    </div>
+                )}
 
-                {!cargando &&
-                    !error &&
-                    reservas.length === 0 && (
+                {!cargando && !error && reservas.length > 0 && (
+                    <div className="routines-grid">
 
-                        <div className="reserva-card">
+                        {reservas.map((reserva) => (
+                            <div
+                                className="routine-card"
+                                key={reserva.id_reserva}
+                            >
 
-                            <h3>
-                                No tienes reservas todavía
-                            </h3>
+                                <div className="routine-badge">
+                                    {reserva.estado === "completada"
+                                        ? "Completada"
+                                        : reserva.estado}
+                                </div>
 
-                            <p>
-                                Cuando reserves un entrenamiento
-                                aparecerá aquí.
-                            </p>
+                                <h3>
+                                    Reserva #{reserva.id_reserva}
+                                </h3>
 
-                        </div>
+                                <p>
+                                    <strong>Fecha:</strong>{" "}
+                                    {new Date(reserva.fecha).toLocaleDateString("es-CO")}
+                                </p>
 
-                    )}
+                                <p>
+                                    <strong>Horario:</strong>{" "}
+                                    {reserva.hora_inicio.substring(0, 5)}
+                                    {" - "}
+                                    {reserva.hora_fin.substring(0, 5)}
+                                </p>
 
+                                <p>
+                                    <strong>Objetivo:</strong>{" "}
+                                    {reserva.objetivo}
+                                </p>
 
-                {!cargando &&
-                    !error &&
-                    reservas.length > 0 && (
+                                <p>
+                                    <strong>Precio:</strong>{" "}
+                                    ${Number(reserva.precio).toLocaleString("es-CO")}
+                                </p>
 
-                        <div className="routines-grid">
-
-                            {reservas.map((reserva) => (
-
-                                <div
-                                    className="routine-card"
-                                    key={reserva.id_reserva}
-                                >
-
-                                    <div className="routine-badge">
-
-                                        {reserva.estado === "completada"
-                                            ? "Completada"
-                                            : reserva.estado}
-
-                                    </div>
-
-
-                                    <h3>
-                                        Reserva #{reserva.id_reserva}
-                                    </h3>
-
-
-                                    <p>
-                                        <strong>
-                                            Fecha:
-                                        </strong>{" "}
-
-                                        {new Date(
-                                            reserva.fecha
-                                        ).toLocaleDateString(
-                                            "es-CO"
-                                        )}
-                                    </p>
-
-
-                                    <p>
-                                        <strong>
-                                            Horario:
-                                        </strong>{" "}
-
-                                        {reserva.hora_inicio.substring(
-                                            0,
-                                            5
-                                        )}{" "}
-                                        -
-                                        {" "}
-                                        {reserva.hora_fin.substring(
-                                            0,
-                                            5
-                                        )}
-                                    </p>
-
-
-                                    <p>
-                                        <strong>
-                                            Objetivo:
-                                        </strong>{" "}
-
-                                        {reserva.objetivo}
-                                    </p>
-
-
-                                    <p>
-                                        <strong>
-                                            Precio:
-                                        </strong>{" "}
-
-                                        $
-                                        {Number(
-                                            reserva.precio
-                                        ).toLocaleString(
-                                            "es-CO"
-                                        )}
-                                    </p>
-
-
-                                    {reserva.estado === "completada" && (
-
+                                {reserva.estado === "completada" ? (
+                                    reserva.calificada === 1 ||
+                                    reserva.calificada === true ? (
+                                        <p className="calificacion-completada">
+                                            ⭐ Ya calificaste este entrenamiento.
+                                        </p>
+                                    ) : (
                                         <button
                                             type="button"
                                             className="btn-reservar"
-                                            onClick={() =>
-                                                irACalificar(
-                                                    reserva
-                                                )
-                                            }
+                                            onClick={() => irACalificar(reserva)}
                                         >
                                             ⭐ Calificar instructor
                                         </button>
+                                    )
+                                ) : reserva.estado_pago === "pagado" ? (
+                                    <p className="pago-completado">
+                                        ✅ Pago realizado
+                                    </p>
+                                ) : (
+                                    <button
+                                        type="button"
+                                        className="btn-reservar"
+                                        onClick={() => irAPagar(reserva)}
+                                    >
+                                        💳 Realizar pago
+                                    </button>
+                                )}
 
-                                    )}
+                            </div>
+                        ))}
 
-
-                                    {reserva.estado !== "completada" && (
-
-                                        <button
-                                            type="button"
-                                            className="btn-reservar"
-                                            onClick={() =>
-                                                irAPagar(
-                                                    reserva
-                                                )
-                                            }
-                                        >
-                                            💳 Realizar pago
-                                        </button>
-
-                                    )}
-
-                                </div>
-
-                            ))}
-
-                        </div>
-
-                    )}
+                    </div>
+                )}
 
             </div>
-
         </section>
-
     );
-
 }
-
 
 export default MisReservas;

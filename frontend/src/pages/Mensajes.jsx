@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { obtenerUsuario } from "../utils/session";
@@ -10,23 +11,50 @@ function Mensajes() {
 
     const navigate = useNavigate();
 
-    const { idInstructor } = useParams();
+    const { idInstructor, idUsuario: idUsuarioRuta } = useParams();
+
+    const usuario = obtenerUsuario();
 
     const [mensajes, setMensajes] = useState([]);
     const [contenido, setContenido] = useState("");
     const [error, setError] = useState("");
+    const [cargando, setCargando] = useState(true);
+    const [enviando, setEnviando] = useState(false);
 
-    // Usuario autenticado (viene de la sesión, no es un valor fijo)
-    const idUsuario = obtenerUsuario().id_usuario;
-    const instructorId = Number(idInstructor);
+    const esInstructor = usuario?.rol === "instructor";
+
+    // Identificar a los participantes de la conversación.
+    const usuarioId = esInstructor
+        ? Number(idUsuarioRuta)
+        : Number(usuario?.id_usuario);
+
+    const instructorId = esInstructor
+        ? Number(usuario?.id_instructor)
+        : Number(idInstructor);
 
     useEffect(() => {
+
         const cargarConversacion = async () => {
+
+            if (
+                !usuario ||
+                !usuarioId ||
+                !instructorId ||
+                usuarioId <= 0 ||
+                instructorId <= 0
+            ) {
+                setError("No se pudieron identificar los participantes de la conversación.");
+                setCargando(false);
+                return;
+            }
 
             try {
 
+                setCargando(true);
+                setError("");
+
                 const data = await obtenerConversacion(
-                    idUsuario,
+                    usuarioId,
                     instructorId
                 );
 
@@ -42,29 +70,45 @@ function Mensajes() {
                 setError(
                     "No fue posible cargar la conversación."
                 );
+
+            } finally {
+
+                setCargando(false);
+
             }
         };
 
         cargarConversacion();
-    }, [idUsuario, instructorId]);
+
+    }, [usuarioId, instructorId]);
 
     const enviarMensaje = async () => {
 
-        if (!contenido.trim()) {
+        if (!contenido.trim() || enviando) {
             return;
         }
 
         try {
 
-            const nuevoMensaje = await crearMensaje({
-                idUsuario: idUsuario,
-                idInstructor: instructorId,
-                remitente: "usuario",
-                contenido: contenido
-            });
+            setEnviando(true);
+            setError("");
 
-            setMensajes([
-                ...mensajes,
+            // El backend identifica al remitente mediante el JWT.
+            // Solo enviamos el identificador del otro participante.
+            const datosMensaje = esInstructor
+                ? {
+                    idUsuario: usuarioId,
+                    contenido: contenido.trim()
+                }
+                : {
+                    idInstructor: instructorId,
+                    contenido: contenido.trim()
+                };
+
+            const nuevoMensaje = await crearMensaje(datosMensaje);
+
+            setMensajes((mensajesAnteriores) => [
+                ...mensajesAnteriores,
                 nuevoMensaje
             ]);
 
@@ -80,6 +124,11 @@ function Mensajes() {
             setError(
                 "No fue posible enviar el mensaje."
             );
+
+        } finally {
+
+            setEnviando(false);
+
         }
     };
 
@@ -91,9 +140,11 @@ function Mensajes() {
                 <button
                     type="button"
                     className="routines-back-button"
-                    onClick={() => navigate("/instructores")}
+                    onClick={() => navigate(
+                        esInstructor ? "/" : "/instructores"
+                    )}
                 >
-                    ← Volver a instructores
+                    ← Volver
                 </button>
 
                 <p className="section-tag">
@@ -101,11 +152,14 @@ function Mensajes() {
                 </p>
 
                 <h2 className="section-title">
-                    Chat con tu <em>instructor</em>
+                    Chat con tu{" "}
+                    <em>
+                        {esInstructor ? "usuario" : "instructor"}
+                    </em>
                 </h2>
 
                 <p className="section-desc">
-                    Comunícate directamente con tu instructor.
+                    Comunícate directamente con el otro participante.
                 </p>
 
                 {error && (
@@ -118,7 +172,13 @@ function Mensajes() {
 
                     <div className="mensajes-lista">
 
-                        {mensajes.length === 0 ? (
+                        {cargando ? (
+
+                            <p className="chat-vacio">
+                                Cargando conversación...
+                            </p>
+
+                        ) : mensajes.length === 0 ? (
 
                             <p className="chat-vacio">
                                 No hay mensajes todavía.
@@ -161,14 +221,21 @@ function Mensajes() {
                                 setContenido(e.target.value)
                             }
                             placeholder="Escribe tu mensaje..."
+                            maxLength={500}
+                            disabled={cargando || enviando}
                         />
 
                         <button
                             type="button"
                             className="btn-enviar-mensaje"
                             onClick={enviarMensaje}
+                            disabled={
+                                cargando ||
+                                enviando ||
+                                !contenido.trim()
+                            }
                         >
-                            Enviar mensaje
+                            {enviando ? "Enviando..." : "Enviar mensaje"}
                         </button>
 
                     </div>

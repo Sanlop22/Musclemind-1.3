@@ -1,3 +1,4 @@
+
 const service = require('./reserva.service');
 
 async function crear(req, res, next) {
@@ -29,13 +30,27 @@ async function listarPorInstructor(req, res, next) {
   }
 }
 
+async function listarHorariosOcupados(req, res, next) {
+  try {
+    const { idInstructor } = req.params;
+    const { fecha } = req.query;
+
+    const horarios = await service.listarHorariosOcupados(
+      idInstructor,
+      fecha
+    );
+
+    res.status(200).json(horarios);
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function cambiarEstado(req, res, next) {
   try {
     const { id } = req.params;
     const { estado } = req.body;
 
-    // El usuario que reservó solo puede cancelar su reserva; confirmarla,
-    // iniciarla o completarla le corresponde al instructor.
     if (req.user.rol !== 'instructor' && estado !== 'cancelada') {
       return res.status(403).json({
         error: 'Solo el instructor puede cambiar la reserva a ese estado. Tú puedes cancelarla.',
@@ -49,4 +64,10 @@ async function cambiarEstado(req, res, next) {
   }
 }
 
-module.exports = { crear, listarPorUsuario, listarPorInstructor, cambiarEstado };
+module.exports = {
+  crear,
+  listarPorUsuario,
+  listarPorInstructor,
+  listarHorariosOcupados,
+  cambiarEstado
+};

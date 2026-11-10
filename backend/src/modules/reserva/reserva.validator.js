@@ -1,4 +1,5 @@
-const { body, param, validationResult } = require('express-validator');
+
+const { body, param, query, validationResult } = require('express-validator');
 
 const ESTADOS_VALIDOS = ['pendiente', 'confirmada', 'en_curso', 'completada', 'cancelada'];
 const HORA_REGEX = /^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/;
@@ -53,11 +54,24 @@ const validarIdInstructorParam = [
   param('idInstructor').isInt({ min: 1 }).withMessage('El id de instructor en la URL no es válido.'),
 ];
 
+const validarConsultaHorariosOcupados = [
+  param('idInstructor')
+    .isInt({ min: 1 }).withMessage('El id de instructor no es válido.'),
+
+  query('fecha')
+    .notEmpty().withMessage('La fecha es obligatoria.')
+    .isISO8601().withMessage('La fecha debe tener formato YYYY-MM-DD.'),
+];
+
 function manejarErroresValidacion(req, res, next) {
   const errores = validationResult(req);
+
   if (!errores.isEmpty()) {
-    return res.status(400).json({ errores: errores.array().map((e) => e.msg) });
+    return res.status(400).json({
+      errores: errores.array().map((e) => e.msg)
+    });
   }
+
   next();
 }
 
@@ -66,5 +80,6 @@ module.exports = {
   validarCambioEstado,
   validarIdUsuarioParam,
   validarIdInstructorParam,
+  validarConsultaHorariosOcupados,
   manejarErroresValidacion,
 };
