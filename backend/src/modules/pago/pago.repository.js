@@ -1,58 +1,102 @@
+
 const pool = require('../../database/connection');
 
 /**
- * Inserta el primer intento de pago para una reserva.
- * Solo debe llamarse cuando esa reserva todavía no tiene fila en pago
- * (id_reserva es UNIQUE), si no, MySQL rechazará el INSERT.
+ * Busca el pago asociado a una reserva.
  */
-async function crear({ idReserva, monto, metodoPago }) {
-  const [resultado] = await pool.query(
-    `INSERT INTO pago (id_reserva, monto, metodo_pago, estado)
-     VALUES (?, ?, ?, 'pendiente')`,
-    [idReserva, monto, metodoPago]
+async function buscarPorReserva(idReserva, conexion = pool) {
+  const [filas] = await conexion.query(
+    'SELECT * FROM pago WHERE id_reserva = ?',
+    [idReserva]
   );
+
+  return filas[0];
+}
+
+/**
+ * Crea el primer registro de pago.
+ */
+async function crear(
+  { idReserva, idUsuarioPagador, monto, metodoPago },
+  conexion = pool
+) {
+  const [resultado] = await conexion.query(
+    `INSERT INTO pago (
+      id_reserva,
+      id_usuario_pagador,
+      monto,
+      metodo_pago,
+      estado
+    )
+    VALUES (?, ?, ?, ?, 'pendiente')`,
+    [idReserva, idUsuarioPagador, monto, metodoPago]
+  );
+
   return resultado.insertId;
 }
 
 /**
- * Busca un pago por su id.
+ * Actualiza un intento de pago fallido.
  */
-async function buscarPorId(idPago) {
-  const [filas] = await pool.query('SELECT * FROM pago WHERE id_pago = ?', [idPago]);
-  return filas[0];
-}
-
-/**
- * Busca el registro de pago asociado a una reserva (a lo sumo hay uno,
- * porque id_reserva es UNIQUE en la tabla).
- */
-async function buscarPorReserva(idReserva) {
-  const [filas] = await pool.query('SELECT * FROM pago WHERE id_reserva = ?', [idReserva]);
-  return filas[0];
-}
-
-/**
- * Actualiza los datos de un nuevo intento de pago sobre la fila
- * existente de una reserva (monto, método y vuelve a dejarlo en
- * "pendiente"), sin crear una fila nueva.
- */
-async function actualizarIntento(idReserva, { monto, metodoPago }) {
-  await pool.query(
+async function actualizarIntento(
+  idReserva,
+  { idUsuarioPagador, monto, metodoPago },
+  conexion = pool
+) {
+  await conexion.query(
     `UPDATE pago
-     SET monto = ?, metodo_pago = ?, estado = 'pendiente', referencia_externa = NULL, fecha_pago = NULL
+     SET id_usuario_pagador = ?,
+         monto = ?,
+         metodo_pago = ?,
+         estado = 'pendiente',
+         referencia_externa = NULL,
+         fecha_pago = NULL
      WHERE id_reserva = ?`,
-    [monto, metodoPago, idReserva]
+    [idUsuarioPagador, monto, metodoPago, idReserva]
   );
 }
 
 /**
- * Actualiza el estado del pago de una reserva (por ejemplo, a "pagado",
- * "fallido" o "reembolsado"), junto con la referencia externa y la
- * fecha de pago cuando corresponda.
+ * Aprueba el pago simulado únicamente si todavía no está pagado.
  */
-async function actualizarEstado(idReserva, { estado, referenciaExterna, fechaPago }) {
-  await pool.query(
-    'UPDATE pago SET estado = ?, referencia_externa = ?, fecha_pago = ? WHERE id_reserva = ?',
+async function aprobarPago(
+  idReserva,
+  { referenciaExterna, fechaPago },
+  conexion = pool
+) {
+  const [resultado] = await conexion.query(
+    `UPDATE pago
+     SET estado = 'pagado',
+         referencia_externa = ?,
+         fecha_pago = ?
+     WHERE id_reserva = ?
+       AND estado = 'pendiente'`,
+    [referenciaExterna, fechaPago, idReserva]
+  );
+
+  return resultado.affectedRows;
+}
+
+async function buscarPorId(idPago, conexion = pool) {
+  const [filas] = await conexion.query(
+    'SELECT * FROM pago WHERE id_pago = ?',
+    [idPago]
+  );
+
+  return filas[0];
+}
+
+async function actualizarEstado(
+  idReserva,
+  { estado, referenciaExterna, fechaPago },
+  conexion = pool
+) {
+  await conexion.query(
+    `UPDATE pago
+     SET estado = ?,
+         referencia_externa = ?,
+         fecha_pago = ?
+     WHERE id_reserva = ?`,
     [estado, referenciaExterna, fechaPago, idReserva]
   );
 }
@@ -62,5 +106,7 @@ module.exports = {
   buscarPorId,
   buscarPorReserva,
   actualizarIntento,
-  actualizarEstado,
+  aprobarPago,
+  actualizarEstado
 };
+

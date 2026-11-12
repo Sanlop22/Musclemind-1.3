@@ -118,6 +118,12 @@ function ReservasInstructor() {
                                     </h3>
 
                                     <p>
+                                        <strong>Deportista:</strong>{" "}
+                                        {reserva.nombre_deportista}{" "}
+                                        {reserva.apellido_deportista}
+                                    </p>
+
+                                    <p>
                                         <strong>Fecha:</strong>{" "}
                                         {new Date(
                                             `${String(reserva.fecha).slice(0, 10)}T00:00:00`
@@ -137,13 +143,25 @@ function ReservasInstructor() {
                                     </p>
 
                                     <p>
-                                        <strong>Estado:</strong>{" "}
+                                        <strong>Estado del entrenamiento:</strong>{" "}
                                         {reserva.estado}
                                     </p>
 
                                     <p>
                                         <strong>Precio:</strong>{" "}
                                         ${Number(reserva.precio).toLocaleString("es-CO")}
+                                    </p>
+
+                                    <hr />
+
+                                    <p>
+                                        <strong>Estado del pago:</strong>{" "}
+                                        {reserva.estado_pago || "Sin registrar"}
+                                    </p>
+
+                                    <p>
+                                        <strong>Pagado por:</strong>{" "}
+                                        {reserva.pagador || "No registrado"}
                                     </p>
                                 </div>
 
@@ -179,3 +197,4 @@ function ReservasInstructor() {
 }
 
 export default ReservasInstructor;
+

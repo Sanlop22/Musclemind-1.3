@@ -1,10 +1,8 @@
+
 const repository = require('./pago.repository');
 const Pago = require('./pago.model');
+const pool = require('../../database/connection');
 
-/**
- * Error de negocio: se pidió el pago de una reserva que todavía no
- * tiene ningún intento de pago registrado.
- */
 class PagoNoEncontradoError extends Error {
   constructor() {
     super('No existe un pago registrado para esa reserva.');
@@ -12,62 +10,138 @@ class PagoNoEncontradoError extends Error {
   }
 }
 
-/**
- * Registra un intento de pago para una reserva.
- *
- * Decisión de diseño: en la tabla `pago`, id_reserva es UNIQUE, así que
- * solo puede existir UNA fila de pago por reserva. En vez de crear una
- * fila nueva por cada intento (lo que rompería esa restricción), este
- * método actúa como upsert: si la reserva ya tiene un registro de pago,
- * lo actualiza con los datos del nuevo intento (dejándolo en
- * "pendiente" otra vez); si no tiene ninguno, crea el primero.
- */
-async function registrarPago({ idReserva, monto, metodoPago = 'otro' }) {
-  const pagoExistente = await repository.buscarPorReserva(idReserva);
-
-  if (pagoExistente) {
-    await repository.actualizarIntento(idReserva, { monto, metodoPago });
-  } else {
-    await repository.crear({ idReserva, monto, metodoPago });
+class PagoYaProcesadoError extends Error {
+  constructor(mensaje) {
+    super(mensaje);
+    this.status = 409;
   }
-
-  const actualizado = await repository.buscarPorReserva(idReserva);
-  return new Pago(actualizado);
 }
 
 /**
- * Consulta el estado de pago de una reserva.
+ * Procesa un pago simulado con una transacción.
+ */
+async function procesarPagoSimulado({
+  idReserva,
+  idUsuarioPagador,
+  monto,
+  metodoPago = 'tarjeta'
+}) {
+  const conexion = await pool.getConnection();
+  let transaccionIniciada = false;
+
+  try {
+    await conexion.beginTransaction();
+    transaccionIniciada = true;
+
+    // Bloquea la reserva para evitar dos procesos simultáneos.
+    const [reservas] = await conexion.query(
+      `SELECT id_reserva
+       FROM reserva
+       WHERE id_reserva = ?
+       FOR UPDATE`,
+      [idReserva]
+    );
+
+    if (reservas.length === 0) {
+      throw new PagoNoEncontradoError();
+    }
+
+    let pago = await repository.buscarPorReserva(
+      idReserva,
+      conexion
+    );
+
+    if (pago?.estado === 'pagado') {
+      throw new PagoYaProcesadoError(
+        'Esta reserva ya fue pagada. No se puede realizar otro cobro.'
+      );
+    }
+
+    if (pago?.estado === 'reembolsado') {
+      throw new PagoYaProcesadoError(
+        'Esta reserva tiene un pago reembolsado y no puede procesarse nuevamente.'
+      );
+    }
+
+    if (!pago) {
+      await repository.crear(
+        {
+          idReserva,
+          idUsuarioPagador,
+          monto,
+          metodoPago
+        },
+        conexion
+      );
+    } else if (pago.estado === 'fallido') {
+      await repository.actualizarIntento(
+        idReserva,
+        {
+          idUsuarioPagador,
+          monto,
+          metodoPago
+        },
+        conexion
+      );
+    }
+
+    const referenciaExterna =
+      `MM-${String(idReserva).padStart(5, '0')}`;
+
+    const filasActualizadas = await repository.aprobarPago(
+      idReserva,
+      {
+        referenciaExterna,
+        fechaPago: new Date()
+      },
+      conexion
+    );
+
+    if (filasActualizadas !== 1) {
+      throw new PagoYaProcesadoError(
+        'No fue posible aprobar el pago porque su estado cambió.'
+      );
+    }
+
+    const pagoActualizado = await repository.buscarPorReserva(
+      idReserva,
+      conexion
+    );
+
+    await conexion.commit();
+    transaccionIniciada = false;
+
+    return new Pago(pagoActualizado);
+
+  } catch (error) {
+    if (transaccionIniciada) {
+      await conexion.rollback();
+    }
+
+    throw error;
+
+  } finally {
+    conexion.release();
+  }
+}
+
+/**
+ * Consulta el pago asociado a una reserva.
  */
 async function buscarPorReserva(idReserva) {
   const pago = await repository.buscarPorReserva(idReserva);
+
   if (!pago) {
     throw new PagoNoEncontradoError();
   }
+
   return new Pago(pago);
 }
 
-/**
- * Cambia el estado de un pago (por ejemplo, cuando la pasarela de pago
- * confirma que el cobro fue exitoso, o cuando se marca como fallido o
- * reembolsado). Cuando el nuevo estado es "pagado", se registra la
- * fecha y hora exactas en fecha_pago.
- */
-async function actualizarEstadoPago(idReserva, { estado, referenciaExterna = null }) {
-  const pagoExistente = await repository.buscarPorReserva(idReserva);
-  if (!pagoExistente) {
-    throw new PagoNoEncontradoError();
-  }
-
-  const fechaPago = estado === 'pagado' ? new Date() : null;
-
-  await repository.actualizarEstado(idReserva, { estado, referenciaExterna, fechaPago });
-  const actualizado = await repository.buscarPorReserva(idReserva);
-  return new Pago(actualizado);
-}
-
 module.exports = {
-  registrarPago,
+  procesarPagoSimulado,
   buscarPorReserva,
-  actualizarEstadoPago,
   PagoNoEncontradoError,
+  PagoYaProcesadoError
 };
+

@@ -16,7 +16,13 @@ class Reserva {
     estado,
     precio,
     calificada,
-    estado_pago
+    estado_pago,
+    nombre_deportista,
+    apellido_deportista,
+    deportista,
+    nombre_pagador,
+    apellido_pagador,
+    pagador
   }) {
     this.id_reserva = id_reserva;
     this.id_usuario = id_usuario;
@@ -30,6 +36,14 @@ class Reserva {
     this.precio = precio;
     this.calificada = calificada;
     this.estado_pago = estado_pago;
+
+    this.nombre_deportista = nombre_deportista;
+    this.apellido_deportista = apellido_deportista;
+    this.deportista = deportista;
+
+    this.nombre_pagador = nombre_pagador;
+    this.apellido_pagador = apellido_pagador;
+    this.pagador = pagador;
   }
 }
 

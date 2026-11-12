@@ -2316,3 +2316,114 @@ textarea {
         font-size: 18px;
     }
 }
+
+/* ========================================
+   MUSCLEMIND - MODULO DE PAGOS
+   ======================================== */
+
+.pagos-container {
+    min-height: 100vh;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 60px 25px;
+    color: #ffffff;
+}
+
+.pagos-container > button:first-child {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 35px;
+    padding: 12px 22px;
+    background: #1A1A1A;
+    color: #ffffff;
+    border: 1px solid #383838;
+    border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagos-container > button:first-child:hover {
+    background: rgba(230, 57, 70, 0.10);
+    border-color: #E63946;
+    color: #E63946;
+    transform: translateX(-4px);
+}
+
+.pagos-container > button:first-child:focus-visible {
+    outline: 2px solid #E63946;
+    outline-offset: 3px;
+}
+
+.pagos-container h1 {
+    margin-bottom: 25px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+}
+
+.pago-resumen {
+    padding: 28px;
+    background: #1A1A1A;
+    border: 1px solid #303030;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+}
+
+.pago-resumen h2 {
+    margin-top: 0;
+    color: #E63946;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.pagos-container p {
+    color: #bbbbbb;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.pagos-container strong {
+    color: #ffffff;
+}
+
+.pagos-container button:not(:first-child) {
+    margin-top: 20px;
+    padding: 14px 25px;
+    background: #E63946;
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagos-container button:not(:first-child):hover {
+    background: #c92f3b;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(230, 57, 70, 0.25);
+}
+
+.pagos-container button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+@media (max-width: 600px) {
+    .pagos-container {
+        padding: 35px 18px;
+    }
+
+    .pagos-container h1 {
+        font-size: 26px;
+    }
+
+    .pago-resumen {
+        padding: 22px;
+    }
+}

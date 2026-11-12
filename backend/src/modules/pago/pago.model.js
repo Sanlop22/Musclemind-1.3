@@ -1,20 +1,21 @@
+
 /**
- * Representa una fila de la tabla `pago`. Cada reserva tiene, como
- * máximo, un único registro de pago (id_reserva es UNIQUE en la BD),
- * que se va actualizando conforme avanzan los intentos de pago.
+ * Representa una fila de la tabla pago.
  */
 class Pago {
   constructor({
     id_pago,
     id_reserva,
+    id_usuario_pagador,
     monto,
     metodo_pago,
     estado,
     referencia_externa,
-    fecha_pago,
+    fecha_pago
   }) {
     this.id_pago = id_pago;
     this.id_reserva = id_reserva;
+    this.id_usuario_pagador = id_usuario_pagador;
     this.monto = monto;
     this.metodo_pago = metodo_pago;
     this.estado = estado;

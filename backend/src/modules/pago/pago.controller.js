@@ -1,16 +1,32 @@
+
 const service = require('./pago.service');
 
 /**
  * POST /api/pago
- * Registra un nuevo intento de pago para una reserva. Si la reserva ya
- * tenía un intento previo, este lo reemplaza (por la restricción UNIQUE
- * de id_reserva en la base de datos).
+ * Procesa un pago simulado.
  */
 async function registrar(req, res, next) {
   try {
-    const { idReserva, monto, metodoPago } = req.body;
-    const pago = await service.registrarPago({ idReserva, monto, metodoPago });
-    res.status(201).json(pago);
+    const idReserva = req.reserva.id_reserva;
+    const idUsuarioPagador = req.user.id_usuario;
+    const monto = Number(req.reserva.precio);
+    const { metodoPago = 'tarjeta' } = req.body;
+
+    if (!Number.isFinite(monto) || monto <= 0) {
+      return res.status(400).json({
+        mensaje: 'La reserva no tiene un precio válido.'
+      });
+    }
+
+    const pago = await service.procesarPagoSimulado({
+      idReserva,
+      idUsuarioPagador,
+      monto,
+      metodoPago
+    });
+
+    res.status(200).json(pago);
+
   } catch (error) {
     next(error);
   }
@@ -18,28 +34,15 @@ async function registrar(req, res, next) {
 
 /**
  * GET /api/pago/reserva/:idReserva
- * Consulta el estado de pago de una reserva.
  */
 async function buscarPorReserva(req, res, next) {
   try {
     const { idReserva } = req.params;
-    const pago = await service.buscarPorReserva(idReserva);
-    res.status(200).json(pago);
-  } catch (error) {
-    next(error);
-  }
-}
 
-/**
- * PATCH /api/pago/reserva/:idReserva/estado
- * Actualiza el estado del pago de una reserva (pagado, fallido, reembolsado).
- */
-async function actualizarEstado(req, res, next) {
-  try {
-    const { idReserva } = req.params;
-    const { estado, referenciaExterna } = req.body;
-    const pago = await service.actualizarEstadoPago(idReserva, { estado, referenciaExterna });
+    const pago = await service.buscarPorReserva(idReserva);
+
     res.status(200).json(pago);
+
   } catch (error) {
     next(error);
   }
@@ -47,6 +50,6 @@ async function actualizarEstado(req, res, next) {
 
 module.exports = {
   registrar,
-  buscarPorReserva,
-  actualizarEstado,
+  buscarPorReserva
 };
+

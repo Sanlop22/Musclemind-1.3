@@ -74,11 +74,36 @@ async function listarPorUsuario(idUsuario) {
   return rows;
 }
 
+// Lista las reservas del instructor con información del deportista y del pago.
 async function listarPorInstructor(idInstructor) {
   const [rows] = await pool.query(
-    `SELECT * FROM reserva
-     WHERE id_instructor = ?
-     ORDER BY fecha DESC, hora_inicio DESC`,
+    `SELECT
+        r.*,
+
+        u.nombre AS nombre_deportista,
+        u.apellido AS apellido_deportista,
+        CONCAT(u.nombre, ' ', u.apellido) AS deportista,
+
+        p.estado AS estado_pago,
+
+        up.nombre AS nombre_pagador,
+        up.apellido AS apellido_pagador,
+        CONCAT(up.nombre, ' ', up.apellido) AS pagador
+
+     FROM reserva r
+
+     INNER JOIN usuario u
+       ON r.id_usuario = u.id_usuario
+
+     LEFT JOIN pago p
+       ON r.id_reserva = p.id_reserva
+
+     LEFT JOIN usuario up
+       ON p.id_usuario_pagador = up.id_usuario
+
+     WHERE r.id_instructor = ?
+
+     ORDER BY r.fecha DESC, r.hora_inicio DESC`,
     [idInstructor]
   );
 
@@ -119,3 +144,4 @@ module.exports = {
   buscarPorInstructorYFecha,
   actualizarEstado
 };
+
